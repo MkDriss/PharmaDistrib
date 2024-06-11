@@ -7,8 +7,14 @@ const fs = require('fs');
 
 const app = express();
 
+app.use(bodyparser.urlencoded({ extended: false }));
+app.use(express.static("public"));
+app.use(express.static("views"));
+
+app.engine("html", mustache());
+
 app.get("/", (req, res) => {
-    res.send("Hello World");
+    res.render("home.html");
 });
 
 app.listen(3000, () => {
