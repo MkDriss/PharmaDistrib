@@ -1,0 +1,43 @@
+:root{
+    --primary-color: #000000;
+    --secondary-color: #000000;
+    --button-hover: #000000;
+    --third-color: #000000;
+    --text-color: #000000;
+    --background-color: #ffff;
+    --title-color: #000000;
+    --font-family: "Raleway";
+    --box-shadow: 0px 0px 5px 1px rgb(195, 195, 195);
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-color);
+    filter: blur(1.rem);
+    font-family: var(--font-family);
+}
+
+#navBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 100px;
+    box-shadow: 0px 0px 5px 1px rgb(159, 152, 152);
+    width: 100%;
+    background-color: var(--background-color) !important;
+    margin-bottom: 100px;
+}
+
+#navBar a {
+    text-decoration: none;
+    color: var(--text-color);
+}

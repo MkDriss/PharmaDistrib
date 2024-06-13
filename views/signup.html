@@ -1,0 +1,14 @@
+{{>header}}
+
+<div>
+    <form action="/signup" method="post">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="text" name="surname" placeholder="Surname" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="password" name="confirmPassword" placeholder="Confirm password" required>
+        <input type="submit" value="Sign up">
+    </form>
+    <a href="/signin">I have already an account</a>
+</div>
+{{>footer}}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/header.css">
+    <link rel="stylesheet" href="{{css}}">
+    <title>Pharma Distrib</title>
+</head>
+
+<body>
+    <nav id="navBar">
+        <div id="leftSide">
+            <a href="/home" id="home">Pharma Distrib</a>
+            <a href="/orders" id="shop">Orders</a>
+        </div>
+        <div id="rightSide">
+            <a href="/cart"><img class="icoHeader" src="/shopping-bag.svg" id="shoppingCartImg" alt="shopping-bag"></a>
+            {{#authenticated}}
+            <a href="/account"><img class="icoHeader" src="/account.svg" id="accountimg" alt="accountimg"></a>
+            {{/authenticated}}
+
+            {{^authenticated}}
+            <a href="/signin"><img class="icoHeader" src="/account.svg" id="accountimg" alt="accountimg"></a>
+            {{/authenticated}}
+        </div>
+    </nav>
