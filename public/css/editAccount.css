@@ -1,0 +1,110 @@
+#accountContainer{
+    display: flex;
+    justify-content: center;
+}
+
+#row1{
+    display: flex;
+    flex-direction: column;
+    border: 5px solid #ebebebb2;
+    backdrop-filter: blur(2px);
+    background-color: #a0a0a069;
+    padding: 25px;
+    border-radius: 10px;
+    margin: 50px 0px;
+}
+
+#primarySection{
+    display: flex;
+    gap: 50px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+#profilePicture{
+    width: 124px;
+    height: 124px;
+    border-radius: 10px;
+    background-color: var(--secondary-background-color);
+}
+
+#nameSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#nameSection input{
+    width: 500px;
+}
+
+
+#row1 input[type="text"], #row1 input[type="email"]{
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 40px;    gap: 20px;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 10px 0px;
+    border-radius: 5px;
+    border: none;
+    font-family: var(--font-family);
+    
+}
+
+#buttonSection{
+    display: flex;
+    justify-content: center;
+    gap: 20px;margin-top: 20px;
+}
+
+#row1 a, #row1 input[type="submit"]{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: var(--font-family);
+    font-weight: 500;
+}
+
+#row1 input[type="submit"]{
+    color: var(--text-color);
+    background-color: var(--background-color);
+    border: 3px solid #e0dedc88;
+    backdrop-filter: blur(20px);
+}
+
+#row1 input[type="submit"]:hover{
+    cursor: pointer;
+}
+#row1 a{
+    color: var(--background-color);
+    background-color: var(--text-color);
+    border: 3px solid #e0dedc88;
+    backdrop-filter: blur(20px);
+}
+
+#localisationSection, #contactSection{
+    display: flex;
+    justify-content: space-between;
+}
+
+#emailField, #cityField{
+    width: 400px;
+}
+
+#phoneNumberField, #zipCodeField{
+    width: 230px;
+}
+
+#buttonSection{
+    display: flex;
+}
+
+#editPicture:hover{
+    cursor: pointer;
+}

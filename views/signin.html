@@ -5,6 +5,9 @@
         <span>Sign in</span>
         <input type="email" name="email" placeholder="Email">
         <input type="password" name="password" placeholder="Password">
+        {{#errorMessage}}
+        <span id="errorMessage">{{errorMessage}}</span>
+        {{/errorMessage}}
         <input type="submit" value="Sign in">
     </form>
     <a href="/forgotPassword">Forgot password</a>

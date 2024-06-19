@@ -3,10 +3,13 @@
     --secondary-color: #000000;
     --button-hover: #000000;
     --third-color: #000000;
-    --text-color: #000000;
-    --background-color: #ffff;
+    --text-color: #ffffff;
+    --secondary-text-color: #000000;
+    --third-background-color: #f6f7f9;
+    --secondary-background-color: #ffffff;
+    --background-color: #0064F7;
     --title-color: #000000;
-    --font-family: "Raleway";
+    --font-family: "Inter";
     --box-shadow: 0px 0px 5px 1px rgb(195, 195, 195);
 }
 
@@ -20,9 +23,10 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: var(--background-color);
+    background-image: url("background.png");
     filter: blur(1.rem);
     font-family: var(--font-family);
+    font-weight: 300;
 }
 
 #navBar {
@@ -34,10 +38,90 @@ body {
     box-shadow: 0px 0px 5px 1px rgb(159, 152, 152);
     width: 100%;
     background-color: var(--background-color) !important;
-    margin-bottom: 100px;
 }
 
 #navBar a {
     text-decoration: none;
     color: var(--text-color);
+}
+
+
+.icoHeader {
+    width: 35px;
+    height: 35px;
+    transition: .2s;
+}
+
+.icoHeader:hover {
+    transform: translateY(-5px);
+}
+
+.icoFooter {
+    width: 30px;
+    height: 30px;
+}
+
+footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 70px;
+    background-color: var(--background-color);
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 50px;
+}
+
+footer a{
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+footer input{
+    border: none;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: Inter;
+    font-size: 15px;
+    font-weight: 300;
+}
+
+.text{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+#footerLeftSide, #footerMiddle{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+#rightSide, #leftSide{
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+#home{
+    font-size: 30px;
+    font-weight: 600;
+}
+
+#orders{
+    font-size:25px;
+    font-weight: 500;
+}
+
+#title{
+    display: flex;
+    justify-content: center;
+    font-size: 50px;
+    margin-bottom: 50px;
+    color: var(--text-color);
+    font-family: var(--font-family);
+    font-weight: 500;
+    margin: 50px 0px;
 }

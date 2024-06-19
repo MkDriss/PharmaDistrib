@@ -1,0 +1,71 @@
+#newOrderContainer,
+#content,
+#infoSection,
+#dateSection,
+#fileSection,
+#labelfileField {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#content{
+    margin: 0px 0px 90px 0px;
+    background-color: var(--third-background-color);
+    padding: 50px;
+    border-radius: 10px;
+}   
+
+input, select {
+    width: 400px;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 40px;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 10px 0px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: var(--box-shadow);
+    font-family: var(--font-family);
+    background-color: var(--secondary-background-color);
+}
+
+
+input[type="text"] {
+    width: 500px;
+}
+
+select{
+    width: 520px;
+}
+
+.datePannel {
+    width: 520px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 500;
+
+}
+
+
+
+#labelfileField {
+    text-decoration: none;
+    color: var(--secondary-text-color);
+    margin: 20px 0px 5px 0px;
+    padding: 10px 0px;
+    font-size: 20px;
+    font-weight: 500;
+    width: 300px;
+    height: 30px;
+    border-radius: 10px;
+    border: 3px solid #e0dedc88;
+    background-color: var(--background-color);
+    backdrop-filter: blur(20px);
+    color: var(--text-color);
+    transition: transform .2s;
+}

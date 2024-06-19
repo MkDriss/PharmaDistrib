@@ -1,24 +1,26 @@
 <footer>
-    <div>
-          <h3 class="text">About</h3>
-          <div id="footerLeftSide">
-                <a href="/aboutUs" class="text">About us</a>
-                <a href="mailto:cecilecreation@gmail.com">Contact us</a>
-          </div>
-    </div>
-    <div>
-          <h3 class="text">Account</h3>
-          {{#authenticated}}
-          <div id="footerMiddle">
-                <a href="/account" class="text">Account</a>
-                <a href="/logout" class="text">Logout</a>
-          </div>
-          {{/authenticated}}
+      <div class="column">
+            <span class="text">About</span>
+            <div id="footerLeftSide">
+                  <a href="/aboutUs">About us</a>
+                  <a href="mailto:pharmadistrib@gmail.com">Contact us</a>
+            </div>
+      </div>
+      <div class="column">
+            <span class="text">Account</span>
+            {{#authenticated}}
+            <div id="footerMiddle">
+                  <a href="/account">Account</a>
+                  <form action="/signout" method="post">
+                        <input type="submit" value="Sign Out">
+                  </form>
+            </div>
+            {{/authenticated}}
 
-          {{^authenticated}}
-          <a href="/login" class="text">Login</a>
-          {{/authenticated}}
-    </div>
+            {{^authenticated}}
+            <a href="/signin">Sing In</a>
+            {{/authenticated}}
+      </div>
 </footer>
 
 

@@ -1,2 +1,96 @@
 {{>header}}
+
+<script>
+    function checkPassword() {
+        let newPas = document.getElementById("newPassordField")
+        let confirmPas = document.getElementById("confirmPasField")
+        let msg = document.getElementById("errorMessage")
+        let btn = document.getElementById("changePsswdSub")
+        if (newPas.value != confirmPas.value) {
+            msg.style.display = "block"
+            btn.type = "button"
+        } else {
+            msg.style.display = "none"
+            btn.type = "submit"
+        }
+    }
+
+    function showElement(showElementId, hideElementId, cancel) {
+
+        document.getElementById(showElementId).style.display = 'flex';
+        document.getElementById(hideElementId).style.display = 'none';
+        if (cancel === 1) {
+            document.getElementById('cancelBtn').style.display = 'flex';
+        } else {
+            document.getElementById('cancelBtn').style.display = 'none';
+        }
+    }
+
+</script>
+{{#account}}
+<div id="accountContainer">
+    <div id="column1">
+        <div id="primarySection">
+            <img src="/{{profilePicture}}" alt="profilePicture" id="profilePicture">
+            <div id="nameSection">
+                <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Name" readonly>
+                <input type="text" name="lastNameField" id="lastNameField" value="{{userLastName}}"
+                    placeholder="Last Name" readonly>
+            </div>
+        </div>
+        <div id="contactSection">
+            <input type="email" name="emailField" id="emailField" value="{{email}}" placeholder="Email" readonly>
+            <input type="text" name="phoneNumberField" id="phoneNumberField" value="{{phone}}"
+                placeholder="Phone Number" readonly>
+        </div>
+
+        <input type="text" name="adressField" id="adressField" value="{{adress}}" placeholder="Adress" readonly>
+
+        <div id="localisationSection">
+            <input type="text" name="cityField" id="cityField" value="{{city}}" placeholder="City" readonly>
+            <input type="text" name="zipCodeField" id="zipCodeField" value="{{zipCode}}" placeholder="Zip Code"
+                readonly>
+        </div>
+        <div id="changePsswdSection">
+            <input type="button" name="changePsswdBtn" id="changePsswdBtn" value="Change Password"
+                onclick="showElement('updatePasswordForm','changePsswdBtn', 1)">
+
+            <form action="/updatePassword/{{token}}" method="post" style="display: none;" id="updatePasswordForm">
+                <input type="password" name="oldPasswordField" id="oldPasswordField" placeholder="Old Password">
+                <input type="password" name="newPassordField" id="newPassordField" placeholder="New Password">
+                <input type="password" name="confirmPasField" id="confirmPasField" placeholder="Confirm Password">
+                <span id="errorMessage" style="display: none;">
+                    Password aren't matching
+                </span>
+                <input type="button" name="cancelBtn" id="cancelBtn" value="Cancel"
+                    onclick="showElement('changePsswdBtn', 'updatePasswordForm', 0)">
+                <input type="submit" name="changePsswdSub" id="changePsswdSub" value="Confirm"
+                    onclick="checkPassword()">
+            </form>
+            <a href="/editAccount" id="editProfileLink">Edit</a>
+        </div>
+
+    </div>
+    <div id="column2">
+        <div id="column2Content">
+            <span class="title">My Orders</span>
+
+            <div id="orderList">
+                {{#myOrders}}
+                {{#orders}}
+                <a href="/order/{{orderId}}" class="order">
+                </a>
+                {{/orders}}
+                <a href="/myOrders" id="myOrderBtn">See More</a>
+                {{/myOrders}}
+                {{^myOrders}}
+                <span class="text">You have no orders yet</span>
+                <a href="/newOrder" id="newOrderBtn">New Order</a>
+                {{/myOrders}}
+            </div>
+
+        </div>
+    </div>
+</div>
+{{/account}}
 {{>footer}}

@@ -1,0 +1,14 @@
+{{>header}}
+<span id="title">Orders</span>
+<div id="orderContainer">
+    <div id="content">
+        {{#orders}}
+        {{/orders}}
+        {{^orders}}
+        <span id="errorMessage">There is no Orders</span>
+        {{/orders}}
+        <a href="/newOrder" id="newOrder">New Order</a>
+    </div>
+</div>
+
+{{>footer}}

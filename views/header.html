@@ -6,6 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/header.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{css}}">
     <title>Pharma Distrib</title>
 </head>
@@ -14,10 +17,10 @@
     <nav id="navBar">
         <div id="leftSide">
             <a href="/home" id="home">Pharma Distrib</a>
-            <a href="/orders" id="shop">Orders</a>
+            <a href="/orders" id="orders">Orders</a>
         </div>
         <div id="rightSide">
-            <a href="/cart"><img class="icoHeader" src="/shopping-bag.svg" id="shoppingCartImg" alt="shopping-bag"></a>
+            <a href="/cart"><img class="icoHeader" src="/shopping-cart.svg" id="shoppingCartImg" alt="shopping-bag"></a>
             {{#authenticated}}
             <a href="/account"><img class="icoHeader" src="/account.svg" id="accountimg" alt="accountimg"></a>
             {{/authenticated}}

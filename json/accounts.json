@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "id": "b1980132af634fb3b4f383626d77dbca8ac6921a21642ca400abe95f698c2112",
+    "username": "SuperDri",
+    "userLastName": "",
+    "email": "dri@gmail.com",
+    "token": "d2f993c45ffbf68e588da79e87d8353f735a45499de113e6d8fa521ecc1a7d39b39cd977fdf4197a0fad9df8f95f717a317d6a05e5dc975baaf240f171341c79e53f6b8e05e6b5db1b8e7e9094241308931aaafc1456a9183d69dc9db4c291869c25a063b9b004e73679301697bd0f0e8c156abb70419bed90eb7c9b686ed9a9",
+    "password": "marie",
+    "admin": "0",
+    "adress": "",
+    "city": "",
+    "zipCode": "",
+    "phone": "",
+    "profilePicture": "account.svg"
+  }
+]
