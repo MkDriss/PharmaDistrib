@@ -9,7 +9,7 @@
       <div class="column">
             <span class="text">Account</span>
             {{#authenticated}}
-            <div id="footerMiddle">
+            <div id="footerRightSide">
                   <a href="/account">Account</a>
                   <form action="/signout" method="post">
                         <input type="submit" value="Sign Out">
@@ -18,8 +18,11 @@
             {{/authenticated}}
 
             {{^authenticated}}
-            <a href="/signin">Sing In</a>
+            <div id="footerRightSide">
+                  <a href="/signin">Sing In</a>
+            </div>
             {{/authenticated}}
+
       </div>
 </footer>
 

@@ -107,21 +107,22 @@ exports.checkEmail = function (email) {
       return 'true';
 };
 
-exports.checkPassword = function (email, password) {
+exports.authenticate = function (email, password) {
+      console.log(email,password)
       if (db.prepare('SELECT * FROM user WHERE email = ?').get(email) == undefined) {
             console.log('email not found');
-            return 'false';
+            return false;
       }
       let pass = db.prepare('SELECT password FROM user WHERE email = ?').get(email).password;
       if (pass == password) {
-            return 'true';
+            return true;
       }
-      return 'false';
+      return false;
 }
 
 //UPDATE
 
-exports.updateAccount = function (id, username, userLastName, email, adress, city, zipCode, phone, pictureName) {
+exports.updateAccount = function (id, username, userLastName, adress, city, zipCode, phone, pictureName) {
 
       fs.readFile('json/accounts.json', function (err, data) {
             if (err) throw err;
@@ -131,7 +132,6 @@ exports.updateAccount = function (id, username, userLastName, email, adress, cit
                   if (account.id === id) {
                         account.username = username;
                         account.userLastName = userLastName;
-                        account.email = email;
                         account.adress = adress;
                         account.city = city;
                         account.zipCode = zipCode;
@@ -145,13 +145,18 @@ exports.updateAccount = function (id, username, userLastName, email, adress, cit
             });
       });
 
-      db.prepare('UPDATE user SET username = ?, userLastName = ?, email = ?, adress = ?, city = ?, zipCode = ?, phone = ?, profilePicture = ? WHERE id = ?').run(username, userLastName, email, adress, city, zipCode, phone, pictureName, id);
+      db.prepare('UPDATE user SET username = ?, userLastName = ?, adress = ?, city = ?, zipCode = ?, phone = ?, profilePicture = ? WHERE id = ?').run(username, userLastName, adress, city, zipCode, phone, pictureName, id);
       console.log("Account updated");
 }
 
 exports.updateAccountPassword = function (password, token) {
-      db.prepare('UPDATE user SET password = ? WHERE token = ?').run(password, token);
-      console.log('Password updated');
+      try{
+
+            db.prepare('UPDATE user SET password = ? WHERE token = ?').run(password, token);
+            console.log('Password updated');
+      } catch (err) {
+            console.log(err)
+      }
 }
 
 

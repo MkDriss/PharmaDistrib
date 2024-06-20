@@ -19,7 +19,7 @@
     text-decoration: none;
     color: var(--secondary-text-color);
     padding: 10px 0px;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 500;
     width: 200px;
     height: 30px;
@@ -47,7 +47,7 @@
     border: 5px solid #ebebebb2;
     backdrop-filter: blur(2px);
     background-color: #a0a0a069;
-    width: 1000px;
+    width: 900px;
     margin-top: 50px;
     border-radius: 20px;
 }

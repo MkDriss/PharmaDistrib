@@ -1,10 +1,11 @@
-#accountContainer{
+#accountContainer {
     display: flex;
     justify-content: center;
     gap: 20px;
 }
 
-#column1, #column2{
+#column1,
+#column2 {
     display: flex;
     flex-direction: column;
     border: 5px solid #ebebebb2;
@@ -12,49 +13,62 @@
     background-color: #a0a0a069;
     padding: 25px;
     border-radius: 10px;
-    margin: 50px 0px;
+    margin-bottom: 50px;
 }
 
-#primarySection{
+#primarySection {
     display: flex;
     gap: 50px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
 
-#profilePicture{
+#profilePicture {
     width: 124px;
     height: 124px;
     border-radius: 10px;
-    background-color: var(--secondary-background-color);
+    object-fit: cover;
 }
 
-#nameSection{
+#nameSection {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
 }
 
-#nameSection input{
+#nameSection input {
     width: 500px;
 }
 
+#nameSection input,
+#contactSection input,
+#adressField,
+#localisationSection input,
+#changePsswdSub,
+#changePsswdBtn,
+#cancelBtn,
+#editProfileLink {
+    border-radius: 10px;
+}
 
-#column1 input, #column1 a{
+#column1 input,
+#column1 a {
     padding-left: 10px;
     padding-right: 10px;
-    height: 40px;    
+    height: 40px;
     font-weight: 500;
     gap: 20px;
     font-size: 15px;
     font-weight: 500;
     margin: 10px 0px;
-    border-radius: 5px;
+
     border: none;
-    font-family: var(--font-family);   
+    font-family: var(--font-family);
 }
 
-#column1 a, #newOrderBtn, #myOrderBtn{
+#column1 a,
+#newOrderBtn,
+#myOrderBtn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -66,10 +80,7 @@
     backdrop-filter: blur(20px);
 }
 
-#column1 input[type="button"]{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+#column1 input[type="button"] {
     color: var(--background-color);
     background-color: var(--text-color);
     height: 46px;
@@ -77,52 +88,76 @@
     backdrop-filter: blur(20px);
 }
 
-#column1 input[type="submit"]{
-    background-color: var(--background-color);
-    color: var(--text-color);
-    border: 3px solid #e0dedc88;
-    backdrop-filter: blur(20px);;
+#oldPasswordSection,
+#newPasswordSection,
+#confirmPasswordSection {
+    display: flex;
+    align-items: center;
 
 }
 
-#localisationSection, #contactSection{
+#oldPasswordField,
+#newPasswordField,
+#confirmPasswordField {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+#changePsswdBtn {
+    width: 206px;
+    justify-content: center;
+}
+
+#column1 input[type="submit"] {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 3px solid #e0dedc88;
+    backdrop-filter: blur(20px);
+    height: 46px;
+
+}
+
+#localisationSection,
+#contactSection {
     display: flex;
     justify-content: space-between;
 }
 
-#changePsswdSection{
+#changePsswdSection {
     display: flex;
     justify-content: space-around;
 }
 
-#emailField, #cityField{
+#emailField,
+#cityField {
     width: 400px;
 }
 
-#phoneNumberField, #zipCodeField{
+#phoneNumberField,
+#zipCodeField {
     width: 230px;
 }
 
-#updatePasswordForm{
+#updatePasswordForm {
     display: flex;
     flex-direction: column;
 }
 
-.title{
+.title {
     font-size: 30px;
     font-family: Inter;
     font-weight: 500;
     color: var(--text-color);
 }
 
-#column2Content{
+#column2Content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
 }
 
-#orderList{
+#orderList {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -130,13 +165,41 @@
     gap: 20px;
 }
 
-#newOrderBtn, #myOrderBtn{
+#newOrderBtn,
+#myOrderBtn {
     height: 40px;
     font-weight: 500;
     border-radius: 10px;
     margin-top: 50px;
 }
 
-#column2{
+#column2 {
     width: 500px;
+}
+
+
+label {
+    height: 42px;
+    width: 42px;
+    background-color: var(--text-color);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+label img{
+    width: 30px;
+    height: 30px;
+}
+
+.hiddenInput {
+    display: none;
+}
+
+#cancelBtn {
+    display: flex;
+    justify-content: center;
 }

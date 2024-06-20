@@ -3,6 +3,7 @@
 #infoSection,
 #dateSection,
 #fileSection,
+#createOrderForm,
 #labelfileField {
     display: flex;
     flex-direction: column;
@@ -12,13 +13,14 @@
 
 #content{
     margin: 0px 0px 90px 0px;
-    background-color: var(--third-background-color);
+    border: 5px solid #ebebebb2;
+    backdrop-filter: blur(2px);
+    background-color: #a0a0a069;
     padding: 50px;
     border-radius: 10px;
 }   
 
-input, select {
-    width: 400px;
+#createOrderForm input[type="text"], #createOrderForm input[type="date"], #createOrderForm select {
     padding-left: 10px;
     padding-right: 10px;
     height: 40px;
@@ -32,40 +34,67 @@ input, select {
     background-color: var(--secondary-background-color);
 }
 
-
-input[type="text"] {
-    width: 500px;
+#createOrderForm input[type="text"] {
+    width: 300px;
 }
 
-select{
-    width: 520px;
+#createOrderForm select{
+    width: 320px;
+}
+
+#createOrderForm input[type="date"]{
+    width: 210px;
 }
 
 .datePannel {
-    width: 520px;
+    width: 320px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 15px;
+
     font-weight: 500;
 
 }
 
-
-
-#labelfileField {
-    text-decoration: none;
-    color: var(--secondary-text-color);
+#labelfileField, #createOrderBtn{
     margin: 20px 0px 5px 0px;
     padding: 10px 0px;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 500;
-    width: 300px;
+    width: 200px;
     height: 30px;
     border-radius: 10px;
     border: 3px solid #e0dedc88;
-    background-color: var(--background-color);
     backdrop-filter: blur(20px);
+}
+
+
+#labelfileField{
+    text-decoration: none;
+    background-color: var(--text-color);
+    color: var(--background-color);
+}
+
+#createOrderBtn{
+    background-color: var(--background-color);
     color: var(--text-color);
-    transition: transform .2s;
+    height: 56px;
+    font-family: var(--font-family);
+}
+#fileAccepted{
+    font-size: 15px;
+}
+
+#submitSection{
+    display: flex;
+    justify-content: center;
+}
+
+input[type="submit"]:hover, label:hover{
+    cursor: pointer;
+}
+
+#upperForm, #bottomForm{
+    display: flex;
+    gap: 50px;
 }

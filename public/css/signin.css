@@ -1,0 +1,101 @@
+#singinContainer,
+#content,
+#inputSection,
+#otherOptions,
+label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#content,
+label {
+    justify-content: center;
+
+}
+
+#signInForm {
+    border: 5px solid #ebebebb2;
+    backdrop-filter: blur(2px);
+    background-color: #a0a0a069;
+    padding: 50px;
+    border-radius: 10px;
+    margin-bottom: 50px;
+}
+
+#signInForm input[type="submit"],
+#signInForm input[type="email"],
+#signInForm input[type="password"],
+#signInForm input[type="text"]
+{
+    height: 40px;
+    font-size: 15px;
+    font-weight: 500;
+    border: none;
+    font-family: var(--font-family);
+}
+
+#signInForm input[type="email"],
+#signInForm input[type="password"],
+#signInForm input[type="text"] {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 10px 0px;
+    border-radius: 5px;
+}
+
+
+#signInForm input[type="password"],
+#signInForm input[type="text"] {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+#signInForm input[type="email"] {
+    width: 278px;
+}
+
+#signInForm input[type="submit"]{
+    width: 150px;
+    border-radius: 10px;
+    border: 3px solid #e0dedc88;
+    backdrop-filter: blur(20px);
+}
+
+#signInForm input[type="submit"] {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+#signInForm input[type="submit"]:hover {
+    cursor: pointer;
+}
+
+
+label img{
+    width: 30px;
+    height: 30px;
+}
+
+#inputSection{
+    gap : 20px
+}
+
+label {
+    height: 42px;
+    width: 42px;
+    background-color: var(--text-color);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#passwordField {
+    display: flex;
+    align-items: center;
+}
+
+#otherOptions a{
+    text-decoration: none;
+    color: var(--background-color);
+}
+

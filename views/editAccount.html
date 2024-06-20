@@ -28,7 +28,7 @@
 
 </script>
 {{#account}}
-<form action="/editAccount" method="post">
+<form action="/editAccount" method="post" enctype="multipart/form-data">
     <div id="accountContainer">
         <div id="row1">
             <div id="primarySection">
@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div id="contactSection">
-                <input type="email" name="emailField" id="emailField" value="{{email}}" placeholder="Email">
+                <input type="email" name="emailField" id="emailField" value="{{email}}" placeholder="Email" readonly>
                 <input type="text" name="phoneNumberField" id="phoneNumberField" value="{{phone}}"
                     placeholder="Phone Number">
             </div>
