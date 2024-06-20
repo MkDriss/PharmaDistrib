@@ -1,7 +1,8 @@
-#signinContainer,
+#signUpContainer,
 #content,
 #inputSection,
 #otherOptions,
+#field,
 label {
     display: flex;
     flex-direction: column;
@@ -14,7 +15,7 @@ label {
 
 }
 
-#signInForm {
+#signUpForm {
     border: 5px solid #ebebebb2;
     backdrop-filter: blur(2px);
     background-color: #a0a0a069;
@@ -23,10 +24,10 @@ label {
     margin-bottom: 50px;
 }
 
-#signInForm input[type="submit"],
-#signInForm input[type="email"],
-#signInForm input[type="password"],
-#signInForm input[type="text"]
+#signUpForm input[type="submit"],
+#signUpForm input[type="email"],
+#signUpForm input[type="password"],
+#signUpForm input[type="text"]
 {
     height: 40px;
     font-size: 15px;
@@ -35,39 +36,42 @@ label {
     font-family: var(--font-family);
 }
 
-#signInForm input[type="email"],
-#signInForm input[type="password"],
-#signInForm input[type="text"] {
-    padding-left: 10px;
-    padding-right: 10px;
+#signUpForm input[type="email"],
+#signUpForm input[type="password"],
+#signUpForm input[type="text"] {
+    border-radius: 10px;
     margin: 10px 0px;
     border-radius: 5px;
+    padding-left: 10px;
 }
 
 
-#signInForm input[type="password"],
-#signInForm input[type="text"] {
+#passwordSection input[type="password"],
+#passwordSection input[type="text"],
+#confirmPasswordSection input[type="password"],
+#confirmPasswordSection input[type="text"] {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
 }
 
-#signInForm input[type="email"] {
+#signUpForm input[type="email"],
+#signUpForm input[type="text"] {
     width: 278px;
 }
 
-#signInForm input[type="submit"]{
+#signUpForm input[type="submit"]{
     width: 150px;
     border-radius: 10px;
     border: 3px solid #e0dedc88;
     backdrop-filter: blur(20px);
 }
 
-#signInForm input[type="submit"] {
+#signUpForm input[type="submit"] {
     background-color: var(--background-color);
     color: var(--text-color);
 }
 
-#signInForm input[type="submit"]:hover {
+#signUpForm input[type="submit"]:hover {
     cursor: pointer;
 }
 
@@ -89,7 +93,7 @@ label {
     border-bottom-right-radius: 10px;
 }
 
-#passwordField {
+#passwordSection, #confirmPasswordSection {
     display: flex;
     align-items: center;
 }

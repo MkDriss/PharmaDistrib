@@ -1,4 +1,4 @@
-{{>header}}
+{{>./fr/header}}
 <script>
     function showDiv(divId, element) {
         if (element.value == "addLaboratory") {
@@ -14,7 +14,7 @@
 <div id="newOrderContainer">
     <div id="content">
         <span id="title">New Order</span>
-        <form action="/createOrder" method="post" id="createOrderForm">
+        <form action="/createOrder" method="post" id="createOrderForm" enctype="multipart/form-data">
             <div id="upperForm">
                 <div id="infoSection">
                     <input type="text" name="nameField" id="nameField" placeholder="Name" required>

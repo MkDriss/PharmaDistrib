@@ -1,4 +1,4 @@
-{{>header}}
+{{>./fr/header}}
 
 <script>
     function checkPassword() {
@@ -43,13 +43,14 @@
     alert('An error occured, please try again')
 </script>
 {{/script}}
+
 {{#account}}
 <div id="accountContainer">
     <div id="column1">
         <div id="primarySection">
             <img src="/{{profilePicture}}" alt="profilePicture" id="profilePicture">
             <div id="nameSection">
-                <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Name" readonly>
+                <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Nom" readonly>
                 <input type="text" name="lastNameField" id="lastNameField" value="{{userLastName}}"
                     placeholder="Last Name" readonly>
             </div>
@@ -87,7 +88,7 @@
                     </label>
                 </div>
                 <div id="newPasswordSection">
-                    <input type="password" name="newPassordField" id="newPasswordField" placeholder="New Password">
+                    <input type="password" name="newPasswordField" id="newPasswordField" placeholder="New Password">
                     <input type="button" name="showNewPassBtn" id="showNewPassBtn"
                         onclick="showPassword('newPasswordField','showNewPassLabel','hideNewPassLabel',true)" hidden>
                     <label for="showNewPassBtn" id="showNewPassLabel">
@@ -100,7 +101,8 @@
                     </label>
                 </div>
                 <div id="confirmPasswordSection">
-                    <input type="password" name="confirmPasswordField" id="confirmPasswordField" placeholder="Confirm Password">
+                    <input type="password" name="confirmPasswordField" id="confirmPasswordField"
+                        placeholder="Confirm Password">
                     <input type="button" name="showConfirmPassBtn" id="showConfirmPassBtn"
                         onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',true)"
                         hidden>
@@ -108,11 +110,13 @@
                         <img src="showPass.svg" class="icoPass" alt="show Confirm Password">
                     </label>
                     <input type="button" name="hideConfirmPasswdBtn" id="hideConfirmPasswdBtn"
-                        onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',false)" hidden>
+                        onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',false)"
+                        hidden>
                     <label for="hideConfirmPasswdBtn" style="display: none;" id="hideConfirmPassLabel">
                         <img src="hidePass.svg" class="icoPass" alt="hide Confirm Password">
                     </label>
                 </div>
+                <span id="errorMessage" style="display: none;">Passwords aren't matching</span>
                 <input type="button" name="cancelBtn" id="cancelBtn" value="Cancel"
                     onclick="showElement('changePsswdBtn', 'updatePasswordForm', 0)">
                 <input type="submit" name="changePsswdSub" id="changePsswdSub" value="Confirm"
@@ -144,4 +148,5 @@
     </div>
 </div>
 {{/account}}
+
 {{>footer}}

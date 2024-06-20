@@ -1,0 +1,89 @@
+{{>./fr/header}}
+
+<script>
+    function checkPassword() {
+        let pas = document.getElementById("password")
+        let confirmPas = document.getElementById("confirmPassword")
+        let msg = document.getElementById("errorMessage")
+        let btn = document.getElementById("submit")
+        if (pas.value != confirmPas.value) {
+            msg.style.display = "block"
+            btn.type = "button"
+        } else {
+            msg.style.display = "none"
+            btn.type = "submit"
+        }
+    }
+
+    function showPassword(name, show, hide, value) {
+        if (value) {
+            document.getElementById(name).type = "text"
+            document.getElementById(show).style.display = "none"
+            document.getElementById(hide).style.display = "flex"
+        } else {
+            document.getElementById(name).type = "password"
+            document.getElementById(show).style.display = "flex"
+            document.getElementById(hide).style.display = "none"
+        }
+    }
+</script>
+
+<div id="signUpContainer">
+    <div id="content">
+        <form action="/signup" method="post" id="signUpForm">
+            <span id="title">Sign Up</span>
+            <div id="inputSection">
+                <div id="field">
+                    <input type="text" name="name" placeholder="Name">
+                    <input type="email" name="email" placeholder="Email">
+                    
+                        <div id="passwordSection">
+                            <input type="password" name="passwordField" id="passwordField"
+                                placeholder="Password">
+                            <input type="button" name="showPassBtn" id="showPassBtn"
+                                onclick="showPassword('passwordField','showPassLabel','hidePassLabel',true)"
+                                hidden>
+                            <label for="showPassBtn" id="showPassLabel">
+                                <img src="showPass.svg" class="icoPass" alt="show Password">
+                            </label>
+                            <input type="button" name="hidePasswdBtn" id="hidePasswdBtn"
+                                onclick="showPassword('passwordField','showPassLabel','hidePassLabel',false)"
+                                hidden>
+                            <label for="hidePasswdBtn" style="display: none;" id="hidePassLabel">
+                                <img src="hidePass.svg" class="icoPass" alt="hide Password">
+                            </label>
+                        </div>
+                        <div id="confirmPasswordSection">
+                            <input type="password" name="confirmPasswordField" id="confirmPasswordField"
+                                placeholder="Confirm Password">
+                            <input type="button" name="showConfirmPassBtn" id="showConfirmPassBtn"
+                                onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',true)"
+                                hidden>
+                            <label for="showConfirmPassBtn" id="showConfirmPassLabel">
+                                <img src="showPass.svg" class="icoPass" alt="show Confirm Password">
+                            </label>
+                            <input type="button" name="hideConfirmPasswdBtn" id="hideConfirmPasswdBtn"
+                                onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',false)"
+                                hidden>
+                            <label for="hideConfirmPasswdBtn" style="display: none;" id="hideConfirmPassLabel">
+                                <img src="hidePass.svg" class="icoPass" alt="hide Confirm Password">
+                            </label>
+                        </div>
+
+                </div>
+                {{#errorMessage}}
+                <span id="errorMessage">{{errorMessage}}</span>
+                {{/errorMessage}}
+                <input type="submit" value="Sign Un">
+                <div id="otherOptions">
+                    <a href="/signin">I have already an account</a>
+                </div>
+
+            </div>
+
+
+        </form>
+
+    </div>
+</div>
+{{>footer}}

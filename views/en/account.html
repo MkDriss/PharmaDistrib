@@ -1,0 +1,157 @@
+{{>header}}
+
+<script>
+    function checkPassword() {
+        let newPas = document.getElementById("newPasswordField")
+        let confirmPas = document.getElementById("confirmPasswordField")
+        let msg = document.getElementById("errorMessage")
+        let btn = document.getElementById("changePsswdSub")
+        if (newPas.value != confirmPas.value) {
+            msg.style.display = "block"
+            btn.type = "button"
+        } else {
+            msg.style.display = "none"
+            btn.type = "submit"
+        }
+    }
+
+    function showElement(showElementId, hideElementId, cancel) {
+
+        document.getElementById(showElementId).style.display = 'flex';
+        document.getElementById(hideElementId).style.display = 'none';
+        if (cancel === 1) {
+            document.getElementById('cancelBtn').style.display = 'flex';
+        } else {
+            document.getElementById('cancelBtn').style.display = 'none';
+        }
+    }
+
+    function showPassword(name, show, hide, value) {
+        if (value) {
+            document.getElementById(name).type = "text"
+            document.getElementById(show).style.display = "none"
+            document.getElementById(hide).style.display = "flex"
+        } else {
+            document.getElementById(name).type = "password"
+            document.getElementById(show).style.display = "flex"
+            document.getElementById(hide).style.display = "none"
+        }
+    }
+</script>
+{{#script}}
+<script>
+    alert('An error occured, please try again')
+</script>
+{{/script}}
+
+{{#account}}
+<div id="accountContainer">
+    <div id="column1">
+        <div id="primarySection">
+            <img src="/{{profilePicture}}" alt="profilePicture" id="profilePicture">
+            <div id="nameSection">
+                {{#EN}}
+                <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Name" readonly>
+                {{/EN}}
+                {{#FR}}
+                <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Nom" readonly>
+                {{/FR}}
+                <input type="text" name="lastNameField" id="lastNameField" value="{{userLastName}}"
+                    placeholder="Last Name" readonly>
+            </div>
+        </div>
+        <div id="contactSection">
+            <input type="email" name="emailField" id="emailField" value="{{email}}" placeholder="Email" readonly>
+            <input type="text" name="phoneNumberField" id="phoneNumberField" value="{{phone}}"
+                placeholder="Phone Number" readonly>
+        </div>
+
+        <input type="text" name="adressField" id="adressField" value="{{adress}}" placeholder="Adress" readonly>
+
+        <div id="localisationSection">
+            <input type="text" name="cityField" id="cityField" value="{{city}}" placeholder="City" readonly>
+            <input type="text" name="zipCodeField" id="zipCodeField" value="{{zipCode}}" placeholder="Zip Code"
+                readonly>
+        </div>
+        <div id="changePsswdSection">
+            <input type="button" name="changePsswdBtn" id="changePsswdBtn" value="Change Password"
+                onclick="showElement('updatePasswordForm','changePsswdBtn', 1)">
+
+            <form action="/updatePassword/{{token}}" method="post" style="display: none;" id="updatePasswordForm">
+                <div id="oldPasswordSection">
+                    <input type="password" name="oldPasswordField" id="oldPasswordField" placeholder="Old Password">
+
+                    <input type="button" name="showOldPassBtn" id="showOldPassBtn"
+                        onclick="showPassword('oldPasswordField','showOldPassLabel','hideOldPassLabel',true)" hidden>
+                    <label for="showOldPassBtn" id="showOldPassLabel">
+                        <img src="showPass.svg" class="icoPass" alt="show Old Password">
+                    </label>
+                    <input type="button" name="hideOldPasswdBtn" id="hideOldPasswdBtn"
+                        onclick="showPassword('oldPasswordField','showOldPassLabel','hideOldPassLabel',false)" hidden>
+                    <label for="hideOldPasswdBtn" style="display: none;" id="hideOldPassLabel">
+                        <img src="hidePass.svg" class="icoPass" alt="hide OldPassword">
+                    </label>
+                </div>
+                <div id="newPasswordSection">
+                    <input type="password" name="newPasswordField" id="newPasswordField" placeholder="New Password">
+                    <input type="button" name="showNewPassBtn" id="showNewPassBtn"
+                        onclick="showPassword('newPasswordField','showNewPassLabel','hideNewPassLabel',true)" hidden>
+                    <label for="showNewPassBtn" id="showNewPassLabel">
+                        <img src="showPass.svg" class="icoPass" alt="show New Password">
+                    </label>
+                    <input type="button" name="hideNewPasswdBtn" id="hideNewPasswdBtn"
+                        onclick="showPassword('newPasswordField','showNewPassLabel','hideNewPassLabel',false)" hidden>
+                    <label for="hideNewPasswdBtn" style="display: none;" id="hideNewPassLabel">
+                        <img src="hidePass.svg" class="icoPass" alt="hide NewPassword">
+                    </label>
+                </div>
+                <div id="confirmPasswordSection">
+                    <input type="password" name="confirmPasswordField" id="confirmPasswordField"
+                        placeholder="Confirm Password">
+                    <input type="button" name="showConfirmPassBtn" id="showConfirmPassBtn"
+                        onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',true)"
+                        hidden>
+                    <label for="showConfirmPassBtn" id="showConfirmPassLabel">
+                        <img src="showPass.svg" class="icoPass" alt="show Confirm Password">
+                    </label>
+                    <input type="button" name="hideConfirmPasswdBtn" id="hideConfirmPasswdBtn"
+                        onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',false)"
+                        hidden>
+                    <label for="hideConfirmPasswdBtn" style="display: none;" id="hideConfirmPassLabel">
+                        <img src="hidePass.svg" class="icoPass" alt="hide Confirm Password">
+                    </label>
+                </div>
+                <span id="errorMessage" style="display: none;">Passwords aren't matching</span>
+                <input type="button" name="cancelBtn" id="cancelBtn" value="Cancel"
+                    onclick="showElement('changePsswdBtn', 'updatePasswordForm', 0)">
+                <input type="submit" name="changePsswdSub" id="changePsswdSub" value="Confirm"
+                    onclick="checkPassword()">
+            </form>
+            <a href="/editAccount" id="editProfileLink">Edit</a>
+        </div>
+
+    </div>
+    <div id="column2">
+        <div id="column2Content">
+            <span class="title">My Orders</span>
+
+            <div id="orderList">
+                {{#myOrders}}
+                {{#orders}}
+                <a href="/order/{{orderId}}" class="order">
+                </a>
+                {{/orders}}
+                <a href="/myOrders" id="myOrderBtn">See More</a>
+                {{/myOrders}}
+                {{^myOrders}}
+                <span class="text">You have no orders yet</span>
+                <a href="/newOrder" id="newOrderBtn">New Order</a>
+                {{/myOrders}}
+            </div>
+
+        </div>
+    </div>
+</div>
+{{/account}}
+
+{{>footer}}

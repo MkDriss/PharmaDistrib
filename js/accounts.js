@@ -151,7 +151,7 @@ exports.updateAccount = function (id, username, userLastName, adress, city, zipC
 
 exports.updateAccountPassword = function (password, token) {
       try{
-
+            console.log(password, token)
             db.prepare('UPDATE user SET password = ? WHERE token = ?').run(password, token);
             console.log('Password updated');
       } catch (err) {

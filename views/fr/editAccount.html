@@ -1,0 +1,65 @@
+{{>./fr/header}}
+
+<script>
+    function checkPassword() {
+        let newPas = document.getElementById("newPassordField")
+        let confirmPas = document.getElementById("confirmPasField")
+        let msg = document.getElementById("errorMessage")
+        let btn = document.getElementById("changePsswdSub")
+        if (newPas.value != confirmPas.value) {
+            msg.style.display = "block"
+            btn.type = "button"
+        } else {
+            msg.style.display = "none"
+            btn.type = "submit"
+        }
+    }
+
+    function showElement(showElementId, hideElementId, cancel) {
+
+        document.getElementById(showElementId).style.display = 'flex';
+        document.getElementById(hideElementId).style.display = 'none';
+        if (cancel === 1) {
+            document.getElementById('cancelBtn').style.display = 'flex';
+        } else {
+            document.getElementById('cancelBtn').style.display = 'none';
+        }
+    }
+
+</script>
+{{#account}}
+<form action="/editAccount" method="post" enctype="multipart/form-data">
+    <div id="accountContainer">
+        <div id="row1">
+            <div id="primarySection">
+                <label for="updateProfilePicture" id="editPicture" class="button"><img src="/{{profilePicture}}"
+                        alt="profilePicture" id="profilePicture"></label>
+                <input type="file" id="updateProfilePicture" name="updateProfilePicture"
+                    accept='image/png, image/jpg, image/jpeg' hidden>
+                <div id="nameSection">
+                    <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Name">
+                    <input type="text" name="lastNameField" id="lastNameField" value="{{userLastName}}"
+                        placeholder="Last Name">
+                </div>
+            </div>
+            <div id="contactSection">
+                <input type="email" name="emailField" id="emailField" value="{{email}}" placeholder="Email" readonly>
+                <input type="text" name="phoneNumberField" id="phoneNumberField" value="{{phone}}"
+                    placeholder="Phone Number">
+            </div>
+
+            <input type="text" name="adressField" id="adressField" value="{{adress}}" placeholder="Adress">
+
+            <div id="localisationSection">
+                <input type="text" name="cityField" id="cityField" value="{{city}}" placeholder="City">
+                <input type="text" name="zipCodeField" id="zipCodeField" value="{{zipCode}}" placeholder="Zip Code">
+            </div>
+            <div id="buttonSection">
+                <a href="/account" class="button">Cancel</a>
+                <input type="submit" class="button" value="Confirm">
+            </div>
+        </div>
+    </div>
+</form>
+{{/account}}
+{{>footer}}

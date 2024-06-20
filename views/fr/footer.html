@@ -1,0 +1,32 @@
+<footer>
+      <div class="column">
+            <span class="text">About</span>
+            <div id="footerLeftSide">
+                  <a href="/aboutUs">About us</a>
+                  <a href="mailto:pharmadistrib@gmail.com">Contact us</a>
+            </div>
+      </div>
+      <div class="column">
+            <span class="text">Account</span>
+            {{#authenticated}}
+            <div id="footerRightSide">
+                  <a href="/account">Account</a>
+                  <form action="/signout" method="post">
+                        <input type="submit" value="Sign Out">
+                  </form>
+            </div>
+            {{/authenticated}}
+
+            {{^authenticated}}
+            <div id="footerRightSide">
+                  <a href="/signin">Sing In</a>
+            </div>
+            {{/authenticated}}
+
+      </div>
+</footer>
+
+
+</body>
+
+</html>
