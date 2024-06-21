@@ -1,4 +1,4 @@
-{{>header}}
+{{>./en/header}}
 <script>
     function showDiv(divId, element) {
         if (element.value == "addLaboratory") {
@@ -8,13 +8,22 @@
             document.getElementById(divId).style.display = "none";
         }
     }
+
+    function checkDate() {
+        let startDate = document.getElementById("dateStartField")
+        let endDate = document.getElementById("dateEndField")
+        if (startDate.value > endDate.value) {
+            alert("The start date must be before the end date")
+            endDate.value = startDate
+        }
+    }
 </script>
 
 
 <div id="newOrderContainer">
     <div id="content">
         <span id="title">New Order</span>
-        <form action="/createOrder" method="post" id="createOrderForm" enctype="multipart/form-data">
+        <form action="/en/createOrder" method="post" id="createOrderForm" enctype="multipart/form-data">
             <div id="upperForm">
                 <div id="infoSection">
                     <input type="text" name="nameField" id="nameField" placeholder="Name" required>
@@ -33,11 +42,11 @@
                 <div id="dateSection">
                     <div class="datePannel">
                         <span>Start Date</span>
-                        <input type="date" name="dateStartField" id="dateStartField" required>
+                        <input type="date" name="dateStartField" id="dateStartField" value="{{currentDate}}" onchange="checkDate()" required>
                     </div>
                     <div class="datePannel">
                         <span>End Date</span>
-                        <input type="date" name="dateEndField" id="dateEndField" required>
+                        <input type="date" name="dateEndField" id="dateEndField" onchange="checkDate()" required>
                     </div>
                 </div>
             </div>
@@ -56,4 +65,4 @@
         </form>
     </div>
 </div>
-{{>footer}}
+{{>./en/footer}}

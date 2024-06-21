@@ -1,4 +1,4 @@
-{{>header}}
+{{>./en/header}}
 
 <script>
     function showPassword(name, show, hide, value) {
@@ -16,7 +16,7 @@
 
 <div id="signinContainer">
     <div id="content">
-        <form action="/signin" method="post" id="signInForm">
+        <form action="/en/signin" method="post" id="signInForm">
             <span id="title">Sign In</span>
             <div id="inputSection">
                 <div id="field">
@@ -28,13 +28,13 @@
                                 onclick="showPassword('password','showPassLabel','hidePassLabel',true)"
                                 hidden>
                             <label for="showPassBtn" id="showPassLabel">
-                                <img src="showPass.svg" class="icoPass" alt="show Password">
+                                <img src="../showPass.svg" class="icoPass" alt="show Password">
                             </label>
                             <input type="button" name="hidePasswdBtn" id="hidePasswdBtn"
                                 onclick="showPassword('password','showPassLabel','hidePassLabel',false)"
                                 hidden>
                             <label for="hidePasswdBtn" style="display: none;" id="hidePassLabel">
-                                <img src="hidePass.svg" class="icoPass" alt="hide Password">
+                                <img src="../hidePass.svg" class="icoPass" alt="hide Password">
                             </label>
                     </div>
                 </div>
@@ -43,8 +43,8 @@
                         {{/errorMessage}}
                 <input type="submit" value="Sign In">
                 <div id="otherOptions">
-                    <a href="/forgotPassword">Forgot password</a>
-                    <a href="/signup">Sign up</a>
+                    <a href="/en/forgotPassword">Forgot password</a>
+                    <a href="/en/signup">Sign up</a>
                 </div>
 
             </div>
@@ -55,4 +55,4 @@
     </div>
 </div>
 
-{{>footer}}
+{{>./en/footer}}

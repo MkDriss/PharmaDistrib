@@ -50,54 +50,54 @@
         <div id="primarySection">
             <img src="/{{profilePicture}}" alt="profilePicture" id="profilePicture">
             <div id="nameSection">
-                <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Nom" readonly>
+                <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Prénom" readonly>
                 <input type="text" name="lastNameField" id="lastNameField" value="{{userLastName}}"
-                    placeholder="Last Name" readonly>
+                    placeholder="Nom" readonly>
             </div>
         </div>
         <div id="contactSection">
             <input type="email" name="emailField" id="emailField" value="{{email}}" placeholder="Email" readonly>
             <input type="text" name="phoneNumberField" id="phoneNumberField" value="{{phone}}"
-                placeholder="Phone Number" readonly>
+                placeholder="Numéro de téléphone" readonly>
         </div>
 
-        <input type="text" name="adressField" id="adressField" value="{{adress}}" placeholder="Adress" readonly>
+        <input type="text" name="adressField" id="adressField" value="{{adress}}" placeholder="Adresse" readonly>
 
         <div id="localisationSection">
-            <input type="text" name="cityField" id="cityField" value="{{city}}" placeholder="City" readonly>
-            <input type="text" name="zipCodeField" id="zipCodeField" value="{{zipCode}}" placeholder="Zip Code"
+            <input type="text" name="cityField" id="cityField" value="{{city}}" placeholder="Ville" readonly>
+            <input type="text" name="zipCodeField" id="zipCodeField" value="{{zipCode}}" placeholder="Code Postal"
                 readonly>
         </div>
         <div id="changePsswdSection">
-            <input type="button" name="changePsswdBtn" id="changePsswdBtn" value="Change Password"
+            <input type="button" name="changePsswdBtn" id="changePsswdBtn" value="Modifier Mot de passe"
                 onclick="showElement('updatePasswordForm','changePsswdBtn', 1)">
 
-            <form action="/updatePassword/{{token}}" method="post" style="display: none;" id="updatePasswordForm">
+            <form action="/fr/updatePassword/{{token}}" method="post" style="display: none;" id="updatePasswordForm">
                 <div id="oldPasswordSection">
-                    <input type="password" name="oldPasswordField" id="oldPasswordField" placeholder="Old Password">
+                    <input type="password" name="oldPasswordField" id="oldPasswordField" placeholder="Ancien Mot de passe">
 
                     <input type="button" name="showOldPassBtn" id="showOldPassBtn"
                         onclick="showPassword('oldPasswordField','showOldPassLabel','hideOldPassLabel',true)" hidden>
                     <label for="showOldPassBtn" id="showOldPassLabel">
-                        <img src="showPass.svg" class="icoPass" alt="show Old Password">
+                        <img src="../showPass.svg" class="icoPass" alt="show Old Password">
                     </label>
                     <input type="button" name="hideOldPasswdBtn" id="hideOldPasswdBtn"
                         onclick="showPassword('oldPasswordField','showOldPassLabel','hideOldPassLabel',false)" hidden>
                     <label for="hideOldPasswdBtn" style="display: none;" id="hideOldPassLabel">
-                        <img src="hidePass.svg" class="icoPass" alt="hide OldPassword">
+                        <img src="../hidePass.svg" class="icoPass" alt="hide OldPassword">
                     </label>
                 </div>
                 <div id="newPasswordSection">
-                    <input type="password" name="newPasswordField" id="newPasswordField" placeholder="New Password">
+                    <input type="password" name="newPasswordField" id="newPasswordField" placeholder="Nouveau Mot de passe">
                     <input type="button" name="showNewPassBtn" id="showNewPassBtn"
                         onclick="showPassword('newPasswordField','showNewPassLabel','hideNewPassLabel',true)" hidden>
                     <label for="showNewPassBtn" id="showNewPassLabel">
-                        <img src="showPass.svg" class="icoPass" alt="show New Password">
+                        <img src="../showPass.svg" class="icoPass" alt="show New Password">
                     </label>
                     <input type="button" name="hideNewPasswdBtn" id="hideNewPasswdBtn"
                         onclick="showPassword('newPasswordField','showNewPassLabel','hideNewPassLabel',false)" hidden>
                     <label for="hideNewPasswdBtn" style="display: none;" id="hideNewPassLabel">
-                        <img src="hidePass.svg" class="icoPass" alt="hide NewPassword">
+                        <img src="../hidePass.svg" class="icoPass" alt="hide NewPassword">
                     </label>
                 </div>
                 <div id="confirmPasswordSection">
@@ -107,40 +107,40 @@
                         onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',true)"
                         hidden>
                     <label for="showConfirmPassBtn" id="showConfirmPassLabel">
-                        <img src="showPass.svg" class="icoPass" alt="show Confirm Password">
+                        <img src="../showPass.svg" class="icoPass" alt="show Confirm Password">
                     </label>
                     <input type="button" name="hideConfirmPasswdBtn" id="hideConfirmPasswdBtn"
                         onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',false)"
                         hidden>
                     <label for="hideConfirmPasswdBtn" style="display: none;" id="hideConfirmPassLabel">
-                        <img src="hidePass.svg" class="icoPass" alt="hide Confirm Password">
+                        <img src="../hidePass.svg" class="icoPass" alt="hide Confirm Password">
                     </label>
                 </div>
-                <span id="errorMessage" style="display: none;">Passwords aren't matching</span>
+                <span id="errorMessage" style="display: none;">Les mots de passes doivent être identiques</span>
                 <input type="button" name="cancelBtn" id="cancelBtn" value="Cancel"
                     onclick="showElement('changePsswdBtn', 'updatePasswordForm', 0)">
                 <input type="submit" name="changePsswdSub" id="changePsswdSub" value="Confirm"
                     onclick="checkPassword()">
             </form>
-            <a href="/editAccount" id="editProfileLink">Edit</a>
+            <a href="/fr/editAccount" id="editProfileLink">Configurer</a>
         </div>
 
     </div>
     <div id="column2">
         <div id="column2Content">
-            <span class="title">My Orders</span>
+            <span class="title">Mes Commandes</span>
 
             <div id="orderList">
                 {{#myOrders}}
                 {{#orders}}
-                <a href="/order/{{orderId}}" class="order">
+                <a href="/fr/order/{{orderId}}" class="order">
                 </a>
                 {{/orders}}
-                <a href="/myOrders" id="myOrderBtn">See More</a>
+                <a href="/fr/myOrders" id="myOrderBtn">Voir plus</a>
                 {{/myOrders}}
                 {{^myOrders}}
-                <span class="text">You have no orders yet</span>
-                <a href="/newOrder" id="newOrderBtn">New Order</a>
+                <span class="text">Vous n'avez aucune commandes</span>
+                <a href="/fr/newOrder" id="newOrderBtn">Nouvelle Commande</a>
                 {{/myOrders}}
             </div>
 
@@ -149,4 +149,4 @@
 </div>
 {{/account}}
 
-{{>footer}}
+{{>./fr/footer}}

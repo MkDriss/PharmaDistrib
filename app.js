@@ -56,98 +56,116 @@ function sanitize(str) {
     return newStr;
 };
 
+function now() {
+    let currentDate = new Date();
+    let day = currentDate.getDate();
+    let month = currentDate.getMonth() + 1;
+    let year = currentDate.getFullYear();
+
+    if (day < 10) {
+        day = "0" + day;
+    }
+    if (month < 10) {
+        month = "0" + month;
+    }
+
+    let date = year + "-" + month + "-" + day;
+    return date;
+}
+
 // GET
 
 app.get("/", (req, res) => {
-    res.render("./en/home.html", { css: '/home.css', lang: req.session.language });
-});
-
-app.get("/fr/:route", (req, res) => {
-    req.session.language = "FR";
-    res.redirect("/" + req.params.route);
+    res.redirect("./en")
 })
 
-app.get("/en/:route", (req, res) => {
-    req.session.language = "EN";
-    res.redirect("/" + req.params.route);
+app.get("/:lang", (req, res) => {
+    res.render("./" + req.params.lang + "/home.html", { css: '/home.css' });
+});
+
+app.get("/:lang/home", (req, res) => {
+    res.redirect("/" + req.params.lang);
 })
 
-app.get("/home", (req, res) => {
-    res.redirect("/");
-})
-
-app.get("/signin", (req, res) => {
-    res.render("signin.html", { css: "/signin.css", lang: req.session.language });
+app.get("/:lang/signin", (req, res) => {
+    res.render("./" + req.params.lang + "/signin.html", { css: "/signin.css" });
 });
 
 
-app.get("/signup", (req, res) => {
-    res.render("signup.html", { css: "/signup.css", lang: req.session.language });
+app.get("/:lang/signup", (req, res) => {
+    res.render("./" + req.params.lang + "/signup.html", { css: "/signup.css" });
 });
 
-app.get("/account", (req, res) => {
-    let id = req.session.id;
-    let account = accounts.get(id)
-    console.log(req.session.language)
-    if (req.session.language) {
-        view = "/" + req.session.language + "/account.html";
-    } else view = "/en/account.html";
-    res.render(view, { css: "/account.css", account: account });
+app.get("/:lang/account", (req, res) => {
+    if (req.session.authenticated) {
+        let id = req.session.id;
+        let account = accounts.get(id)
+        return res.render("./" + req.params.lang + "/account.html", { css: "/account.css", account: account });
+    } res.redirect('/' + req.params.lang + '/signin')
 });
 
-app.get("/orders", (req, res) => {
-    res.render("orders.html", { css: "/orders.css", lang: req.session.language });
+app.get("/:lang/orders", (req, res) => {
+    if (req.session.authenticated) {
+        return res.render("./" + req.params.lang + "/orders.html", { css: "/orders.css" });
+    } res.redirect('/' + req.params.lang + '/signin')
 });
 
-app.get('/newOrder', (req, res) => {
-    res.render("newOrder.html", { css: "/newOrder.css", lang: req.session.language });
+app.get('/:lang/newOrder', (req, res) => {
+    if (req.session.authenticated) {
+        return res.render("./" + req.params.lang + "/newOrder.html", { css: "/newOrder.css", currentDate: now() });
+    } res.redirect('/' + req.params.lang + '/signin')
 });
 
-app.get('/editAccount', (req, res) => {
-    let account = accounts.get(req.session.id);
-    res.render("editAccount.html", { css: "/editAccount.css", account: account, lang: req.session.language });
+app.get('/:lang/editAccount', (req, res) => {
+    if (req.session.authenticated) {
+        let account = accounts.get(req.session.id);
+        return res.render("./" + req.params.lang + "/editAccount.html", { css: "/editAccount.css", account: account });
+    } res.redirect('/' + req.params.lang + '/signin')
+
 })
 
 // POST
 
-app.post("/signin", (req, res) => {
+app.post("/:lang/signin", (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
 
     if (email == undefined || password == undefined) {
         console.log("email or password is undefined")
-        return res.render('signin.html', { errorMessage: "Invalid email or password", css: '/signIn.css', lang: req.session.language });
+        return res.render("./" + req.params.lang + '/signin.html', { errorMessage: "Invalid email or password", css: '/signIn.css' });
     }
     else if (accounts.authenticate(email, password)) {
         req.session.id = (accounts.getIdFromEmail(email)).id;
         req.session.email = email;
         req.session.username = accounts.get(req.session.id).userName;
-        req.session.authenticated = true;
+        req.session.authenticatedd = true;
         if (accounts.get(req.session.id).admin === 1) {
             req.session.admin = true;
         } else { req.session.admin = false; }
 
         console.log(req.session.username + ' connected');
 
-        return res.redirect('/home');
+        return res.redirect("/" + req.params.lang + '/home');
     }
     else if (!accounts.authenticate(email, password)) {
         console.log("Invalid username or password")
-        return res.render('signin.html', { errorMessage: "Wrong username or password", css: '/signin.css', lang: req.session.language });
+        return res.render("./" + req.params.lang + '/signin.html', { errorMessage: "Wrong username or password", css: '/signin.css' });
     }
 });
 
-app.post("/signout", (req, res) => {
-    console.log(req.session.username + " logged out");
-    req.session.username = null;
-    req.session.email = null;
-    req.session.authenticated = false;
-    req.session.admin = false;
-    req.session.id = null;
-    res.redirect('/home');
+app.post("/:lang/signout", (req, res) => {
+    if (req.session.authenticated) {
+        console.log(req.session.username + " logged out");
+        req.session.username = null;
+        req.session.email = null;
+        req.session.authenticatedd = false;
+        req.session.admin = false;
+        req.session.id = null;
+        res.redirect('/' + req.params.lang + '/home');
+    } res.redirect('/' + req.params.lang + '/signin')
 });
 
-app.post("/signup", (req, res) => {
+app.post("/:lang/signup", (req, res) => {
     let username = req.body.name;
     let email = req.body.email;
     let password = req.body.password;
@@ -157,24 +175,25 @@ app.post("/signup", (req, res) => {
 
     if (email == undefined || username == undefined || password == undefined) {
         console.log("Invalid username or password")
-        return res.render('signup', { msg: "Invalid email, username or password", css: '/signup.css', lang: req.session.language });
+        return res.render("./" + req.params.lang + '/signup', { msg: "Invalid email, username or password", css: '/signup.css' });
     }
     else if (confirmPassword != password) {
         console.log("Password aren't matching")
-        return res.render('signup', { msg: "Wrong password", css: '/register.css', lang: req.session.language })
+        return res.render("./" + req.params.lang + '/signup', { msg: "Wrong password", css: '/register.css' })
     }
     else if (accounts.get(id) == undefined && accounts.checkEmail(email) == 'false') {
         accounts.create(id, email, username, password, token);
-        return res.redirect('/signin');
+        return res.redirect("/" + req.params.lang + '/signin');
     }
     else if (accounts.get(email) != undefined) {
         console.log("An account already exists with this email")
-        return res.render('singup', { msg: "An account already exists with this email", css: '/signup.css', lang: req.session.language });
+        return res.render("./" + req.params.lang + '/singup', { msg: "An account already exists with this email", css: '/signup.css' });
     }
 });
 
 
-app.post("/updatePassword/:token", (req, res) => {
+app.post("/:lang/updatePassword/:token", (req, res) => {
+
     let token = req.params.token;
     let email = req.body.emailField;
     let oldPassword = req.body.oldPasswordField;
@@ -182,88 +201,93 @@ app.post("/updatePassword/:token", (req, res) => {
     let confirmPassword = req.body.confirmPasswordField;
     if (accounts.authenticate(email, oldPassword) && newPassword === confirmPassword) {
         accounts.updateAccountPassword(confirmPassword, token);
-        res.redirect('/account');
-    } else {
-        let account = accounts.get(req.session.id);
-        res.render('account.html', { css: '/account.css', account: account, script: true, lang: req.session.language })
+        return res.redirect("/" + req.params.lang + '/account');
     }
+    let account = accounts.get(req.session.id);
+    res.render("./" + req.params.lang + '/account.html', { css: '/account.css', account: account, script: true })
 })
 
-app.post("/editAccount", uploadProfilePicture.single('updateProfilePicture'), (req, res) => {
-    let name = req.body.nameField;
-    let lastName = req.body.lastNameField;
-    let phone = req.body.phoneNumberField;
-    let adress = req.body.adressField;
-    let city = req.body.cityField;
-    let zipCode = req.body.zipCodeField
-    let id = req.session.id;
-    let email = req.body.email;
-    let profilePictureName;
-
-    if (req.file == undefined) {
-        profilePictureName = accounts.get(id).profilePicture;
-    } else {
-        console.log(req.file)
-        profilePictureName = sanitize(req.file.originalname) + '_' + id + '.png';
-    }
-
-    if (name == undefined) {
-        console.log("Invalid username or password")
-        return res.render('updateAccount', { msg: "Invalid email, username or password", css: '/updateAccount.css', lang: req.session.language });
-    }
-    else if (accounts.get(email) == undefined) {
-        accounts.updateAccount(id, name, lastName, adress, city, zipCode, phone, profilePictureName);
+app.post("/:lang/editAccount", uploadProfilePicture.single('updateProfilePicture'), (req, res) => {
+    if (req.session.authenticated) {
+        let name = req.body.nameField;
+        let lastName = req.body.lastNameField;
+        let phone = req.body.phoneNumberField;
+        let adress = req.body.adressField;
+        let city = req.body.cityField;
+        let zipCode = req.body.zipCodeField
+        let id = req.session.id;
+        let email = req.body.email;
+        let profilePictureName;
 
         if (req.file == undefined) {
-            console.log("No profile picture uploaded");
+            profilePictureName = accounts.get(id).profilePicture;
         } else {
-            let tmp_path = req.file.path;
-            let target_path = 'public/profiles_pictures/' + profilePictureName;
-            let src = fs.createReadStream(tmp_path);
-            let dest = fs.createWriteStream(target_path);
-            src.pipe(dest);
+            console.log(req.file)
+            profilePictureName = sanitize(req.file.originalname) + '_' + id + '.png';
         }
 
-        return res.redirect('/account');
-    }
+        if (name == undefined) {
+            console.log("Invalid username or password")
+            return res.render("./" + req.params.lang + '/updateAccount', { msg: "Invalid email, username or password", css: '/updateAccount.css' });
+        }
+        else if (accounts.get(email) == undefined) {
+            accounts.updateAccount(id, name, lastName, adress, city, zipCode, phone, profilePictureName);
+
+            if (req.file == undefined) {
+                console.log("No profile picture uploaded");
+            } else {
+                let tmp_path = req.file.path;
+                let target_path = 'public/profiles_pictures/' + profilePictureName;
+                let src = fs.createReadStream(tmp_path);
+                let dest = fs.createWriteStream(target_path);
+                src.pipe(dest);
+            }
+
+            return res.redirect("/" + req.params.lang + '/account');
+        }
+    } res.redirect('/' + req.params.lang + '/signin')
 })
 
-app.post("/searchMedic", (req, res) => {
+app.post("/:lang/searchMedic", (req, res) => {
     // TO DO
 })
 
-app.post("/createOrder", uploadCSVFiles.single('fileField'), (req, res) => {
-    let file = req.file;
-    let fileName = req.file.originalname;
+app.post("/:lang/createOrder", uploadCSVFiles.single('fileField'), (req, res) => {
+    if (req.session.authenticated) {
 
-    if (req.file == undefined) {
-        console.log("No profile files uploaded");
-    } else {
-        let tmp_path = file.path;
-        let target_path = 'public/csv/' + fileName;
+        let file = req.file;
+        let fileName = req.file.originalname;
+        let startDate = req.body.dateStartField;
+        if (req.file == undefined) {
+            console.log("No profile files uploaded");
+        } else {
+            let tmp_path = file.path;
+            let target_path = 'public/csv/' + fileName;
 
-        fs.readFile(tmp_path, "utf8", (err, data) => {
-            if (err) {
-                console.error("Error while reading:", err);
-                return;
-            }
+            fs.readFile(tmp_path, "utf8", (err, data) => {
+                if (err) {
+                    console.error("Error while reading:", err);
+                    return;
+                }
 
-            // Split the data into lines
-            const lines = data.split("\n");
+                // Split the data into lines
+                const lines = data.split("\n");
 
-            // Initialize the output array
-            const output = [];
+                // Initialize the output array
+                const output = [];
 
-            // Loop through each line and split it into fields
-            lines.forEach((line) => {
-                const fields = line.split(";");
-                output.push(fields);
+                // Loop through each line and split it into fields
+                lines.forEach((line) => {
+                    const fields = line.split(";");
+                    output.push(fields);
+                });
+
+                // Log the output array
+                console.log(output[0]);
             });
+        }
+    } res.redirect('/' + req.params.lang + '/signin')
 
-            // Log the output array
-            console.log(output[0]);
-        });
-    }
 });
 
 // LISTEN

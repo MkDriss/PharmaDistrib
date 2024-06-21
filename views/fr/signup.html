@@ -30,43 +30,43 @@
 
 <div id="signUpContainer">
     <div id="content">
-        <form action="/signup" method="post" id="signUpForm">
-            <span id="title">Sign Up</span>
+        <form action="/fr/signup" method="post" id="signUpForm">
+            <span id="title">S'inscrire</span>
             <div id="inputSection">
                 <div id="field">
-                    <input type="text" name="name" placeholder="Name">
+                    <input type="text" name="name" placeholder="Nom">
                     <input type="email" name="email" placeholder="Email">
                     
                         <div id="passwordSection">
                             <input type="password" name="passwordField" id="passwordField"
-                                placeholder="Password">
+                                placeholder="Mot de passe">
                             <input type="button" name="showPassBtn" id="showPassBtn"
                                 onclick="showPassword('passwordField','showPassLabel','hidePassLabel',true)"
                                 hidden>
                             <label for="showPassBtn" id="showPassLabel">
-                                <img src="showPass.svg" class="icoPass" alt="show Password">
+                                <img src="../showPass.svg" class="icoPass" alt="show Password">
                             </label>
                             <input type="button" name="hidePasswdBtn" id="hidePasswdBtn"
                                 onclick="showPassword('passwordField','showPassLabel','hidePassLabel',false)"
                                 hidden>
                             <label for="hidePasswdBtn" style="display: none;" id="hidePassLabel">
-                                <img src="hidePass.svg" class="icoPass" alt="hide Password">
+                                <img src="../hidePass.svg" class="icoPass" alt="hide Password">
                             </label>
                         </div>
                         <div id="confirmPasswordSection">
                             <input type="password" name="confirmPasswordField" id="confirmPasswordField"
-                                placeholder="Confirm Password">
+                                placeholder="Confirmer le mot de passe">
                             <input type="button" name="showConfirmPassBtn" id="showConfirmPassBtn"
                                 onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',true)"
                                 hidden>
                             <label for="showConfirmPassBtn" id="showConfirmPassLabel">
-                                <img src="showPass.svg" class="icoPass" alt="show Confirm Password">
+                                <img src="../showPass.svg" class="icoPass" alt="show Confirm Password">
                             </label>
                             <input type="button" name="hideConfirmPasswdBtn" id="hideConfirmPasswdBtn"
                                 onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',false)"
                                 hidden>
                             <label for="hideConfirmPasswdBtn" style="display: none;" id="hideConfirmPassLabel">
-                                <img src="hidePass.svg" class="icoPass" alt="hide Confirm Password">
+                                <img src="../hidePass.svg" class="icoPass" alt="hide Confirm Password">
                             </label>
                         </div>
 
@@ -74,9 +74,9 @@
                 {{#errorMessage}}
                 <span id="errorMessage">{{errorMessage}}</span>
                 {{/errorMessage}}
-                <input type="submit" value="Sign Un">
+                <input type="submit" value="S'inscrire">
                 <div id="otherOptions">
-                    <a href="/signin">I have already an account</a>
+                    <a href="/fr/signin">Je possède déjà un compte</a>
                 </div>
 
             </div>
@@ -86,4 +86,4 @@
 
     </div>
 </div>
-{{>footer}}
+{{>./fr/footer}}

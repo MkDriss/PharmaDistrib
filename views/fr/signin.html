@@ -16,35 +16,35 @@
 
 <div id="signinContainer">
     <div id="content">
-        <form action="/signin" method="post" id="signInForm">
-            <span id="title">Sign In</span>
+        <form action="/fr/signin" method="post" id="signInForm">
+            <span id="title">Se connecter</span>
             <div id="inputSection">
                 <div id="field">
                     <input type="email" name="email" placeholder="Email">
                     <div id="passwordField">
                        <input type="password" name="password" id="password"
-                                placeholder="Password">
+                                placeholder="Mot de passe">
                             <input type="button" name="showPassBtn" id="showPassBtn"
                                 onclick="showPassword('password','showPassLabel','hidePassLabel',true)"
                                 hidden>
                             <label for="showPassBtn" id="showPassLabel">
-                                <img src="showPass.svg" class="icoPass" alt="show Password">
+                                <img src="../showPass.svg" class="icoPass" alt="show Password">
                             </label>
                             <input type="button" name="hidePasswdBtn" id="hidePasswdBtn"
                                 onclick="showPassword('password','showPassLabel','hidePassLabel',false)"
                                 hidden>
                             <label for="hidePasswdBtn" style="display: none;" id="hidePassLabel">
-                                <img src="hidePass.svg" class="icoPass" alt="hide Password">
+                                <img src="../hidePass.svg" class="icoPass" alt="hide Password">
                             </label>
                     </div>
                 </div>
                 {{#errorMessage}}
                         <span id="errorMessage">{{errorMessage}}</span>
                         {{/errorMessage}}
-                <input type="submit" value="Sign In">
+                <input type="submit" value="Se connecter">
                 <div id="otherOptions">
-                    <a href="/forgotPassword">Forgot password</a>
-                    <a href="/signup">Sign up</a>
+                    <a href="/fr/forgotPassword">Mot de passe oublié</a>
+                    <a href="/fr/signup">S'inscrire</a>
                 </div>
 
             </div>
@@ -55,4 +55,4 @@
     </div>
 </div>
 
-{{>footer}}
+{{>./fr/footer}}

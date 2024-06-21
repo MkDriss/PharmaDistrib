@@ -16,17 +16,17 @@
 <body>
     <nav id="navBar">
         <div id="leftSide">
-            <a href="/home" id="home">Pharma Distrib</a>
-            <a href="/orders" id="orders">Orders</a>
+            <a href="/en/home" id="home">Pharma Distrib</a>
+            <a href="/en/orders" id="orders">Orders</a>
         </div>
         <div id="rightSide">
-            <a href="/orders"><img class="icoHeader" src="/box.svg" id="boximg" alt="boximg"></a>
+            <a href="/en/orders"><img class="icoHeader" src="/box.svg" id="boximg" alt="boximg"></a>
             {{#authenticated}}
-            <a href="/account"><img class="icoHeader" src="/account.svg" id="accountimg" alt="accountimg"></a>
+            <a href="/en/account"><img class="icoHeader" src="/account.svg" id="accountimg" alt="accountimg"></a>
             {{/authenticated}}
 
             {{^authenticated}}
-            <a href="/signin"><img class="icoHeader" src="/account.svg" id="accountimg" alt="accountimg"></a>
+            <a href="/en/signin"><img class="icoHeader" src="/account.svg" id="accountimg" alt="accountimg"></a>
             {{/authenticated}}
         </div>
     </nav>

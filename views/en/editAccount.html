@@ -1,4 +1,4 @@
-{{>header}}
+{{>./en/header}}
 
 <script>
     function checkPassword() {
@@ -28,7 +28,7 @@
 
 </script>
 {{#account}}
-<form action="/editAccount" method="post" enctype="multipart/form-data">
+<form action="/en/editAccount" method="post" enctype="multipart/form-data">
     <div id="accountContainer">
         <div id="row1">
             <div id="primarySection">
@@ -55,11 +55,11 @@
                 <input type="text" name="zipCodeField" id="zipCodeField" value="{{zipCode}}" placeholder="Zip Code">
             </div>
             <div id="buttonSection">
-                <a href="/account" class="button">Cancel</a>
+                <a href="/en/account" class="button">Cancel</a>
                 <input type="submit" class="button" value="Confirm">
             </div>
         </div>
     </div>
 </form>
 {{/account}}
-{{>footer}}
+{{>.//en/footer}}

@@ -1,4 +1,4 @@
-{{>header}}
+{{>./en/header}}
 
 <script>
     function checkPassword() {
@@ -48,14 +48,9 @@
 <div id="accountContainer">
     <div id="column1">
         <div id="primarySection">
-            <img src="/{{profilePicture}}" alt="profilePicture" id="profilePicture">
+            <img src="../{{profilePicture}}" alt="profilePicture" id="profilePicture">
             <div id="nameSection">
-                {{#EN}}
                 <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Name" readonly>
-                {{/EN}}
-                {{#FR}}
-                <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Nom" readonly>
-                {{/FR}}
                 <input type="text" name="lastNameField" id="lastNameField" value="{{userLastName}}"
                     placeholder="Last Name" readonly>
             </div>
@@ -66,7 +61,7 @@
                 placeholder="Phone Number" readonly>
         </div>
 
-        <input type="text" name="adressField" id="adressField" value="{{adress}}" placeholder="Adress" readonly>
+        <input type="text" name="adressField" id="adressField" value="{{adress}}" placeholder="Address" readonly>
 
         <div id="localisationSection">
             <input type="text" name="cityField" id="cityField" value="{{city}}" placeholder="City" readonly>
@@ -77,19 +72,19 @@
             <input type="button" name="changePsswdBtn" id="changePsswdBtn" value="Change Password"
                 onclick="showElement('updatePasswordForm','changePsswdBtn', 1)">
 
-            <form action="/updatePassword/{{token}}" method="post" style="display: none;" id="updatePasswordForm">
+            <form action="/en/updatePassword/{{token}}" method="post" style="display: none;" id="updatePasswordForm">
                 <div id="oldPasswordSection">
                     <input type="password" name="oldPasswordField" id="oldPasswordField" placeholder="Old Password">
 
                     <input type="button" name="showOldPassBtn" id="showOldPassBtn"
                         onclick="showPassword('oldPasswordField','showOldPassLabel','hideOldPassLabel',true)" hidden>
                     <label for="showOldPassBtn" id="showOldPassLabel">
-                        <img src="showPass.svg" class="icoPass" alt="show Old Password">
+                        <img src="../showPass.svg" class="icoPass" alt="show Old Password">
                     </label>
                     <input type="button" name="hideOldPasswdBtn" id="hideOldPasswdBtn"
                         onclick="showPassword('oldPasswordField','showOldPassLabel','hideOldPassLabel',false)" hidden>
                     <label for="hideOldPasswdBtn" style="display: none;" id="hideOldPassLabel">
-                        <img src="hidePass.svg" class="icoPass" alt="hide OldPassword">
+                        <img src="../hidePass.svg" class="icoPass" alt="hide OldPassword">
                     </label>
                 </div>
                 <div id="newPasswordSection">
@@ -97,12 +92,12 @@
                     <input type="button" name="showNewPassBtn" id="showNewPassBtn"
                         onclick="showPassword('newPasswordField','showNewPassLabel','hideNewPassLabel',true)" hidden>
                     <label for="showNewPassBtn" id="showNewPassLabel">
-                        <img src="showPass.svg" class="icoPass" alt="show New Password">
+                        <img src="../showPass.svg" class="icoPass" alt="show New Password">
                     </label>
                     <input type="button" name="hideNewPasswdBtn" id="hideNewPasswdBtn"
                         onclick="showPassword('newPasswordField','showNewPassLabel','hideNewPassLabel',false)" hidden>
                     <label for="hideNewPasswdBtn" style="display: none;" id="hideNewPassLabel">
-                        <img src="hidePass.svg" class="icoPass" alt="hide NewPassword">
+                        <img src="../hidePass.svg" class="icoPass" alt="hide NewPassword">
                     </label>
                 </div>
                 <div id="confirmPasswordSection">
@@ -112,13 +107,13 @@
                         onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',true)"
                         hidden>
                     <label for="showConfirmPassBtn" id="showConfirmPassLabel">
-                        <img src="showPass.svg" class="icoPass" alt="show Confirm Password">
+                        <img src="../showPass.svg" class="icoPass" alt="show Confirm Password">
                     </label>
                     <input type="button" name="hideConfirmPasswdBtn" id="hideConfirmPasswdBtn"
                         onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',false)"
                         hidden>
                     <label for="hideConfirmPasswdBtn" style="display: none;" id="hideConfirmPassLabel">
-                        <img src="hidePass.svg" class="icoPass" alt="hide Confirm Password">
+                        <img src="../hidePass.svg" class="icoPass" alt="hide Confirm Password">
                     </label>
                 </div>
                 <span id="errorMessage" style="display: none;">Passwords aren't matching</span>
@@ -127,7 +122,7 @@
                 <input type="submit" name="changePsswdSub" id="changePsswdSub" value="Confirm"
                     onclick="checkPassword()">
             </form>
-            <a href="/editAccount" id="editProfileLink">Edit</a>
+            <a href="/en/editAccount" id="editProfileLink">Edit</a>
         </div>
 
     </div>
@@ -138,14 +133,14 @@
             <div id="orderList">
                 {{#myOrders}}
                 {{#orders}}
-                <a href="/order/{{orderId}}" class="order">
+                <a href="/en/order/{{orderId}}" class="order">
                 </a>
                 {{/orders}}
-                <a href="/myOrders" id="myOrderBtn">See More</a>
+                <a href="/en/myOrders" id="myOrderBtn">See More</a>
                 {{/myOrders}}
                 {{^myOrders}}
                 <span class="text">You have no orders yet</span>
-                <a href="/newOrder" id="newOrderBtn">New Order</a>
+                <a href="/en/newOrder" id="newOrderBtn">New Order</a>
                 {{/myOrders}}
             </div>
 
@@ -154,4 +149,4 @@
 </div>
 {{/account}}
 
-{{>footer}}
+{{>./en/footer}}

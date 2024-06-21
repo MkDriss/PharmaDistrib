@@ -2,14 +2,14 @@
 
 <div id="orderContainer">
     <div id="content">
-        <span id="title">Orders</span>
+        <span id="title">Commandes</span>
         {{#orders}}
         {{/orders}}
         {{^orders}}
-        <span id="errorMessage">There is no Orders</span>
+        <span id="errorMessage">Il n'y a pas de commandes</span>
         {{/orders}}
-        <a href="/newOrder" id="newOrder">New Order</a>
+        <a href="/fr/newOrder" id="newOrder">Nouvelle Commande</a>
     </div>
 </div>
 
-{{>footer}}
+{{>./fr/footer}}
