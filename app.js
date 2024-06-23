@@ -14,7 +14,6 @@ const app = express();
 
 
 app.use(bodyparser.urlencoded({ extended: true }));
-app.use(express.static('public/medic_pictures/'));
 app.use(express.static('public/icons/'));
 app.use(express.static('public/css/'));
 app.use(express.static('public/pictures/'));
@@ -27,7 +26,7 @@ app.set('views', './views');
 
 var accounts = require('./js/accounts');
 var orders = require('./js/orders');
-var medics = require('./js/medics');
+var products = require('./js/products');
 
 app.use(cookieSession({ secret: 'j7G!wA4t&L,_T9kq5}M(NBF' }));
 app.use(middleware);
@@ -80,11 +79,13 @@ app.get("/", (req, res) => {
 })
 
 app.get("/:lang", (req, res) => {
-    res.render("./" + req.params.lang + "/home.html", { css: '/home.css' });
+    if (req.params.lang === 'en' || req.params.lang === 'fr') {
+        res.redirect("/" + req.params.lang + "/home");
+    }
 });
 
 app.get("/:lang/home", (req, res) => {
-    res.redirect("/" + req.params.lang);
+    res.render("./" + req.params.lang + "/home.html", { css: '/home.css' });
 })
 
 app.get("/:lang/signin", (req, res) => {
@@ -138,7 +139,7 @@ app.post("/:lang/signin", (req, res) => {
         req.session.id = (accounts.getIdFromEmail(email)).id;
         req.session.email = email;
         req.session.username = accounts.get(req.session.id).userName;
-        req.session.authenticatedd = true;
+        req.session.authenticated = true;
         if (accounts.get(req.session.id).admin === 1) {
             req.session.admin = true;
         } else { req.session.admin = false; }
@@ -154,15 +155,13 @@ app.post("/:lang/signin", (req, res) => {
 });
 
 app.post("/:lang/signout", (req, res) => {
-    if (req.session.authenticated) {
-        console.log(req.session.username + " logged out");
-        req.session.username = null;
-        req.session.email = null;
-        req.session.authenticatedd = false;
-        req.session.admin = false;
-        req.session.id = null;
-        res.redirect('/' + req.params.lang + '/home');
-    } res.redirect('/' + req.params.lang + '/signin')
+    console.log(req.session.username + " logged out");
+    req.session.username = null;
+    req.session.email = null;
+    req.session.authenticatedd = false;
+    req.session.admin = false;
+    req.session.id = null;
+    res.redirect('/' + req.params.lang + '/home');
 });
 
 app.post("/:lang/signup", (req, res) => {
@@ -252,42 +251,38 @@ app.post("/:lang/searchMedic", (req, res) => {
     // TO DO
 })
 
-app.post("/:lang/createOrder", uploadCSVFiles.single('fileField'), (req, res) => {
+app.post("/:lang/insertFile", uploadCSVFiles.single('fileField'), (req, res) => {
     if (req.session.authenticated) {
-
         let file = req.file;
         let fileName = req.file.originalname;
         let startDate = req.body.dateStartField;
         if (req.file == undefined) {
-            console.log("No profile files uploaded");
+            console.log("No files uploaded");
         } else {
             let tmp_path = file.path;
-            let target_path = 'public/csv/' + fileName;
-
+            let target_path = 'csv/' + fileName;
+            let src = fs.createReadStream(tmp_path);
+            let dest = fs.createWriteStream(target_path);
+            src.pipe(dest);
             fs.readFile(tmp_path, "utf8", (err, data) => {
                 if (err) {
                     console.error("Error while reading:", err);
                     return;
                 }
-
-                // Split the data into lines
                 const lines = data.split("\n");
-
-                // Initialize the output array
-                const output = [];
-
-                // Loop through each line and split it into fields
-                lines.forEach((line) => {
-                    const fields = line.split(";");
-                    output.push(fields);
-                });
-
-                // Log the output array
-                console.log(output[0]);
+                for (let i = 1; i < lines.length; i++) {
+                    let fields = lines[i].split(";");
+                    try {
+                        fields[10] = fields[10].replace("\r", "");
+                        products.insertProduct(fields[2], fields[4], fields[5], fields[7], fields[9], fields[10]);
+                    } catch {
+                        console.log("ok");
+                        continue;
+                    }
+                }
             });
-        }
+        } return res.redirect("/" + req.params.lang + '/orders');
     } res.redirect('/' + req.params.lang + '/signin')
-
 });
 
 // LISTEN

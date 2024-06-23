@@ -1,68 +1,29 @@
 {{>./en/header}}
-<script>
-    function showDiv(divId, element) {
-        if (element.value == "addLaboratory") {
-            document.getElementById(divId).style.display = "block";
-        }
-        else {
-            document.getElementById(divId).style.display = "none";
-        }
-    }
+<div>
+    <h1>New Order</h1>
+    <form action="/en/newOrder" method="post" id="newOrderForm">
+        <div id="row1">
+            <select name="laboratorySelect" id="laboratorySelect" required>
+                <option name="laboratory" id="laboratory" value="None">Select a Laboratory</option>
+                {{#laboratories}}
+                <option name="laboratory" id="{{laboratory}}" value="{{laboratory}}">
+                    {{laboratory}}</option>
+                {{/laboratories}}
+            </select>
+            <label for="dateStartField">Start Date</label>
+            <input type="date" name="dateStartField" id="dateStartField" value="{{currentDate}}" required>
+            <label for="dateEndField">End Date</label>
+            <input type="date" name="dateEndField" id="dateEndField" required>
+            <input type="submit" value="Create Order">
+        </div>
+        {{#products}}
+        <div id="row2">
+            <input type="text" name="ean13Field" id="ean13Field" value="{{ean13}}" readonly>
+            <input type="text" name="nameField" id="nameField" value="{{name}}" readonly>
+            <input type="text" name="priceField" id="priceField" value="{{price}}" readonly>
+            <input type="number" name="quantityField" id="quantityField" value="{{quantity}}">
 
-    function checkDate() {
-        let startDate = document.getElementById("dateStartField")
-        let endDate = document.getElementById("dateEndField")
-        if (startDate.value > endDate.value) {
-            alert("The start date must be before the end date")
-            endDate.value = startDate
-        }
-    }
-</script>
-
-
-<div id="newOrderContainer">
-    <div id="content">
-        <span id="title">New Order</span>
-        <form action="/en/createOrder" method="post" id="createOrderForm" enctype="multipart/form-data">
-            <div id="upperForm">
-                <div id="infoSection">
-                    <input type="text" name="nameField" id="nameField" placeholder="Name" required>
-                    <select name="laboratorySelect" id="laboratorySelect" onchange="showDiv('newLaboratory',this)"
-                        required>
-                        <option name="laboratory" id="laboratory" value="None">Select a Laboratory</option>
-                        {{#laboratories}}
-                        <option name="laboratory" id="{{laboratory}}" value="{{laboratory}}">
-                            {{laboratory}}</option>
-                        {{/laboratories}}
-                        <option name="addLaboratory" id="addLaboratory" value="addLaboratory">New Laboratory</option>
-                        <input type="text" name="newLaboratory" id="newLaboratory" placeholder="New Laboratory"
-                            style="display: none;">
-                    </select>
-                </div>
-                <div id="dateSection">
-                    <div class="datePannel">
-                        <span>Start Date</span>
-                        <input type="date" name="dateStartField" id="dateStartField" value="{{currentDate}}" onchange="checkDate()" required>
-                    </div>
-                    <div class="datePannel">
-                        <span>End Date</span>
-                        <input type="date" name="dateEndField" id="dateEndField" onchange="checkDate()" required>
-                    </div>
-                </div>
-            </div>
-            <div id="bottomForm">
-                <div id="fileSection">
-                    <input type="file" accept="file/csv" name="fileField" id="fileField" hidden>
-                    <label for="fileField" id="labelfileField">
-                        Insert File
-                    </label>
-                    <span id="fileAccepted">Accept only .csv files</span>
-                </div>
-                <div id="submitSection">
-                    <input type="submit" value="Create" id="createOrderBtn">
-                </div>
-            </div>
-        </form>
-    </div>
+        {{/products}}
+    </form>
 </div>
 {{>./en/footer}}
