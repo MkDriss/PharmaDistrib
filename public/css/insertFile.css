@@ -1,0 +1,103 @@
+#newFileContainer,
+#content,
+#infoSection,
+#dateSection,
+#fileSection,
+#insertFileForm,
+#labelfileField {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#content{
+    margin: 0px 0px 90px 0px;
+    border: 5px solid #ebebebb2;
+    backdrop-filter: blur(2px);
+    background-color: #a0a0a069;
+    padding: 50px;
+    border-radius: 10px;
+}   
+
+#insertFileForm input[type="text"], #insertFileForm input[type="date"], #insertFileForm select {
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 40px;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 10px 0px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: var(--box-shadow);
+    font-family: var(--font-family);
+    background-color: var(--secondary-background-color);
+}
+
+#insertFileForm input[type="text"] {
+    width: 300px;
+}
+
+#insertFileForm select{
+    width: 320px;
+}
+
+#insertFileForm input[type="date"]{
+    width: 210px;
+}
+
+.datePannel span{
+    width: 100px;
+}
+
+.datePannel {
+    width: 320px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+
+}
+
+#labelfileField, #insertFileBtn{
+    margin: 20px 0px 5px 0px;
+    padding: 10px 0px;
+    font-size: 17px;
+    font-weight: 500;
+    width: 200px;
+    height: 30px;
+    border-radius: 10px;
+    border: 3px solid #e0dedc88;
+    backdrop-filter: blur(20px);
+}
+
+
+#labelfileField{
+    text-decoration: none;
+    background-color: var(--text-color);
+    color: var(--background-color);
+}
+
+#insertFileBtn{
+    background-color: var(--background-color);
+    color: var(--text-color);
+    height: 56px;
+    font-family: var(--font-family);
+}
+#fileAccepted{
+    font-size: 15px;
+}
+
+#submitSection{
+    display: flex;
+    justify-content: center;
+}
+
+input[type="submit"]:hover, label:hover{
+    cursor: pointer;
+}
+
+#upperForm, #bottomForm{
+    display: flex;
+    gap: 50px;
+}

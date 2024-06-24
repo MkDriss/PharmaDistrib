@@ -197,3 +197,7 @@ label img {
     border: 3px solid #e0dedc88;
     backdrop-filter: blur(20px);
 }
+
+input[type="button"]:hover, input[type="submit"]:hover{
+    cursor: pointer;
+}

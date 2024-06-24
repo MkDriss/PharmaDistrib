@@ -10,14 +10,14 @@ let loadAccount = function (filename) {
       db.prepare('DROP TABLE IF EXISTS user').run();
       console.log('Account table dropped');
       db.prepare('CREATE TABLE IF NOT EXISTS user (id TEXT PRIMARY KEY,' +
-            'userName TEXT, userLastName TEXT, email TEXT, password TEXT, token TEXT, admin INT, adress TEXT, city TEXT, zipCode TEXT, phone TEXT, profilePicture TEXT)').run();
-      db.prepare('CREATE TABLE IF NOT EXISTS wishlist (userId TEXT, productId TEXT)').run();
+            'userName TEXT, userLastName TEXT, email TEXT, password TEXT, token TEXT, admin BOOLEAN, adress TEXT, city TEXT, zipCode TEXT, phone TEXT, profilePicture TEXT, verified BOOLEAN)').run();
+      db.prepare('DROP TABLE IF EXISTS whishlist').run();
 
-      let insertAccount = db.prepare('INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+      let insertAccount = db.prepare('INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
       let transaction = db.transaction((accounts) => {
             for (let i = 0; i < accounts.length; i++) {
                   let account = accounts[i];
-                  insertAccount.run(account.id, account.username, account.userLastName, account.email, account.password, account.token, account.admin, account.adress, account.city, account.zipCode, account.phone, account.profilePicture);
+                  insertAccount.run(account.id, account.username, account.userLastName, account.email, account.password, account.token, account.admin, account.adress, account.city, account.zipCode, account.phone, account.profilePicture, account.verified);
             }
       });
 
@@ -36,12 +36,13 @@ exports.create = function (id, email, username, password, token) {
             "email": email,
             "token": token,
             "password": password,
-            "admin": "0",
+            "admin": 0,
             "adress": "",
             "city": "",
             "zipCode": "",
             "phone": "",
-            "profilePicture": "account.svg"
+            "profilePicture": "account.svg",
+            "verified": 0
       };
 
       fs.readFile('./json/accounts.json', (err, data) => {
@@ -53,7 +54,7 @@ exports.create = function (id, email, username, password, token) {
             });
       });
       try {
-            db.prepare('INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').run(id, username, "", email, password, token, 0, "", "", "", "", "defaultAccountIco.png");
+            db.prepare('INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').run(id, username, "", email, password, token, 0, "", "", "", "", "defaultAccountIco.png",0);
             console.log('Account created');
       } catch (err) {
             console.log(err);
@@ -108,9 +109,9 @@ exports.checkEmail = function (email) {
 };
 
 exports.authenticate = function (email, password) {
-      console.log(email,password)
-      if (db.prepare('SELECT * FROM user WHERE email = ?').get(email) == undefined) {
-            console.log('email not found');
+      let account = db.prepare('SELECT * FROM user WHERE email = ?').get(email)
+      if (account === undefined || account.verified != 1) {
+            console.log('An error occured, please try again.');
             return false;
       }
       let pass = db.prepare('SELECT password FROM user WHERE email = ?').get(email).password;
@@ -158,7 +159,6 @@ exports.updateAccountPassword = function (password, token) {
             console.log(err)
       }
 }
-
 
 //DELETE
 

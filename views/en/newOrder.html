@@ -1,29 +1,32 @@
 {{>./en/header}}
 <div>
     <h1>New Order</h1>
-    <form action="/en/newOrder" method="post" id="newOrderForm">
-        <div id="row1">
+    <div id="row1">
+        <form action="/en/getProducts" method="post">
             <select name="laboratorySelect" id="laboratorySelect" required>
                 <option name="laboratory" id="laboratory" value="None">Select a Laboratory</option>
                 {{#laboratories}}
-                <option name="laboratory" id="{{laboratory}}" value="{{laboratory}}">
-                    {{laboratory}}</option>
+                <option name="laboratory" id="{{laboratoryName}}" value="{{laboratoryName}}">
+                    {{laboratoryName}}</option>
                 {{/laboratories}}
             </select>
+            <input type="submit" value="Validate">
+        </form>
+        {{#showProducts}}
+        <form action="/en/createOrder">
             <label for="dateStartField">Start Date</label>
             <input type="date" name="dateStartField" id="dateStartField" value="{{currentDate}}" required>
             <label for="dateEndField">End Date</label>
             <input type="date" name="dateEndField" id="dateEndField" required>
             <input type="submit" value="Create Order">
-        </div>
-        {{#products}}
-        <div id="row2">
+            {{#products}}
             <input type="text" name="ean13Field" id="ean13Field" value="{{ean13}}" readonly>
             <input type="text" name="nameField" id="nameField" value="{{name}}" readonly>
             <input type="text" name="priceField" id="priceField" value="{{price}}" readonly>
             <input type="number" name="quantityField" id="quantityField" value="{{quantity}}">
-
-        {{/products}}
-    </form>
+            {{/products}}
+        </form>
+        {{/showProducts}}
+    </div>
 </div>
 {{>./en/footer}}

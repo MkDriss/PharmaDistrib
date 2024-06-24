@@ -111,10 +111,16 @@ app.get("/:lang/orders", (req, res) => {
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
+app.get('/:lang/insertFile', (req, res) => {
+    if (req.session.authenticated) {
+        return res.render("./" + req.params.lang + "/insertFile.html", { css: "/insertFile.css", currentDate: now() });
+    } res.redirect('/' + req.params.lang + '/signin')
+});
+
 app.get('/:lang/newOrder', (req, res) => {
     if (req.session.authenticated) {
-        return res.render("./" + req.params.lang + "/newOrder.html", { css: "/newOrder.css", currentDate: now() });
-    } res.redirect('/' + req.params.lang + '/signin')
+        return res.render("./" + req.params.lang + "/newOrder.html", { css: "/newOrder.css", laboratories: products.getLaboratories() });
+    } res.redirect('/' + req.params.lang + '/signin');
 });
 
 app.get('/:lang/editAccount', (req, res) => {
@@ -167,8 +173,8 @@ app.post("/:lang/signout", (req, res) => {
 app.post("/:lang/signup", (req, res) => {
     let username = req.body.name;
     let email = req.body.email;
-    let password = req.body.password;
-    let confirmPassword = req.body.confirmPassword;
+    let password = req.body.passwordField;
+    let confirmPassword = req.body.confirmPasswordField;
     let id = crypto.randomBytes(32).toString("hex");
     let token = crypto.randomBytes(128).toString("hex");
 
@@ -285,6 +291,15 @@ app.post("/:lang/insertFile", uploadCSVFiles.single('fileField'), (req, res) => 
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
+app.post('/:lang/getProducts', (req, res) => {
+    if (req.session.authenticated) {
+        let laboratoryName = req.body.laboratorySelect;
+        let productsList = products.getLaboratoryProducts(laboratoryName);
+        return res.render("./" + req.params.lang + "/newOrder.html", { css: "/newOrder.css", laboratories: products.getLaboratories(), showProducts : true,products: productsList });
+    } res.redirect ('/' + req.params.lang + '/signin');
+});
+
+app.post('/:lang/createOrder', (req, res) => {});
 // LISTEN
 
 app.listen(3000, () => {

@@ -6,11 +6,27 @@
     "email": "dri@gmail.com",
     "token": "d2f993c45ffbf68e588da79e87d8353f735a45499de113e6d8fa521ecc1a7d39b39cd977fdf4197a0fad9df8f95f717a317d6a05e5dc975baaf240f171341c79e53f6b8e05e6b5db1b8e7e9094241308931aaafc1456a9183d69dc9db4c291869c25a063b9b004e73679301697bd0f0e8c156abb70419bed90eb7c9b686ed9a9",
     "password": "marie",
+    "admin": 0,
+    "adress": "",
+    "city": "",
+    "zipCode": "",
+    "phone": "",
+    "profilePicture": "account.svg",
+    "verified": 1
+  },
+  {
+    "id": "9b43741b9909c3682f3bd560050d44b39b514960911669bfdc0aac51bab51c06",
+    "username": "jaune",
+    "userLastName": "",
+    "email": "j@gmail.com",
+    "token": "d2c1693d6ad34fe678b0a83137f8ae035a9b2215862a37e3b10943e4181885a7b7f356183166a3e692c78b737255245bb1371ca8b842feb5f85b661438ab1eae03709347e1d9441fe3cc56a43cb5229d5aab98ba91fc9f662a816b2742470ad5b78afe86d405740454fa5346dfe396e9974ac9893be638c78ea66a0e18383ea3",
+    "password": "pas",
     "admin": "0",
     "adress": "",
     "city": "",
     "zipCode": "",
     "phone": "",
-    "profilePicture": "account.svg"
+    "profilePicture": "account.svg",
+    "verified": 0
   }
 ]

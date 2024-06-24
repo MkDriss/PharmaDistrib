@@ -3,19 +3,20 @@
 const Sqlite = require('better-sqlite3');
 const fs = require('fs');
 let db = new Sqlite('db.sqlite');
-const directoryPath = 'D:\\Projets\\PharmaDistrib\\csv';
+const directoryPath = '.\\csv';
 
 const fileList = fs.readdirSync(directoryPath);
+
+//INIT
 
 db.prepare('DROP TABLE IF EXISTS products').run();
 console.log('Products table dropped');
 db.prepare('CREATE TABLE IF NOT EXISTS products (ean13 INT PRIMARY KEY,' +
-      'laboratory TEXT, name TEXT, price FLOAT, packaging TEXT, qtyMin TEXT)').run();
+      'laboratoryName TEXT, name TEXT, price FLOAT, packaging TEXT, qtyMin TEXT)').run();
+db.prepare('DROP TABLE IF EXISTS Laboratories').run();
 
 let loadProducts = function (filename) {
-
       let insertProduct = db.prepare('INSERT INTO products VALUES (?, ?, ?, ?, ?, ?)');
-
       fs.readFile(filename, "utf8", (err, data) => {
             if (err) {
                   console.error("Error while reading:", err);
@@ -33,6 +34,7 @@ let loadProducts = function (filename) {
             }
             console.log('Products loaded')
       });
+
 }
 
 for (let i = 0; i < fileList.length; i++) {
@@ -40,74 +42,47 @@ for (let i = 0; i < fileList.length; i++) {
       loadProducts(directoryPath + '\\' + file);
 }
 
-
-
-
-
-//CREATE
+//INSERT
 
 exports.insertProduct = function (ean13, laboratory, name, packaging, price, qtyMin) {
       try {
             db.prepare('INSERT INTO products VALUES (?, ?, ?, ?, ?, ?)').run(ean13, laboratory, name, packaging, price, qtyMin);
             console.log('Product inserted');
-      } catch (err) {
-      }
+      } catch (err) {}
 };
 
 //GET
 
-exports.get = function (ean13) {
+exports.getFromEan = function (ean13) {
       return db.prepare('SELECT * FROM products WHERE ean13 = ?').get(ean13);
+}
+
+exports.getLaboratoryProducts = function (laboratoryName) {
+      return db.prepare('SELECT * FROM products WHERE laboratoryName = ?').all(laboratoryName);
+}
+
+exports.getLaboratories = function () {
+      return db.prepare('SELECT DISTINCT laboratoryName FROM products').all();
 }
 
 exports.list = function () {
       return db.prepare('SELECT * FROM products').all();
 }
 
+
 //UPDATE
 
-exports.updateProduct = function (ean13, laboratory, name, packaging, price, qtyMin) {
-
-      fs.readFile('json/products.json', function (err, data) {
-            if (err) throw err;
-            let productsList = JSON.parse(data);
-            for (let i = 0; i < productsList.length; i++) {
-                  let product = productsList[i];
-                  if (product.ean13 === ean13) {
-                        product.username = username;
-                        product.userLastName = userLastName;
-                        product.adress = adress;
-                        product.city = city;
-                        product.zipCode = zipCode;
-                        product.phone = phone;
-                        product.profilePicture = pictureName;
-                  }
-            }
-            fs.writeFileSync('json/accounts.json', JSON.stringify(productsList, null, 2), function (err) {
-                  if (err) throw err;
-                  console.log(err);
-            });
-      });
-
-      db.prepare('UPDATE user SET username = ?, userLastName = ?, adress = ?, city = ?, zipCode = ?, phone = ?, profilePicture = ? WHERE id = ?').run(username, userLastName, adress, city, zipCode, phone, pictureName, id);
-      console.log("Account updated");
-}
-
-exports.updateAccountPassword = function (password, token) {
+exports.updateProduct = function (ean13, laboratoryName, name, packaging, price, qtyMin) {
       try {
-            console.log(password, token)
-            db.prepare('UPDATE user SET password = ? WHERE token = ?').run(password, token);
-            console.log('Password updated');
-      } catch (err) {
-            console.log(err)
+            db.prepare('UPDATE products SET laboratoryName = ?, name = ?, packaging = ?, price = ?, qtyMin = ? WHERE ean13 = ?').run(laboratoryName, name, packaging, price, qtyMin, ean13);
+            console.log("Account updated");
+      } catch {
+            console.log(err);
       }
 }
 
-
-//DELETE
-
-exports.delete = function (id) {
-      db.prepare('DELETE FROM user WHERE id = ?').run(id);
+exports.delete = function (ean13) {
+      db.prepare('DELETE FROM user WHERE ean13 = ?').run(ean13);
 }
 
 
