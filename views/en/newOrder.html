@@ -10,7 +10,7 @@
                     {{laboratoryName}}</option>
                 {{/laboratories}}
             </select>
-            <input type="submit" value="Validate">
+            <input type="submit" value="Confirm">
         </form>
         {{#showProducts}}
         <form action="/en/createOrder">
@@ -19,12 +19,22 @@
             <label for="dateEndField">End Date</label>
             <input type="date" name="dateEndField" id="dateEndField" required>
             <input type="submit" value="Create Order">
-            {{#products}}
-            <input type="text" name="ean13Field" id="ean13Field" value="{{ean13}}" readonly>
-            <input type="text" name="nameField" id="nameField" value="{{name}}" readonly>
-            <input type="text" name="priceField" id="priceField" value="{{price}}" readonly>
-            <input type="number" name="quantityField" id="quantityField" value="{{quantity}}">
-            {{/products}}
+            <table>
+                <tr>
+                    <th>EAN13</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+                {{#products}}
+                <tr>
+                    <td>{{ean13}}</td>
+                    <td>{{name}}</td>
+                    <td>{{price}}</td>
+                    <td>{{quantity}}</td>
+                </tr>
+                {{/products}}
+            </table>
         </form>
         {{/showProducts}}
     </div>
