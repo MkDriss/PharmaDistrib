@@ -1,0 +1,105 @@
+#row1,
+#content,
+#newOrderContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#row1{
+    gap: 30px;
+    width: 1400px;
+}
+
+#getProductsForm{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+
+input, select{
+    border: none;
+    font-family: var(--font-family);
+    border: 3px solid #e0dedc88;
+    backdrop-filter: blur(20px);
+}
+
+input[type="text"], input[type="decimal"], input[type="number"], input[type="date"], select{
+    font-size: 15px;
+    font-weight: 300;
+    border-radius: 5px;
+}
+input[type="text"], input[type="decimal"], input[type="number"], input[type="date"]{
+    height: 30px;
+}
+
+select{
+    height: 40px;
+}
+ 
+
+input[type="submit"]{
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-radius: 5px;
+    height: 40px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 10px
+}
+
+input[type="submit"]:hover{
+    cursor: pointer;
+}
+
+#datesField{
+    font-weight: 500;
+}
+
+#createOrderForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+#datesField{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+}
+
+th{
+    text-align: center;
+}
+
+table{
+    border-spacing: 40px 10px;
+}
+
+#content{
+    display: flex;
+    flex-direction: column;
+    border: 5px solid #ebebebb2;
+    backdrop-filter: blur(2px);
+    background-color: #a0a0a069;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 50px;
+    width: 1600px;
+}
+
+.price, .quantity, .packaging, .totQty, .basedPrice{
+    width: 60px;
+}
+
+.id{
+    width: 130px;
+}
+
+.name{
+    width: 400px;
+}
+

@@ -99,6 +99,16 @@ footer input:hover{
     font-weight: 500;
 }
 
+
+.title {
+    font-size: 30px;
+    font-family: Inter;
+    font-weight: 500;
+    margin-bottom: 40px;
+    color: var(--text-color);
+}
+
+
 #footerLeftSide, #footerRightSide{
     display: flex;
     flex-direction: column;

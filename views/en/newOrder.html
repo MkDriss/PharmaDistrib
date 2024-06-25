@@ -1,42 +1,55 @@
 {{>./en/header}}
-<div>
-    <h1>New Order</h1>
-    <div id="row1">
-        <form action="/en/getProducts" method="post">
-            <select name="laboratorySelect" id="laboratorySelect" required>
-                <option name="laboratory" id="laboratory" value="None">Select a Laboratory</option>
-                {{#laboratories}}
-                <option name="laboratory" id="{{laboratoryName}}" value="{{laboratoryName}}">
-                    {{laboratoryName}}</option>
-                {{/laboratories}}
-            </select>
-            <input type="submit" value="Confirm">
-        </form>
-        {{#showProducts}}
-        <form action="/en/createOrder">
-            <label for="dateStartField">Start Date</label>
-            <input type="date" name="dateStartField" id="dateStartField" value="{{currentDate}}" required>
-            <label for="dateEndField">End Date</label>
-            <input type="date" name="dateEndField" id="dateEndField" required>
-            <input type="submit" value="Create Order">
-            <table>
-                <tr>
-                    <th>EAN13</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                </tr>
-                {{#products}}
-                <tr>
-                    <td>{{ean13}}</td>
-                    <td>{{name}}</td>
-                    <td>{{price}}</td>
-                    <td>{{quantity}}</td>
-                </tr>
-                {{/products}}
-            </table>
-        </form>
-        {{/showProducts}}
+<div id="newOrderContainer">
+    <div id="content">
+        <div class="title">New Order</div>
+        <div id="row1">
+            <form action="/en/getProducts" method="post" id="getProductsForm">
+                <select name="laboratorySelect" id="laboratorySelect" required>
+                    <option name="laboratory" id="laboratory" value="None">Select a Laboratory</option>
+                    {{#laboratories}}
+                    <option name="laboratory" id="{{laboratoryName}}" value="{{laboratoryName}}">
+                        {{laboratoryName}}</option>
+                    {{/laboratories}}
+                </select>
+
+                <div id="datesField">
+                    <div id="startDate">
+                        <label for="dateStartField">Start Date</label>
+                        <input type="date" name="dateStartField" id="dateStartField" value="{{currentDate}}" required>
+                    </div>
+                    <div id="endDate">
+                        <label for="dateEndField">End Date</label>
+                        <input type="date" name="dateEndField" id="dateEndField" value="{{endDate}}" required>
+                    </div>
+                </div>
+                <input type="submit" value="Confirm">
+            </form>
+            {{#showProducts}}
+            <form action="/en/createOrder" id="createOrderForm">
+
+                <table id="productTable">
+                    <tr class="firstRow">
+                        <th>EAN13</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                    {{#products}}
+                    <tr>
+                        <td class="tableContent"><input type="text" class="id" value="{{ean13}}" readonly name="ean13">
+                        </td>
+                        <td class="tableContent"><input type="text" class="name" value="{{name}}" readonly
+                                name="productName"></td>
+                        <td class="tableContent"><input type="text" class="price" value="{{price}} €" readonly
+                                name="price"></td>
+                        <td class="tableContent"><input type="number" class="quantity" value="0" name="quantity"></td>
+                    </tr>
+                    {{/products}}
+                </table>
+                <input type="submit" value="Create Order">
+            </form>
+            {{/showProducts}}
+        </div>
     </div>
 </div>
 {{>./en/footer}}

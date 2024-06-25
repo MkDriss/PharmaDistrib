@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const cookieSession = require("cookie-session");
 const multer = require("multer");
 const uploadProfilePicture = multer({ dest: 'public/profiles_pictures/' });
-const uploadCSVFiles = multer({ dest: 'public/csv/' });
+const uploadCSVFiles = multer({ dest: './csv/' });
 
 const fs = require('fs');
 const { parse } = require("csv-parse");
@@ -13,7 +13,7 @@ const { parse } = require("csv-parse");
 const app = express();
 
 
-app.use(bodyparser.urlencoded({ extended: true }));
+app.use(bodyparser.urlencoded({ extended: true, parameterLimit: 1000000 }));
 app.use(express.static('public/icons/'));
 app.use(express.static('public/css/'));
 app.use(express.static('public/pictures/'));
@@ -119,7 +119,7 @@ app.get('/:lang/insertFile', (req, res) => {
 
 app.get('/:lang/newOrder', (req, res) => {
     if (req.session.authenticated) {
-        return res.render("./" + req.params.lang + "/newOrder.html", { css: "/newOrder.css", laboratories: products.getLaboratories() });
+        return res.render("./" + req.params.lang + "/newOrder.html", { css: "/newOrder.css", laboratories: products.getLaboratories(), products: products.list(), currentDate: now(), endDate: now() });
     } res.redirect('/' + req.params.lang + '/signin');
 });
 
@@ -128,7 +128,6 @@ app.get('/:lang/editAccount', (req, res) => {
         let account = accounts.get(req.session.id);
         return res.render("./" + req.params.lang + "/editAccount.html", { css: "/editAccount.css", account: account });
     } res.redirect('/' + req.params.lang + '/signin')
-
 })
 
 // POST
@@ -198,7 +197,6 @@ app.post("/:lang/signup", (req, res) => {
 
 
 app.post("/:lang/updatePassword/:token", (req, res) => {
-
     let token = req.params.token;
     let email = req.body.emailField;
     let oldPassword = req.body.oldPasswordField;
@@ -294,12 +292,26 @@ app.post("/:lang/insertFile", uploadCSVFiles.single('fileField'), (req, res) => 
 app.post('/:lang/getProducts', (req, res) => {
     if (req.session.authenticated) {
         let laboratoryName = req.body.laboratorySelect;
+        let startDate = req.body.dateStartField;
+        let endDate = req.body.dateEndField;
         let productsList = products.getLaboratoryProducts(laboratoryName);
-        return res.render("./" + req.params.lang + "/newOrder.html", { css: "/newOrder.css", laboratories: products.getLaboratories(), showProducts : true,products: productsList });
-    } res.redirect ('/' + req.params.lang + '/signin');
+        return res.render("./" + req.params.lang + "/newOrder.html", { css: "/newOrder.css", laboratories: products.getLaboratories(), products: productsList, currentDate: startDate, endDate: endDate });
+    } res.redirect('/' + req.params.lang + '/signin');
 });
 
-app.post('/:lang/createOrder', (req, res) => {});
+app.post('/:lang/createOrder', (req, res) => {
+    if (req.session.authenticated) {
+        let table = req.body;
+        let productsIndex = [];
+        let listSize = table.quantity.length;
+        for (let i = 0; i < listSize; i++) {
+            if (table.quantity[i] != 0) {
+            }
+            productsIndex.push(i);
+        }
+        console.log(productsIndex);
+    } res.redirect('/' + req.params.lang + '/signin');
+});
 // LISTEN
 
 app.listen(3000, () => {

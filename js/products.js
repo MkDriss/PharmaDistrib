@@ -12,7 +12,7 @@ const fileList = fs.readdirSync(directoryPath);
 db.prepare('DROP TABLE IF EXISTS products').run();
 console.log('Products table dropped');
 db.prepare('CREATE TABLE IF NOT EXISTS products (ean13 INT PRIMARY KEY,' +
-      'laboratoryName TEXT, name TEXT, price FLOAT, packaging TEXT, qtyMin TEXT)').run();
+      'laboratoryName TEXT, productName TEXT, price FLOAT, packaging TEXT, qtyMin TEXT)').run();
 db.prepare('DROP TABLE IF EXISTS Laboratories').run();
 
 let loadProducts = function (filename) {
@@ -44,9 +44,9 @@ for (let i = 0; i < fileList.length; i++) {
 
 //INSERT
 
-exports.insertProduct = function (ean13, laboratory, name, packaging, price, qtyMin) {
+exports.insertProduct = function (ean13, laboratory, productName, packaging, price, qtyMin) {
       try {
-            db.prepare('INSERT INTO products VALUES (?, ?, ?, ?, ?, ?)').run(ean13, laboratory, name, packaging, price, qtyMin);
+            db.prepare('INSERT INTO products VALUES (?, ?, ?, ?, ?, ?)').run(ean13, laboratory, productName, packaging, price, qtyMin);
             console.log('Product inserted');
       } catch (err) {}
 };
@@ -69,12 +69,11 @@ exports.list = function () {
       return db.prepare('SELECT * FROM products').all();
 }
 
-
 //UPDATE
 
-exports.updateProduct = function (ean13, laboratoryName, name, packaging, price, qtyMin) {
+exports.updateProduct = function (ean13, laboratoryName, productName, packaging, price, qtyMin) {
       try {
-            db.prepare('UPDATE products SET laboratoryName = ?, name = ?, packaging = ?, price = ?, qtyMin = ? WHERE ean13 = ?').run(laboratoryName, name, packaging, price, qtyMin, ean13);
+            db.prepare('UPDATE products SET laboratoryName = ?, productName = ?, packaging = ?, price = ?, qtyMin = ? WHERE ean13 = ?').run(laboratoryName, productName, packaging, price, qtyMin, ean13);
             console.log("Account updated");
       } catch {
             console.log(err);
