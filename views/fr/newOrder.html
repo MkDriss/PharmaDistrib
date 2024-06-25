@@ -39,56 +39,62 @@
         <div class="title">Nouvelle Commande</div>
         <div id="row1">
             <form action="/fr/createOrder" id="createOrderForm" method="post">
-            <select name="laboratorySelect" id="laboratorySelect" required onchange="showProducts(this)">
-                <option name="laboratory" id="laboratory" value="None">Selectionner un laboratoire</option>
-                {{#laboratories}}
-                <option name="laboratory" id="{{laboratoryName}}" value="{{laboratoryName}}">
-                    {{laboratoryName}}</option>
-                {{/laboratories}}
-                <option name="allProducts" value="all">Tous les produits</option>
-            </select>
-
-            <div id="datesField">
-                <div id="startDate">
-                    <label for="dateStartField">Date Ouverture</label>
-                    <input type="date" name="dateStartField" id="dateStartField" value="{{currentDate}}" required>
+                <div id="selectContainer">
+                    <select name="laboratorySelect" id="laboratorySelect" required onchange="showProducts(this)">
+                        <option name="laboratory" id="laboratory" value="None">Selectionner un laboratoire</option>
+                        {{#laboratories}}
+                        <option name="laboratory" id="{{laboratoryName}}" value="{{laboratoryName}}">
+                            {{laboratoryName}}</option>
+                        {{/laboratories}}
+                        <option name="allProducts" value="all">Tous les produits</option>
+                    </select>
+                    <div id="datesField">
+                        <div id="startDate">
+                            <label for="dateStartField">Date Ouverture</label>
+                            <input type="date" name="dateStartField" id="dateStartField" value="{{currentDate}}"
+                                required>
+                        </div>
+                        <div id="endDate">
+                            <label for="dateEndField">Date Fermeture</label>
+                            <input type="date" name="dateEndField" id="dateEndField" value="{{endDate}}" required>
+                        </div>
+                    </div>
                 </div>
-                <div id="endDate">
-                    <label for="dateEndField">Date Fermeture</label>
-                    <input type="date" name="dateEndField" id="dateEndField" value="{{endDate}}" required>
-                </div>
-            </div>
-            <table id="" class="productTable">
-                <tr class="firstRow">
-                    <th>EAN13</th>
-                    <th>Laboratoire</th>
-                    <th>Nom</th>
-                    <th>Colisage</th>
-                    <th>Qté</th>
-                    <th>Prix €</th>
-                    <th>Qté totale</th>
-                    <th>Prix de base</th>
-                </tr>
-                {{#products}}
-                <tr class="{{laboratoryName}}" style="display: none;" id="{{ean13}}">
-                    <td class="tableContent"><input type="text" class="id" value="{{ean13}}" readonly name="ean13">
-                    </td>
-                    <td class="tableContent"><input type="text" class="laboratoryProductName" value="{{laboratoryName}}" readonly name="laboratoryName">
-                    </td>
-                    <td class="tableContent"><input type="text" class="name" value="{{productName}}" readonly
-                            name="productName"></td>
-                    <td class="tableContent"><input type="text" class="packaging" value="{{packaging}}" readonly
-                            name="packaging"></td>
-                    <td class="tableContent"><input type="number" class="quantity" value="0" name="quantity" onchange="updateQuantity('{{ean13}}')"></td>
-                    <td class="tableContent"><input type="text" class="price" value="{{price}}" readonly name="price">
-                    </td>
-                    <td class="tableContent"><input type="number" class="totQty" value="0" name="totQty" readonly></td>
-                    <td class="tableContent"><input type="number" class="basedPrice" value="0" name="basedPrice"
-                            readonly></td>
-                </tr>
-                {{/products}}
-            </table>
-            <input type="submit" value="Create Order">
+                <table id="" class="productTable">
+                    <tr class="firstRow">
+                        <th>EAN13</th>
+                        <th>Laboratoire</th>
+                        <th>Nom</th>
+                        <th>Colisage</th>
+                        <th>Qté</th>
+                        <th>Prix €</th>
+                        <th>Qté totale</th>
+                        <th>Prix de base</th>
+                    </tr>
+                    {{#products}}
+                    <tr class="{{laboratoryName}}" style="display: none;" id="{{ean13}}">
+                        <td class="tableContent"><input type="text" class="id" value="{{ean13}}" readonly name="ean13">
+                        </td>
+                        <td class="tableContent"><input type="text" class="laboratoryProductName"
+                                value="{{laboratoryName}}" readonly name="laboratoryName">
+                        </td>
+                        <td class="tableContent"><input type="text" class="name" value="{{productName}}" readonly
+                                name="productName"></td>
+                        <td class="tableContent"><input type="text" class="packaging" value="{{packaging}}" readonly
+                                name="packaging"></td>
+                        <td class="tableContent"><input type="number" class="quantity" value="0" name="quantity"
+                                onchange="updateQuantity('{{ean13}}')"></td>
+                        <td class="tableContent"><input type="text" class="price" value="{{price}}" readonly
+                                name="price">
+                        </td>
+                        <td class="tableContent"><input type="number" class="totQty" value="0" name="totQty" readonly>
+                        </td>
+                        <td class="tableContent"><input type="number" class="basedPrice" value="0" name="basedPrice"
+                                readonly></td>
+                    </tr>
+                    {{/products}}
+                </table>
+                <input type="submit" value="Create Order">
             </form>
         </div>
     </div>
