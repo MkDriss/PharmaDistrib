@@ -40,7 +40,7 @@
 </script>
 {{#script}}
 <script>
-    alert('An error occured, please try again')
+    alert('Une erreur est survenue, veuillez réessayer')
 </script>
 {{/script}}
 
@@ -48,7 +48,7 @@
 <div id="accountContainer">
     <div id="column1">
         <div id="primarySection">
-            <img src="/{{profilePicture}}" alt="profilePicture" id="profilePicture">
+            <img src="../{{profilePicture}}" alt="profilePicture" class="profilePicture">
             <div id="nameSection">
                 <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Prénom" readonly>
                 <input type="text" name="lastNameField" id="lastNameField" value="{{userLastName}}"
@@ -57,8 +57,8 @@
         </div>
         <div id="contactSection">
             <input type="email" name="emailField" id="emailField" value="{{email}}" placeholder="Email" readonly>
-            <input type="tel" name="phoneNumberField" id="phoneNumberField" value="{{phone}}"
-                placeholder="Numéro de téléphone" readonly>
+            <input type="tel" name="phoneNumberField" id="phoneNumberField" value="{{phone}}" placeholder="Numéro de téléphone"
+                readonly>
         </div>
 
         <input type="text" name="adressField" id="adressField" value="{{adress}}" placeholder="Adresse" readonly>
@@ -69,17 +69,17 @@
                 readonly>
         </div>
         <div id="changePsswdSection">
-            <input type="button" name="changePsswdBtn" id="changePsswdBtn" value="Modifier Mot de passe"
+            <input type="button" name="changePsswdBtn" id="changePsswdBtn" value="Changer le mot de passe"
                 onclick="showElement('updatePasswordForm','changePsswdBtn', 1)">
 
-            <form action="/fr/updatePassword/{{token}}" method="post" style="display: none;" id="updatePasswordForm">
+            <form action="/en/updatePassword/{{token}}" method="post" style="display: none;" id="updatePasswordForm">
                 <div id="oldPasswordSection">
-                    <input type="password" name="oldPasswordField" id="oldPasswordField" placeholder="Ancien Mot de passe">
+                    <input type="password" name="oldPasswordField" id="oldPasswordField" placeholder="Ancien mot de passe">
 
                     <input type="button" name="showOldPassBtn" id="showOldPassBtn"
                         onclick="showPassword('oldPasswordField','showOldPassLabel','hideOldPassLabel',true)" hidden>
                     <label for="showOldPassBtn" id="showOldPassLabel">
-                        <img src="../showPass.svg" class="icoPass" alt="show Old Password">
+                        <img src="../showPass.svg" class="icoPass" alt="show Ancien mot de passe">
                     </label>
                     <input type="button" name="hideOldPasswdBtn" id="hideOldPasswdBtn"
                         onclick="showPassword('oldPasswordField','showOldPassLabel','hideOldPassLabel',false)" hidden>
@@ -88,11 +88,11 @@
                     </label>
                 </div>
                 <div id="newPasswordSection">
-                    <input type="password" name="newPasswordField" id="newPasswordField" placeholder="Nouveau Mot de passe">
+                    <input type="password" name="newPasswordField" id="newPasswordField" placeholder="Nouveau mot de passe">
                     <input type="button" name="showNewPassBtn" id="showNewPassBtn"
                         onclick="showPassword('newPasswordField','showNewPassLabel','hideNewPassLabel',true)" hidden>
                     <label for="showNewPassBtn" id="showNewPassLabel">
-                        <img src="../showPass.svg" class="icoPass" alt="show New Password">
+                        <img src="../showPass.svg" class="icoPass" alt="show Nouveau mot de passe">
                     </label>
                     <input type="button" name="hideNewPasswdBtn" id="hideNewPasswdBtn"
                         onclick="showPassword('newPasswordField','showNewPassLabel','hideNewPassLabel',false)" hidden>
@@ -102,7 +102,7 @@
                 </div>
                 <div id="confirmPasswordSection">
                     <input type="password" name="confirmPasswordField" id="confirmPasswordField"
-                        placeholder="Confirm Password">
+                        placeholder="Confirmer le mot de passe">
                     <input type="button" name="showConfirmPassBtn" id="showConfirmPassBtn"
                         onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',true)"
                         hidden>
@@ -116,37 +116,59 @@
                         <img src="../hidePass.svg" class="icoPass" alt="hide Confirm Password">
                     </label>
                 </div>
-                <span id="errorMessage" style="display: none;">Les mots de passes doivent être identiques</span>
-                <input type="button" name="cancelBtn" id="cancelBtn" value="Cancel"
+                <span id="errorMessage" style="display: none;">Les mots de passe doivent être identiques</span>
+                <input type="button" name="cancelBtn" id="cancelBtn" value="Annuler"
                     onclick="showElement('changePsswdBtn', 'updatePasswordForm', 0)">
-                <input type="submit" name="changePsswdSub" id="changePsswdSub" value="Confirm"
+                <input type="submit" name="changePsswdSub" id="changePsswdSub" value="Confirmer"
                     onclick="checkPassword()">
             </form>
-            <a href="/fr/editAccount" id="editProfileLink">Configurer</a>
+            <a href="/en/editAccount" id="editProfileLink">Modifier</a>
         </div>
 
     </div>
     <div id="column2">
         <div id="column2Content">
             <span class="title">Mes Commandes</span>
-
             <div id="orderList">
                 {{#myOrders}}
                 {{#orders}}
-                <a href="/fr/order/{{orderId}}" class="order">
+                <a href="/en/order/{{orderId}}" class="order">
                 </a>
                 {{/orders}}
-                <a href="/fr/myOrders" id="myOrderBtn">Voir plus</a>
+                <a href="/en/myOrders" id="myOrderBtn">Voir plus</a>
                 {{/myOrders}}
                 {{^myOrders}}
-                <span class="text">Vous n'avez aucune commandes</span>
-                <a href="/fr/newOrder" id="newOrderBtn">Nouvelle Commande</a>
+                <span class="text">Vous n'avez pas encore de commande</span>
+                <a href="/en/newOrder" id="newOrderBtn">Nouvelle Commande</a>
                 {{/myOrders}}
             </div>
-
         </div>
     </div>
 </div>
+
+{{#admin}}
+<div id="row2">
+    <div id="unverifiedAccountsContainer">
+        <div class="title">Compte non confirmés</div>
+        {{#unverifiedAccounts}}
+        <div class="unverifiedAccountContent">
+            <img src="/account.svg" alt="defaultProfilePicture" class="profilePicture">
+            <div class="userInfoSection">
+                <div class="inputSection"><input type="text" value="{{userName}}" id="userName-{{id}}" readonly>
+                    <form action="/en/rejectAccount/{{token}}" method="post" class="rejectAccountForm"><input type="image" src="/cross.svg"
+                            class="rejectBtn"></form>
+                </div>
+                <div class="inputSection"><input type="text" value="{{email}}" id="email-{{id}}" readonly>
+                    <form action="/en/verifyAccount/{{token}}" method="post" class="verifyAccountForm"><input type="image" src="/check.svg"
+                            class="verifyBtn"></form>
+                </div>
+            </div>
+        </div>
+
+        {{/unverifiedAccounts}}
+    </div>
+</div>
+{{/admin}}
 {{/account}}
 
 {{>./fr/footer}}

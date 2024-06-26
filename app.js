@@ -80,7 +80,7 @@ app.get("/", (req, res) => {
 
 app.get("/:lang", (req, res) => {
     if (req.params.lang === 'en' || req.params.lang === 'fr') {
-        res.redirect("/" + req.params.lang + "/home");
+        return res.redirect("/" + req.params.lang + "/home");
     }
 });
 
@@ -101,13 +101,22 @@ app.get("/:lang/account", (req, res) => {
     if (req.session.authenticated) {
         let id = req.session.id;
         let account = accounts.get(id)
+        if (account.admin) {
+            let unverifiedAccounts = accounts.getUnverifiedAccounts();
+            return res.render("./" + req.params.lang + "/account.html", { css: "/account.css", account: account, admin: true, unverifiedAccounts: unverifiedAccounts });
+        }
         return res.render("./" + req.params.lang + "/account.html", { css: "/account.css", account: account });
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
 app.get("/:lang/orders", (req, res) => {
     if (req.session.authenticated) {
-        return res.render("./" + req.params.lang + "/orders.html", { css: "/orders.css" });
+        let order = orders.listOrders();
+        for (let i = 0; i < order.length; i++) {
+            order[i].ownerName = accounts.get(order[i].ownerIndex).userName;
+        }
+        console.log(order)
+        return res.render("./" + req.params.lang + "/orders.html", { css: "/orders.css", ordersList: order });
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
@@ -163,7 +172,7 @@ app.post("/:lang/signout", (req, res) => {
     console.log(req.session.username + " logged out");
     req.session.username = null;
     req.session.email = null;
-    req.session.authenticatedd = false;
+    req.session.authenticated = false;
     req.session.admin = false;
     req.session.id = null;
     res.redirect('/' + req.params.lang + '/home');
@@ -246,23 +255,35 @@ app.post("/:lang/editAccount", uploadProfilePicture.single('updateProfilePicture
                 src.pipe(dest);
             }
 
-            return res.redirect("/" + req.params.lang + '/account');
+            return res.redirect('/' + req.params.lang + '/account');
         }
     } res.redirect('/' + req.params.lang + '/signin')
 })
 
-app.post("/:lang/searchMedic", (req, res) => {
-    // TO DO
-})
+app.post("/:lang/verifyAccount/:token", (req, res) => {
+    if (req.session.authenticated) {
+        let token = req.params.token;
+        accounts.verifyAccount(token);
+        return res.redirect('/' + req.params.lang + '/account');
+    } res.redirect('/' + req.params.lang + '/signin');
+});
+
+app.post("/:lang/rejectAccount/:token", (req, res) => {
+    if (req.session.authenticated) {
+        let token = req.params.token;
+        accounts.rejectAccount(token);
+        return res.redirect('/' + req.params.lang + '/account');
+    } res.redirect('/' + req.params.lang + '/signin');
+});
+
 
 app.post("/:lang/insertFile", uploadCSVFiles.single('fileField'), (req, res) => {
     if (req.session.authenticated) {
-        let file = req.file;
-        let fileName = req.file.originalname;
-        let startDate = req.body.dateStartField;
         if (req.file == undefined) {
             console.log("No files uploaded");
         } else {
+            let file = req.file;
+            let fileName = req.file.originalname;
             let tmp_path = file.path;
             let target_path = 'csv/' + fileName;
             let src = fs.createReadStream(tmp_path);
@@ -285,7 +306,7 @@ app.post("/:lang/insertFile", uploadCSVFiles.single('fileField'), (req, res) => 
                     }
                 }
             });
-        } return res.redirect("/" + req.params.lang + '/orders');
+        } return res.redirect("/" + req.params.lang + '/insertFile');
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
@@ -304,12 +325,16 @@ app.post('/:lang/createOrder', (req, res) => {
         let table = req.body;
         let productsIndex = [];
         let listSize = table.quantity.length;
+        let ownerIndex = req.session.id;
+        let openDate = req.body.dateStartField;
+        let closeDate = req.body.dateEndField;
         for (let i = 0; i < listSize; i++) {
             if (table.quantity[i] != 0) {
+                productsIndex.push([table.ean13[i], parseInt(table.quantity[i])]);
             }
-            productsIndex.push(i);
         }
-        console.log(productsIndex);
+        orders.createOrder(ownerIndex, productsIndex, openDate, closeDate);
+        return res.redirect('/' + req.params.lang + '/orders');
     } res.redirect('/' + req.params.lang + '/signin');
 });
 // LISTEN

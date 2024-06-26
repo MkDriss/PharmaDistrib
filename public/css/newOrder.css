@@ -19,13 +19,12 @@
 
 
 input, select{
-    border: none;
     font-family: var(--font-family);
     border: 3px solid #e0dedc88;
     backdrop-filter: blur(20px);
 }
 
-input[type="text"], input[type="decimal"], input[type="number"], input[type="date"], select{
+input, select{
     font-size: 15px;
     font-weight: 300;
     border-radius: 5px;
@@ -39,22 +38,20 @@ select{
 }
  
 
-input[type="submit"]{
+#createOrderForm input[type="submit"]{
     background-color: var(--background-color);
     color: var(--text-color);
     border-radius: 5px;
-    height: 40px;
+    height: 50px;
+    width: 150px;
     font-size: 15px;
     font-weight: 500;
-    border-radius: 10px
+    border-radius: 10px;
+    display: flex;
 }
 
 input[type="submit"]:hover{
     cursor: pointer;
-}
-
-#datesField{
-    font-weight: 500;
 }
 
 #createOrderForm{
@@ -77,6 +74,7 @@ input[type="submit"]:hover{
     display: flex;
     gap: 20px;
     align-items: center;
+    font-weight: 500;
 }
 
 th{
@@ -97,6 +95,12 @@ table{
     border-radius: 10px;
     margin-bottom: 50px;
     width: 1600px;
+}
+
+#startDate, #endDate{
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .price, .quantity, .packaging, .totQty, .basedPrice{

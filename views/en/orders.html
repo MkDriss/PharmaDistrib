@@ -2,12 +2,25 @@
 
 <div id="orderContainer">
     <div id="content">
-        <span id="title">Orders</span>
-        {{#orders}}
-        {{/orders}}
-        {{^orders}}
-        <span id="errorMessage">There is no Orders</span>
-        {{/orders}}
+        <span class="title">Orders</span>
+        <table>
+            <tr id="firstRow">
+                <th>Number</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>State</th>
+                <th>Owner</th>
+            </tr>
+             {{#ordersList}}
+            <tr class="order">
+                <td>{{orderIndex}}</td>
+                <td>{{openDate}}</td>
+                <td>{{closeDate}}</td>
+                <td>{{state}}</td>
+                <td>{{ownerName}}</td>
+            </tr>
+            {{/ordersList}}
+        </table>
         <a href="/en/newOrder" id="newOrder">New Order</a>
     </div>
 </div>

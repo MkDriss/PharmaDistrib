@@ -4,77 +4,134 @@ const Sqlite = require('better-sqlite3');
 const fs = require('fs');
 let db = new Sqlite('db.sqlite');
 
-let loadProduct = function (filename) {
 
-    const orders = JSON.parse(fs.readFileSync(filename));
+let initDatabase = function() {
 
+    db.prepare('DROP TABLE IF EXISTS productInventory').run();
+    console.log("Product Inventory table dropped");
+    db.prepare('DROP TABLE IF EXISTS crossOrders').run();
+    console.log('Cross Orders table dropped');
     db.prepare('DROP TABLE IF EXISTS orders').run();
     console.log('orders table dropped');
-    db.prepare('CREATE TABLE IF NOT EXISTS orders (id INT, owner TEXT, productsListId INT)').run();
-    let insertOrder = db.prepare('INSERT INTO orders VALUES (?, ?, ?)');
+
+    db.prepare('CREATE TABLE IF NOT EXISTS orders (orderIndex INTEGER PRIMARY KEY AUTOINCREMENT, ownerIndex TEXT, openDate TEXT, closeDate TEXT, state boolean)').run();
+    db.prepare('CREATE TABLE IF NOT EXISTS crossOrders (crossOrderIndex INTEGER PRIMARY KEY AUTOINCREMENT,' +
+        'originalOrderIndex INTEGER, crossOrderOwner TEXT,' +
+        'FOREIGN KEY(originalOrderIndex) REFERENCES orders(orderIndex))').run();
+    db.prepare('CREATE TABLE IF NOT EXISTS productInventory (crossOrderIndex INTEGER, productIndex TEXT, quantity INT,' +
+        'FOREIGN KEY(crossOrderIndex) REFERENCES crossOrders(crossOrderIndex))').run();
+}
+
+let loadOrder = function (filename) {
+    const orders = JSON.parse(fs.readFileSync(filename));
+    let insertOrder = db.prepare('INSERT INTO orders(orderIndex, ownerIndex, openDate, closeDate, state) VALUES (?, ?, ?, ?, ?) ');
     let transaction = db.transaction((orders) => {
-        for (let tempOrder = 0; tempOrder < orders.length; tempOrder++) {
-            let order = orders[tempOrder];
-            insertOrder.run(order.id, order.userId, order.userEmail, order.userName, order.userLastName, order.userAdress, order.userCity, order.userPostCode, order.userPhoneNumber, order.products, order.price, order.commentary, order.date, order.state);
+        for (let indexOrder = 0; indexOrder < orders.length; indexOrder++) {
+            insertOrder.run(orders[indexOrder].orderIndex, orders[indexOrder].ownerIndex, orders[indexOrder].openDate, orders[indexOrder].closeDate, orders[indexOrder].state);
         }
     });
-
     transaction(orders);
 }
 
-loadProduct('./json/orders.json');
+let loadCrossOrders = function (filename) {
+    const crossOrders = JSON.parse(fs.readFileSync(filename));
+    let insertCrossOrder = db.prepare('INSERT INTO crossOrders(crossOrderIndex, originalOrderIndex, crossOrderOwner) VALUES (?, ?, ?) ');
+    let insertProductInventory = db.prepare('INSERT INTO productInventory(crossOrderIndex, productIndex, quantity) VALUES (?, ?, ?) ');
+    let transaction = db.transaction((crossOrders) => { 
+        for (let crossOrderIndex = 0; crossOrderIndex < crossOrders.length; crossOrderIndex++) {
+            insertCrossOrder.run(crossOrders[crossOrderIndex].crossOrderIndex, crossOrders[crossOrderIndex].originalOrderIndex, crossOrders[crossOrderIndex].crossOrderOwner);
+            // Insert list of products in 
+            for (let indexProduct = 0; indexProduct < (crossOrders[crossOrderIndex].productInventory).length; indexProduct++) {
+                insertProductInventory.run(crossOrders[crossOrderIndex].crossOrderIndex, crossOrders[crossOrderIndex].productInventory[indexProduct].productIndex, crossOrders[crossOrderIndex].productInventory[indexProduct].quantity);
+            }
+        }
+    });
+    transaction(crossOrders);
+}
+
+initDatabase();
+loadOrder('./json/orders.json');
+loadCrossOrders('./json/crossOrders.json');
+console.log('Orders loaded');
 
 //CREATE
 
-exports.createOrder = function (userId, userEmail, userName, userLastName, userAdress, userCity, userPostCode, userPhoneNumber, products, price, commentary, date, state) {
-    let newOrder = {
-        "userId": userId,
-        "userEmail": userEmail,
-        "userName": userName,
-        "userLastName": userLastName,
-        "userAdress": userAdress,
-        "userCity": userCity,
-        "userPostCode": userPostCode,
-        "userPhoneNumber": userPhoneNumber,
-        "products": products,
-        "price": price,
-        "commentary": commentary,
-        "date": date,
-        "state": state
-    };
-    try {
-        fs.readFile('./json/orders.json', (err, data) => {
-            if (err) throw err;
-            let orders = JSON.parse(data);
-            orders.push(newOrder)
-            fs.writeFileSync('./json/orders.json', JSON.stringify(orders, null, 2), function (err) {
-                if (err) throw err;
-                console.log(err);
-            });
-
-        });
-        db.prepare('INSERT INTO orderList (userId, userEmail, userName, userLastName, userAdress, userCity, userPostCode, userPhoneNumber, products, price, commentary, date,  state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').run(userId, userEmail, userName, userLastName, userAdress, userCity, userPostCode, userPhoneNumber, products, price, commentary, date, state);
-        console.log('Order created');
-    } catch (err) {
-        console.log(err);
+exports.createOrder = function (ownerIndex, productsList, openDate, closeDate) {
+    db.prepare('INSERT INTO orders(ownerIndex, openDate, closeDate, state) VALUES (?, ?, ?, ?)').run(ownerIndex, openDate, closeDate, 1);
+    let orderIndex = (db.prepare('SELECT MAX(orderIndex) FROM orders').get()['MAX(orderIndex)']);
+    db.prepare('INSERT INTO crossOrders(originalOrderIndex, crossOrderOwner) VALUES (?, ?)').run(orderIndex, ownerIndex);
+    let crossOrderIndex = (db.prepare('SELECT MAX(crossOrderIndex) FROM crossOrders').get()['MAX(crossOrderIndex)']);
+    console.log(crossOrderIndex)
+    for (let indexProduct = 0; indexProduct < productsList.length; indexProduct++) {
+        db.prepare('INSERT INTO productInventory(crossOrderIndex, productIndex, quantity) VALUES (?, ?, ?)').run(crossOrderIndex, productsList[indexProduct][0], productsList[indexProduct][1]);
     }
 
+    fs.readFile('./json/orders.json', (err, data) => {
+        let newOrder = {
+            "orderIndex": orderIndex,
+            "ownerIndex": ownerIndex,
+            "openDate": openDate,
+            "closeDate": closeDate,
+            "state": 1
+        }
+        if (err) throw err;
+        let orders = JSON.parse(data);
+        orders.push(newOrder);
+        fs.writeFileSync('./json/orders.json', JSON.stringify(orders, null, 2), function (err) {
+            if (err) throw err;
+            console.log(err);
+        });
+    });
+
+    fs.readFile('./json/crossOrders.json', (err, data) => {
+        let newCrossOrder = {
+            "crossOrderIndex": crossOrderIndex,
+            "originalOrderIndex": orderIndex,
+            "crossOrderOwner": ownerIndex,
+            "productInventory": productsList
+        }
+        if (err) throw err;
+        let crossOrders = JSON.parse(data);
+        crossOrders.push(newCrossOrder);
+        fs.writeFileSync('./json/crossOrders.json', JSON.stringify(crossOrders, null, 2), function (err) {
+            if (err) throw err;
+            console.log(err);
+        });
+    });
+}
+
+exports.createCrossOrder = function (originalOrderIndex, crossOrderOwnerIndex, productsList) {
+    fs.readFile('./json/orders.json', (err, data) => {
+        let newCrossOrder = {
+            "crossOrderIndex": crossOrderOwnerIndex,
+            "originalOrderIndex": originalOrderIndex,
+            "crossOrderOwner": ownerIndex,
+            "productInventory": productsList
+        }
+        if (err) throw err;
+        let orders = JSON.parse(data);
+        orders.push(newCrossOrder);
+        fs.writeFileSync('./json/crossOrders.json', JSON.stringify(orders, null, 2), function (err) {
+            if (err) throw err;
+            console.log(err);
+        });
+    });
 }
 
 // GET
 
 exports.getOrderFromId = function (id) {
-    return db.prepare('SELECT * FROM orderList WHERE id = ?').get(id);
+    return db.prepare('SELECT * FROM orders WHERE id = ?').get(id);
 }
 
-exports.getOrdersFromUserId = function (userId) {
-    return db.prepare('SELECT * FROM orderList WHERE userId = ?').all(userId);
+exports.getAllOrders = function () {
+    return db.prepare('SELECT * FROM orders').all();
 }
 
 //UPDATE
 
 exports.updateOrderCommentary = function (id, commentary) {
-    db.prepare('UPDATE orderList SET commentary = ? where id = ?').run(commentary, id);
+    db.prepare('UPDATE orders SET commentary = ? where id = ?').run(commentary, id);
 }
 
 exports.updateOrderState = function (id, state) {
@@ -90,13 +147,21 @@ exports.updateOrderState = function (id, state) {
         });
     });
 
-    db.prepare('UPDATE orderList SET state = ? WHERE id = ?').run(state, id);
+    db.prepare('UPDATE orders SET state = ? WHERE id = ?').run(state, id);
 }
 
 
 // LIST
 exports.listOrders = function () {
-    return db.prepare('SELECT * FROM orderList').all();
+    return db.prepare('SELECT * FROM orders').all();
+}
+
+exports.listOpenedOrders = function () {
+    return db.prepare('SELECT * FROM orders WHERE state = 1').all();
+}
+
+exports.listClosedOrders = function () {
+    return db.prepare('SELECT * FROM orders WHERE state = 0').all();
 }
 
 // DELETE
@@ -110,8 +175,7 @@ exports.deleteOrderFromId = function (id) {
             if (err) throw err;
             console.log(err);
         });
-
     });
-    db.prepare('DELETE FROM orderList WHERE id = ?').run(id);
+    db.prepare('DELETE FROM orders WHERE id = ?').run(id);
     console.log('Order deleted');
 }

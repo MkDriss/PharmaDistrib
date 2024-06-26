@@ -48,7 +48,7 @@
 <div id="accountContainer">
     <div id="column1">
         <div id="primarySection">
-            <img src="../{{profilePicture}}" alt="profilePicture" id="profilePicture">
+            <img src="../{{profilePicture}}" alt="profilePicture" class="profilePicture">
             <div id="nameSection">
                 <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Name" readonly>
                 <input type="text" name="lastNameField" id="lastNameField" value="{{userLastName}}"
@@ -57,8 +57,8 @@
         </div>
         <div id="contactSection">
             <input type="email" name="emailField" id="emailField" value="{{email}}" placeholder="Email" readonly>
-            <input type="tel" name="phoneNumberField" id="phoneNumberField" value="{{phone}}"
-                placeholder="Phone Number" readonly>
+            <input type="tel" name="phoneNumberField" id="phoneNumberField" value="{{phone}}" placeholder="Phone Number"
+                readonly>
         </div>
 
         <input type="text" name="adressField" id="adressField" value="{{adress}}" placeholder="Address" readonly>
@@ -144,11 +144,31 @@
             </div>
         </div>
     </div>
+</div>
 
-    <div>
-        
+{{#admin}}
+<div id="row2">
+    <div id="unverifiedAccountsContainer">
+        <div class="title">Unverified Accounts</div>
+        {{#unverifiedAccounts}}
+        <div class="unverifiedAccountContent">
+            <img src="/account.svg" alt="defaultProfilePicture" class="profilePicture">
+            <div class="userInfoSection">
+                <div class="inputSection"><input type="text" value="{{userName}}" id="userName-{{id}}" readonly>
+                    <form action="/en/rejectAccount/{{token}}" method="post" class="rejectAccountForm"><input type="image" src="/cross.svg"
+                            class="rejectBtn"></form>
+                </div>
+                <div class="inputSection"><input type="text" value="{{email}}" id="email-{{id}}" readonly>
+                    <form action="/en/verifyAccount/{{token}}" method="post" class="verifyAccountForm"><input type="image" src="/check.svg"
+                            class="verifyBtn"></form>
+                </div>
+            </div>
+        </div>
+
+        {{/unverifiedAccounts}}
     </div>
 </div>
+{{/admin}}
 {{/account}}
 
 {{>./en/footer}}

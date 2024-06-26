@@ -1,11 +1,13 @@
-#accountContainer {
+#accountContainer,
+#row2 {
     display: flex;
     justify-content: center;
     gap: 20px;
 }
 
 #column1,
-#column2 {
+#column2,
+#unverifiedAccountsContainer {
     display: flex;
     flex-direction: column;
     border: 5px solid #ebebebb2;
@@ -13,8 +15,32 @@
     background-color: #a0a0a069;
     padding: 25px;
     border-radius: 10px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
+
+#column1 {
+    width: 700px;
+    gap: 20px;
+}
+
+#unverifiedAccountsContainer {
+    align-items: center;
+}
+
+.unverifiedAccountContent {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 20px;
+}
+
+.userInfoSection {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
+
+
 
 #primarySection {
     display: flex;
@@ -23,7 +49,7 @@
     border-top-right-radius: 10px;
 }
 
-#profilePicture {
+.profilePicture {
     width: 124px;
     height: 124px;
     border-radius: 10px;
@@ -47,21 +73,26 @@
 #changePsswdSub,
 #changePsswdBtn,
 #cancelBtn,
-#editProfileLink {
+#editProfileLink,
+#unverifiedAccountsContainer input {
     border-radius: 10px;
     border: none;
 }
 
-#column1 input,
-#column1 a {
-    padding-left: 10px;
-    padding-right: 10px;
+#column1 input[type="text"],
+#column1 input[type="email"],
+#column1 input[type="tel"],
+#column1 input[type="password"],
+#column1 a,
+#unverifiedAccountsContainer input[type="text"] {
+    padding: 0px 10px;
     height: 40px;
     font-size: 15px;
     font-weight: 500;
-    margin: 10px 0px;
     font-family: var(--font-family);
+
 }
+
 
 #column1 a,
 #newOrderBtn,
@@ -73,6 +104,7 @@
     color: var(--text-color);
     background-color: var(--background-color);
     width: 180px;
+    height: 34px;
     border: 3px solid #e0dedc88;
     backdrop-filter: blur(20px);
 }
@@ -82,7 +114,8 @@
 #confirmPasswordSection {
     display: flex;
     align-items: center;
-
+    height: 40px;
+    
 }
 
 #oldPasswordField,
@@ -93,17 +126,9 @@
     border: none;
 }
 
-#changePsswdBtn {
-    width: 206px;
-    justify-content: center;
-}
-
 #changePsswdSub {
     background-color: var(--background-color);
     color: var(--text-color);
-    border: 3px solid #e0dedc88;
-    backdrop-filter: blur(20px);
-    height: 46px;
 }
 
 #localisationSection,
@@ -115,6 +140,7 @@
 #changePsswdSection {
     display: flex;
     justify-content: space-around;
+    align-items: flex-start;
 }
 
 #emailField,
@@ -130,13 +156,8 @@
 #updatePasswordForm {
     display: flex;
     flex-direction: column;
-}
-
-.title {
-    font-size: 30px;
-    font-family: Inter;
-    font-weight: 500;
-    color: var(--text-color);
+    align-items: center;
+    gap: 20px;
 }
 
 #column2Content {
@@ -150,26 +171,27 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
     gap: 20px;
 }
 
 #newOrderBtn,
 #myOrderBtn {
     height: 40px;
+    width: 200px;
     font-weight: 500;
     border-radius: 10px;
     margin-top: 50px;
 }
 
-#column2 {
+#column2,
+#unverifiedAccountsContainer {
     width: 500px;
 }
 
 
 label {
-    height: 42px;
-    width: 42px;
+    height: 40px;
+    width: 40px;
     background-color: var(--text-color);
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -182,21 +204,59 @@ label {
 label img {
     width: 30px;
     height: 30px;
+    padding: 5px;
 }
 
 .hiddenInput {
     display: none;
 }
 
-#cancelBtn, #changePsswdBtn {
+#cancelBtn,
+#changePsswdBtn,
+#changePsswdSub {
     display: flex;
+    height: 40px;
+    width: 237px;
     justify-content: center;
-    color: var(--background-color);
-    background-color: var(--text-color);
     border: 3px solid #e0dedc88;
     backdrop-filter: blur(20px);
+    font-family: var(--font-family);
+    font-size: 15px;
+    font-weight: 500;
 }
 
-input[type="button"]:hover, input[type="submit"]:hover{
+#cancelBtn,
+#changePsswdBtn {
+    color: var(--background-color);
+    background-color: var(--text-color);
+}
+
+input[type="button"]:hover,
+input[type="submit"]:hover {
     cursor: pointer;
+}
+
+.inputSection {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.rejectBtn,
+.verifyBtn {
+    height: 30px;
+    width: 30px;
+    padding: 5px;
+}
+
+.rejectBtn {
+    background-color: var(--text-color);
+}
+
+.verifyBtn {
+    background-color: var(--background-color);
+}
+
+.rejectAccountForm, .verifyAccountForm {
+    height: 40px;
 }

@@ -79,6 +79,10 @@ exports.list = function () {
       return db.prepare('SELECT * FROM user').all();
 }
 
+exports.getUnverifiedAccounts = function () {
+      return db.prepare('SELECT * FROM user WHERE verified = 0').all();
+}
+
 // SET
 
 exports.setAdmin = function (id) {
@@ -160,10 +164,55 @@ exports.updateAccountPassword = function (password, token) {
       }
 }
 
+exports.verifyAccount = function (token){
+      try {
+            fs.readFile('json/accounts.json', function (err, data) {
+                  if (err) throw err;
+                  let accountsList = JSON.parse(data);
+                  for (let i = 0; i < accountsList.length; i++) {
+                        let account = accountsList[i];
+                        if (account.token === token) {
+                              account.verified = 1;
+                        }
+                  }
+                  fs.writeFileSync('json/accounts.json', JSON.stringify(accountsList, null, 2), function (err) {
+                        if (err) throw err;
+                        console.log(err);
+                  });
+            });
+            db.prepare('UPDATE user SET verified = 1 WHERE token = ?').run(token);
+      } catch (err) {
+            console.log(err);
+      }
+}
+
 //DELETE
 
 exports.delete = function (id) {
       db.prepare('DELETE FROM user WHERE id = ?').run(id);
 }
+
+exports.rejectAccount = function (token){
+      try {
+            db.prepare('DELETE FROM user WHERE token = ?').run(token);
+            fs.readFile('json/accounts.json', function (err, data) {
+                  if (err) throw err;
+                  let accountsList = JSON.parse(data);
+                  for (let i = 0; i < accountsList.length; i++) {
+                        let account = accountsList[i];
+                        if (account.token === token) {
+                              accountsList.splice(i, 1); 
+                        }
+                  }
+                  fs.writeFileSync('json/accounts.json', JSON.stringify(accountsList, null, 2), function (err) {
+                        if (err) throw err;
+                        console.log(err);
+                  });
+            });
+      } catch (err) {
+            console.log(err);
+      }
+}
+
 
 
