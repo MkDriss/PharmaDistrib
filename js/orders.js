@@ -61,7 +61,6 @@ exports.createOrder = function (ownerIndex, productsList, openDate, closeDate) {
     let orderIndex = (db.prepare('SELECT MAX(orderIndex) FROM orders').get()['MAX(orderIndex)']);
     db.prepare('INSERT INTO crossOrders(originalOrderIndex, crossOrderOwner) VALUES (?, ?)').run(orderIndex, ownerIndex);
     let crossOrderIndex = (db.prepare('SELECT MAX(crossOrderIndex) FROM crossOrders').get()['MAX(crossOrderIndex)']);
-    console.log(crossOrderIndex)
     for (let indexProduct = 0; indexProduct < productsList.length; indexProduct++) {
         db.prepare('INSERT INTO productInventory(crossOrderIndex, productIndex, quantity) VALUES (?, ?, ?)').run(crossOrderIndex, productsList[indexProduct][0], productsList[indexProduct][1]);
     }
@@ -120,12 +119,17 @@ exports.createCrossOrder = function (originalOrderIndex, crossOrderOwnerIndex, p
 
 // GET
 
-exports.getOrderFromId = function (id) {
-    return db.prepare('SELECT * FROM orders WHERE id = ?').get(id);
+exports.get = function (orderIndex) {
+    console.log(orderIndex);    
+    return db.prepare('SELECT * FROM orders WHERE orderIndex = ?').get(orderIndex);
 }
 
-exports.getAllOrders = function () {
-    return db.prepare('SELECT * FROM orders').all();
+exports.getLastCrossOrdersFromOwnerIndex = function (ownerIndex) {
+    return db.prepare('SELECT * FROM crossOrders WHERE crossOrderOwner = ? ORDER BY originalOrderIndex DESC LIMIT 3').all(ownerIndex);
+}
+
+exports.getOrders = function () {
+    return db.prepare('SELECT * FROM orders ORDER BY orderIndex DESC').all();
 }
 
 //UPDATE
@@ -150,18 +154,8 @@ exports.updateOrderState = function (id, state) {
     db.prepare('UPDATE orders SET state = ? WHERE id = ?').run(state, id);
 }
 
-
-// LIST
-exports.listOrders = function () {
-    return db.prepare('SELECT * FROM orders').all();
-}
-
-exports.listOpenedOrders = function () {
-    return db.prepare('SELECT * FROM orders WHERE state = 1').all();
-}
-
-exports.listClosedOrders = function () {
-    return db.prepare('SELECT * FROM orders WHERE state = 0').all();
+exports.setState = function(orderIndex, state) {
+    db.prepare('UPDATE orders SET state = ? WHERE orderIndex = ?').run(state, orderIndex);
 }
 
 // DELETE

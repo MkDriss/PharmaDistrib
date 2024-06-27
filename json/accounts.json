@@ -27,6 +27,21 @@
     "zipCode": "",
     "phone": "",
     "profilePicture": "account.svg",
-    "verified": 0
+    "verified": 1
+  },
+  {
+    "id": "c8fdf2db9d539b487ee34ccc1e4d67eaeb166216b672a69619908f7c378eb03c",
+    "username": "Clement",
+    "userLastName": "",
+    "email": "clement@gmail.com",
+    "token": "37d7d26dbc10d4792871a5335b0d3a2fbf320fe90d8fd640fb6a1073b8b38f00529920af44c6f0edf831ff523124f35dea941cbbf19aed8cb9d7996007b9c2ec9a92179b0340f5a8b1758ecdc11105905bdbe1d8cd4721591b80f554a616ccc5226efb47b21a7ceb6124e33e78be269f038cf0293ec06d9f921ffa5c40095265",
+    "password": "cl",
+    "admin": 0,
+    "adress": "",
+    "city": "",
+    "zipCode": "",
+    "phone": "",
+    "profilePicture": "account.svg",
+    "verified": 1
   }
 ]

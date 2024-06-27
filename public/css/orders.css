@@ -38,27 +38,52 @@
     backdrop-filter: blur(20px);
 }
 
-.order{
+#table span, #table svg{
+    width: 120px;
+    display: flex;
+    justify-content: center;
+}
+
+#table{
+    display: flex;
+    flex-direction: column;
     gap: 20px;
+}
+
+.row, #firstRow{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+#firstRow{
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.row{
     padding: 10px;
-    border: 3px solid #e0dedc88;
     border-radius: 10px;
-    backdrop-filter: blur(20px);
-    text-decoration: none;
-}
-
-
-td{
-    text-align: center;
-    padding: 10px 20px;
-}
-
-tr{
     border: 3px solid #e0dedc88;
-    backdrop-filter: blur(20px);
-    border-radius: 5px;
+    background-color: var(--text-color);
+    color: var(--background-color);
+    .checkSvgIco{
+        stroke: var(--background-color);
+    }
+    .crossSvgIco{
+        fill: var(--background-color);
+    }
 }
 
-td:hover{
+.row:hover{
     cursor: pointer;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    .checkSvgIco{
+        stroke: var(--text-color);
+    }
+    .crossSvgIco{
+        fill: var(--text-color);
+    }
 }

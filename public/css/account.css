@@ -260,3 +260,47 @@ input[type="submit"]:hover {
 .rejectAccountForm, .verifyAccountForm {
     height: 40px;
 }
+
+
+#table span, #table svg{
+    width: 120px;
+    display: flex;
+    justify-content: center;
+}
+
+#table{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 3px solid #e0dedc88;
+    background-color: var(--text-color);
+    color: var(--background-color);
+    .checkSvgIco{
+        stroke: var(--background-color);
+    }
+    .crossSvgIco{
+        fill: var(--background-color);
+    }
+}
+
+.row:hover{
+    cursor: pointer;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    .checkSvgIco{
+        stroke: var(--text-color);
+    }
+    .crossSvgIco{
+        fill: var(--text-color);
+    }
+}

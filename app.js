@@ -81,6 +81,8 @@ app.get("/", (req, res) => {
 app.get("/:lang", (req, res) => {
     if (req.params.lang === 'en' || req.params.lang === 'fr') {
         return res.redirect("/" + req.params.lang + "/home");
+    } else {
+        return res.send('404 Not Found');
     }
 });
 
@@ -101,21 +103,30 @@ app.get("/:lang/account", (req, res) => {
     if (req.session.authenticated) {
         let id = req.session.id;
         let account = accounts.get(id)
-        if (account.admin) {
-            let unverifiedAccounts = accounts.getUnverifiedAccounts();
-            return res.render("./" + req.params.lang + "/account.html", { css: "/account.css", account: account, admin: true, unverifiedAccounts: unverifiedAccounts });
+        let lastCrossOrdersList = orders.getLastCrossOrdersFromOwnerIndex(id);
+        for (let i = 0; i < lastCrossOrdersList.length; i++) {
+            lastCrossOrdersList[i].orderIndex = lastCrossOrdersList[i].originalOrderIndex;
+            lastCrossOrdersList[i].openDate = orders.get(lastCrossOrdersList[i].orderIndex).openDate;
+            lastCrossOrdersList[i].closeDate = orders.get(lastCrossOrdersList[i].orderIndex).closeDate;
+            lastCrossOrdersList[i].state = orders.get(lastCrossOrdersList[i].orderIndex).state;
         }
-        return res.render("./" + req.params.lang + "/account.html", { css: "/account.css", account: account });
+        let unverifiedAccounts = accounts.getUnverifiedAccounts();
+        console.log(lastCrossOrdersList)
+        return res.render("./" + req.params.lang + "/account.html", { css: "/account.css", 
+            account: account, admin: account.admin, unverifiedAccounts: unverifiedAccounts, orders : lastCrossOrdersList });
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
 app.get("/:lang/orders", (req, res) => {
     if (req.session.authenticated) {
-        let order = orders.listOrders();
+        let order = orders.getOrders();
         for (let i = 0; i < order.length; i++) {
             order[i].ownerName = accounts.get(order[i].ownerIndex).userName;
+            if(new Date(order[i].closeDate) - new Date() < 0) {
+                order[i].state = 0;
+                orders.setState(order[i].orderIndex, 0)
+            }
         }
-        console.log(order)
         return res.render("./" + req.params.lang + "/orders.html", { css: "/orders.css", ordersList: order });
     } res.redirect('/' + req.params.lang + '/signin')
 });

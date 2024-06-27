@@ -2,13 +2,42 @@
 
 <div id="orderContainer">
     <div id="content">
-        <span id="title">Commandes</span>
-        {{#orders}}
-        {{/orders}}
-        {{^orders}}
-        <span id="errorMessage">Il n'y a pas de commandes</span>
-        {{/orders}}
-        <a href="/fr/newOrder" id="newOrder">Nouvelle Commande</a>
+        <span class="title">Commandes</span>
+        <div id="table">
+            <div id="firstRow">
+                <span>Numéro</span>
+                <span>Date début</span>
+                <span>Date fin</span>
+                <span>Etat</span>
+                <span>Créateur</span>
+            </div>
+            {{#ordersList}}
+            <a href="/orderIndex/{{orderIndex}}" class="row">
+                <span>{{orderIndex}}</span>
+                <span>{{openDate}}</span>
+                <span>{{closeDate}}</span>
+                {{#state}}
+                <svg class="checkSvgIco" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+                    <g id="SVGRepo_iconCarrier"> <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> </g>
+                    </svg>
+                {{/state}}
+                {{^state}}
+                <svg class="crossSvgIco" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+                    <g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" 
+                        d="M5.46967 5.46967C5.76256 5.17678 6.23744 5.17678 6.53033 5.46967L18.5303 17.4697C18.8232 17.7626 18.8232 18.2374 18.5303 18.5303C18.2374 18.8232 17.7626 18.8232 17.4697 18.5303L5.46967 6.53033C5.17678 6.23744 5.17678 5.76256 5.46967 5.46967Z" 
+                        /><path fill-rule="evenodd" clip-rule="evenodd" d="M18.5303 5.46967C18.8232 5.76256 18.8232 6.23744 18.5303 6.53033L6.53035 18.5303C6.23745 18.8232 5.76258 18.8232 5.46969 18.5303C5.17679 18.2374 5.17679 17.7626 5.46968 17.4697L17.4697 5.46967C17.7626 5.17678 18.2374 5.17678 18.5303 5.46967Z"
+                        /> </g>
+                    </svg>
+                {{/state}}
+                <span>{{ownerName}}</span>
+            </a>
+            {{/ordersList}}
+        </div>
+        <a href="/en/newOrder" id="newOrder">Nouvelle Commande</a>
     </div>
 </div>
 

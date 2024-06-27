@@ -27,6 +27,7 @@ body {
     filter: blur(1.rem);
     font-family: var(--font-family);
     font-weight: 300;
+    gap: 20px;
 }
 
 #navBar {
@@ -38,7 +39,6 @@ body {
     box-shadow: 0px 0px 5px 1px rgb(159, 152, 152);
     width: 100%;
     background-color: var(--background-color) !important;
-    margin-bottom: 50px;
 }
 
 #navBar a {
@@ -60,6 +60,11 @@ body {
 .icoFooter {
     width: 30px;
     height: 30px;
+}
+
+
+header {
+    margin-bottom: auto;
 }
 
 footer {
@@ -108,7 +113,6 @@ footer input:hover{
     font-weight: 500;
     color: var(--text-color);
     font-family: var(--font-family);
-    margin-bottom: 40px;
 }
 
 
@@ -142,4 +146,8 @@ footer input:hover{
     color: var(--text-color);
     font-family: var(--font-family);
     font-weight: 500;
+}
+
+a {
+    text-decoration: none;
 }
