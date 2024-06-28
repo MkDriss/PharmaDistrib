@@ -3,7 +3,7 @@
 const Sqlite = require('better-sqlite3');
 const fs = require('fs');
 let db = new Sqlite('db.sqlite');
-const directoryPath = '.\\csv';
+const directoryPath = './csv';
 
 const fileList = fs.readdirSync(directoryPath);
 
@@ -39,7 +39,7 @@ let loadProducts = function (filename) {
 
 for (let i = 0; i < fileList.length; i++) {
       let file = fileList[i];
-      loadProducts(directoryPath + '\\' + file);
+      loadProducts(directoryPath + '/' + file);
 }
 
 //INSERT
