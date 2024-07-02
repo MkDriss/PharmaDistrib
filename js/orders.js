@@ -1,6 +1,7 @@
 'use strict';
 
 const Sqlite = require('better-sqlite3');
+const { Console } = require('console');
 const fs = require('fs');
 let db = new Sqlite('db.sqlite');
 
@@ -18,8 +19,9 @@ let initDatabase = function() {
     db.prepare('CREATE TABLE IF NOT EXISTS crossOrders (crossOrderIndex INTEGER PRIMARY KEY AUTOINCREMENT,' +
         'originalOrderIndex INTEGER, crossOrderOwner TEXT,' +
         'FOREIGN KEY(originalOrderIndex) REFERENCES orders(orderIndex))').run();
-    db.prepare('CREATE TABLE IF NOT EXISTS productInventory (crossOrderIndex INTEGER, productIndex TEXT, quantity INT,' +
-        'FOREIGN KEY(crossOrderIndex) REFERENCES crossOrders(crossOrderIndex))').run();
+    db.prepare('CREATE TABLE IF NOT EXISTS productInventory (orderIndex INTEGER, crossOrderIndex INTEGER, productIndex TEXT, quantity INT,' +
+        'FOREIGN KEY(crossOrderIndex) REFERENCES crossOrders(crossOrderIndex),' + 
+        'FOREIGN KEY(orderIndex) REFERENCES orders(orderIndex))').run();
 }
 
 let loadOrder = function (filename) {
@@ -36,13 +38,13 @@ let loadOrder = function (filename) {
 let loadCrossOrders = function (filename) {
     const crossOrders = JSON.parse(fs.readFileSync(filename));
     let insertCrossOrder = db.prepare('INSERT INTO crossOrders(crossOrderIndex, originalOrderIndex, crossOrderOwner) VALUES (?, ?, ?) ');
-    let insertProductInventory = db.prepare('INSERT INTO productInventory(crossOrderIndex, productIndex, quantity) VALUES (?, ?, ?) ');
+    let insertProductInventory = db.prepare('INSERT INTO productInventory(orderIndex, crossOrderIndex, productIndex, quantity) VALUES (?, ?, ?, ?) ');
     let transaction = db.transaction((crossOrders) => { 
         for (let crossOrderIndex = 0; crossOrderIndex < crossOrders.length; crossOrderIndex++) {
             insertCrossOrder.run(crossOrders[crossOrderIndex].crossOrderIndex, crossOrders[crossOrderIndex].originalOrderIndex, crossOrders[crossOrderIndex].crossOrderOwner);
             // Insert list of products in 
             for (let indexProduct = 0; indexProduct < (crossOrders[crossOrderIndex].productInventory).length; indexProduct++) {
-                insertProductInventory.run(crossOrders[crossOrderIndex].crossOrderIndex, crossOrders[crossOrderIndex].productInventory[indexProduct].productIndex, crossOrders[crossOrderIndex].productInventory[indexProduct].quantity);
+                insertProductInventory.run(crossOrders[crossOrderIndex].originalOrderIndex, crossOrders[crossOrderIndex].crossOrderIndex, crossOrders[crossOrderIndex].productInventory[indexProduct][0], crossOrders[crossOrderIndex].productInventory[indexProduct][1]);
             }
         }
     });
@@ -62,7 +64,7 @@ exports.createOrder = function (ownerIndex, productsList, openDate, closeDate) {
     db.prepare('INSERT INTO crossOrders(originalOrderIndex, crossOrderOwner) VALUES (?, ?)').run(orderIndex, ownerIndex);
     let crossOrderIndex = (db.prepare('SELECT MAX(crossOrderIndex) FROM crossOrders').get()['MAX(crossOrderIndex)']);
     for (let indexProduct = 0; indexProduct < productsList.length; indexProduct++) {
-        db.prepare('INSERT INTO productInventory(crossOrderIndex, productIndex, quantity) VALUES (?, ?, ?)').run(crossOrderIndex, productsList[indexProduct][0], productsList[indexProduct][1]);
+        db.prepare('INSERT INTO productInventory(orderIndex, crossOrderIndex, productIndex, quantity) VALUES (?, ?, ?, ?)').run(orderIndex, crossOrderIndex, productsList[indexProduct][0], productsList[indexProduct][1]);
     }
 
     fs.readFile('./json/orders.json', (err, data) => {
@@ -119,8 +121,7 @@ exports.createCrossOrder = function (originalOrderIndex, crossOrderOwnerIndex, p
 
 // GET
 
-exports.get = function (orderIndex) {
-    console.log(orderIndex);    
+exports.getOrder = function (orderIndex) {
     return db.prepare('SELECT * FROM orders WHERE orderIndex = ?').get(orderIndex);
 }
 
@@ -130,6 +131,18 @@ exports.getLastCrossOrdersFromOwnerIndex = function (ownerIndex) {
 
 exports.getOrders = function () {
     return db.prepare('SELECT * FROM orders ORDER BY orderIndex DESC').all();
+}
+
+exports.getCrossOrders = function (){
+    return db.prepare('SELECT * FROM crossOrders ORDER BY crossOrderIndex DESC').all();
+}
+
+exports.getCrossOrder = function (crossOrderIndex) {
+    return db.prepare('SELECT * FROM crossOrders WHERE originalOrderIndex = ?').all(crossOrderIndex);
+}
+
+exports.getProductsListFromOrderIndex = function (orderIndex) {
+    return db.prepare('SELECT * FROM productInventory WHERE orderIndex = ?').all(orderIndex)
 }
 
 //UPDATE
@@ -142,8 +155,6 @@ exports.updateOrderState = function (id, state) {
     fs.readFile('./json/orders.json', (err, data) => {
         if (err) throw err;
         let orders = JSON.parse(data);
-        console.log(id);
-        console.log(state);
         orders[id - 1].state = state;
         fs.writeFileSync('./json/orders.json', JSON.stringify(orders, null, 2), function (err) {
             if (err) throw err;

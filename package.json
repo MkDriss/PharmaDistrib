@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/MkDriss/PharmaDistrib#readme",
   "dependencies": {
-    "better-sqlite3": "^11.0.0",
+    "better-sqlite3": "^11.1.1",
     "body-parser": "^1.20.2",
     "cookie-session": "^2.1.0",
     "csv-parse": "^5.5.6",

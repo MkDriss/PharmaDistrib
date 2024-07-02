@@ -106,12 +106,11 @@ app.get("/:lang/account", (req, res) => {
         let lastCrossOrdersList = orders.getLastCrossOrdersFromOwnerIndex(id);
         for (let i = 0; i < lastCrossOrdersList.length; i++) {
             lastCrossOrdersList[i].orderIndex = lastCrossOrdersList[i].originalOrderIndex;
-            lastCrossOrdersList[i].openDate = orders.get(lastCrossOrdersList[i].orderIndex).openDate;
-            lastCrossOrdersList[i].closeDate = orders.get(lastCrossOrdersList[i].orderIndex).closeDate;
-            lastCrossOrdersList[i].state = orders.get(lastCrossOrdersList[i].orderIndex).state;
+            lastCrossOrdersList[i].openDate = orders.getOrder(lastCrossOrdersList[i].orderIndex).openDate;
+            lastCrossOrdersList[i].closeDate = orders.getOrder(lastCrossOrdersList[i].orderIndex).closeDate;
+            lastCrossOrdersList[i].state = orders.getOrder(lastCrossOrdersList[i].orderIndex).state;
         }
         let unverifiedAccounts = accounts.getUnverifiedAccounts();
-        console.log(lastCrossOrdersList)
         return res.render("./" + req.params.lang + "/account.html", { css: "/account.css", 
             account: account, admin: account.admin, unverifiedAccounts: unverifiedAccounts, orders : lastCrossOrdersList });
     } res.redirect('/' + req.params.lang + '/signin')
@@ -149,6 +148,16 @@ app.get('/:lang/editAccount', (req, res) => {
         return res.render("./" + req.params.lang + "/editAccount.html", { css: "/editAccount.css", account: account });
     } res.redirect('/' + req.params.lang + '/signin')
 })
+
+app.get("/:lang/orderDetails/:orderIndex", (req, res) => {
+    if (req.session.authenticated) {
+        let orderIndex = req.params.orderIndex;
+        let order = orders.getOrder(orderIndex);
+        let productsList = orders.getProductsListFromOrderIndex(orderIndex);
+        console.log(productsList)
+        return res.render("./" + req.params.lang + "/orderDetails.html", { css: "/orderDetails.css", order: order, productsList: productsList });
+    } res.redirect('/' + req.params.lang + '/signin')
+});
 
 // POST
 
