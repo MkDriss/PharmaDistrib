@@ -164,6 +164,15 @@ exports.getProductsListFromOrderIndex = function (orderIndex) {
     return productsList;
 }
 
+exports.getProductsListFromCrossOrderIndex = function (crossOrderIndex) {
+    let productsList = db.prepare('SELECT * FROM productInventory WHERE crossOrderIndex = ?').all(crossOrderIndex);
+    for (let indexProduct = 0; indexProduct < productsList.length; indexProduct++) {
+        productsList[indexProduct] = products.getFromEan(productsList[indexProduct].productIndex);
+        
+    }
+    return productsList;
+}
+
 //UPDATE
 
 exports.updateOrderCommentary = function (id, commentary) {

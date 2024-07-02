@@ -117,6 +117,29 @@ app.get("/:lang/account", (req, res) => {
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
+app.get("/:lang/updateCrossOrder/:crossOrderIndex", (req, res) => {
+    if(req.session.authenticated) {
+        let crossOrderIndex = req.params.crossOrderIndex;
+        let crossOrder = orders.getCrossOrder(crossOrderIndex)[0];
+        let order = orders.getOrder(crossOrder.originalOrderIndex);
+        let productsList = orders.getProductsListFromOrderIndex(order.orderIndex);
+        crossOrder = orders.getProductsListFromCrossOrderIndex(crossOrder.crossOrderIndex);
+        for (let i = 0; i < productsList.length; i++) {
+            for(let j = 0; j < crossOrder.length; j++) {
+                if(productsList[i].ean13 == crossOrder[j].ean13) {
+                    productsList[i].quantity = crossOrder[j].quantity;
+                } else {
+                    productsList[i].quantity = 0;   
+                }
+            }
+        }
+        console.log("pd",productsList)
+        if (crossOrder.crossOrderOwner == req.session.id) {
+            return res.render("./" + req.params.lang + "/updateCrossOrder.html", { css: "/updateCrossOrder.css", laboratories : products.getLaboratories(), crossOrderIndex : crossOrderIndex });
+        } 
+    } res.redirect('/' + req.params.lang + '/signin');
+});
+
 app.get("/:lang/orders", (req, res) => {
     if (req.session.authenticated) {
         let order = orders.getOrders();
@@ -241,7 +264,7 @@ app.post("/:lang/updatePassword/:token", (req, res) => {
     }
     let account = accounts.get(req.session.id);
     res.render("./" + req.params.lang + '/account.html', { css: '/account.css', account: account, script: true })
-})
+});
 
 app.post("/:lang/editAccount", uploadProfilePicture.single('updateProfilePicture'), (req, res) => {
     if (req.session.authenticated) {
@@ -282,7 +305,7 @@ app.post("/:lang/editAccount", uploadProfilePicture.single('updateProfilePicture
             return res.redirect('/' + req.params.lang + '/account');
         }
     } res.redirect('/' + req.params.lang + '/signin')
-})
+});
 
 app.post("/:lang/verifyAccount/:token", (req, res) => {
     if (req.session.authenticated) {
