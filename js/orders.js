@@ -4,9 +4,10 @@ const Sqlite = require('better-sqlite3');
 const { Console } = require('console');
 const fs = require('fs');
 let db = new Sqlite('db.sqlite');
+var products = require('./products.js');
 
 
-let initDatabase = function() {
+let initDatabase = function () {
 
     db.prepare('DROP TABLE IF EXISTS productInventory').run();
     console.log("Product Inventory table dropped");
@@ -20,7 +21,7 @@ let initDatabase = function() {
         'originalOrderIndex INTEGER, crossOrderOwner TEXT,' +
         'FOREIGN KEY(originalOrderIndex) REFERENCES orders(orderIndex))').run();
     db.prepare('CREATE TABLE IF NOT EXISTS productInventory (orderIndex INTEGER, crossOrderIndex INTEGER, productIndex TEXT, quantity INT,' +
-        'FOREIGN KEY(crossOrderIndex) REFERENCES crossOrders(crossOrderIndex),' + 
+        'FOREIGN KEY(crossOrderIndex) REFERENCES crossOrders(crossOrderIndex),' +
         'FOREIGN KEY(orderIndex) REFERENCES orders(orderIndex))').run();
 }
 
@@ -39,7 +40,7 @@ let loadCrossOrders = function (filename) {
     const crossOrders = JSON.parse(fs.readFileSync(filename));
     let insertCrossOrder = db.prepare('INSERT INTO crossOrders(crossOrderIndex, originalOrderIndex, crossOrderOwner) VALUES (?, ?, ?) ');
     let insertProductInventory = db.prepare('INSERT INTO productInventory(orderIndex, crossOrderIndex, productIndex, quantity) VALUES (?, ?, ?, ?) ');
-    let transaction = db.transaction((crossOrders) => { 
+    let transaction = db.transaction((crossOrders) => {
         for (let crossOrderIndex = 0; crossOrderIndex < crossOrders.length; crossOrderIndex++) {
             insertCrossOrder.run(crossOrders[crossOrderIndex].crossOrderIndex, crossOrders[crossOrderIndex].originalOrderIndex, crossOrders[crossOrderIndex].crossOrderOwner);
             // Insert list of products in 
@@ -102,11 +103,18 @@ exports.createOrder = function (ownerIndex, productsList, openDate, closeDate) {
 }
 
 exports.createCrossOrder = function (originalOrderIndex, crossOrderOwnerIndex, productsList) {
-    fs.readFile('./json/orders.json', (err, data) => {
+    console.log(originalOrderIndex, crossOrderOwnerIndex, productsList)
+    db.prepare('INSERT INTO crossOrders(originalOrderIndex, crossOrderOwner) VALUES (?, ?)').run(originalOrderIndex, crossOrderOwnerIndex);
+    let crossOrderIndex = (db.prepare('SELECT MAX(crossOrderIndex) FROM crossOrders').get()['MAX(crossOrderIndex)']);
+    for (let indexProduct = 0; indexProduct < productsList.length; indexProduct++) {
+        db.prepare('INSERT INTO productInventory(orderIndex, crossOrderIndex, productIndex, quantity) VALUES (?, ?, ?, ?)').run(originalOrderIndex, crossOrderIndex, productsList[indexProduct][0], productsList[indexProduct][1]);
+    }
+    fs.readFile('./json/crossOrders.json', (err, data) => {
+        let crossOrderIndex = (db.prepare('SELECT MAX(crossOrderIndex) FROM crossOrders').get()['MAX(crossOrderIndex)']);
         let newCrossOrder = {
-            "crossOrderIndex": crossOrderOwnerIndex,
+            "crossOrderIndex": crossOrderIndex,
             "originalOrderIndex": originalOrderIndex,
-            "crossOrderOwner": ownerIndex,
+            "crossOrderOwner": crossOrderOwnerIndex,
             "productInventory": productsList
         }
         if (err) throw err;
@@ -133,7 +141,7 @@ exports.getOrders = function () {
     return db.prepare('SELECT * FROM orders ORDER BY orderIndex DESC').all();
 }
 
-exports.getCrossOrders = function (){
+exports.getCrossOrders = function () {
     return db.prepare('SELECT * FROM crossOrders ORDER BY crossOrderIndex DESC').all();
 }
 
@@ -142,7 +150,18 @@ exports.getCrossOrder = function (crossOrderIndex) {
 }
 
 exports.getProductsListFromOrderIndex = function (orderIndex) {
-    return db.prepare('SELECT * FROM productInventory WHERE orderIndex = ?').all(orderIndex)
+    let crossOrders = db.prepare('SELECT * FROM productInventory WHERE orderIndex = ?').all(orderIndex)
+    let productsList = [];
+    for (let indexProduct = 0; indexProduct < crossOrders.length; indexProduct++) {
+        if (productsList.includes(crossOrders[indexProduct].productIndex)) {
+
+        } else {
+            productsList.push(products.getFromEan(crossOrders[indexProduct].productIndex));
+            productsList[productsList.length - 1].quantity = crossOrders[indexProduct].quantity;
+        }
+        productsList[productsList.length - 1].basedPrice = crossOrders[indexProduct].quantity / productsList[productsList.length - 1].packaging * productsList[productsList.length - 1].price;
+    }
+    return productsList;
 }
 
 //UPDATE
@@ -161,11 +180,10 @@ exports.updateOrderState = function (id, state) {
             console.log(err);
         });
     });
-
     db.prepare('UPDATE orders SET state = ? WHERE id = ?').run(state, id);
 }
 
-exports.setState = function(orderIndex, state) {
+exports.setState = function (orderIndex, state) {
     db.prepare('UPDATE orders SET state = ? WHERE orderIndex = ?').run(state, orderIndex);
 }
 

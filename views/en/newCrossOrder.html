@@ -19,7 +19,7 @@
         }
     }
 
-    function updateQuantity(productId) {
+    function updateQuantity(productId, originalQty) {
         let product = document.getElementById(productId);
         let quantity = product.getElementsByClassName("quantity")[0].value;
         if (quantity < 0) {
@@ -29,8 +29,8 @@
         }
         let packaging = product.getElementsByClassName("packaging")[0].value;
         let price = product.getElementsByClassName("price")[0].value;
-        let basedPrice = product.getElementsByClassName("basedPrice")[0].value = quantity * price;
-        product.getElementsByClassName("totQty")[0].value = quantity * packaging;
+        product.getElementsByClassName("totQty")[0].value = parseInt(originalQty) +  parseInt((quantity * packaging));
+        let basedPrice = product.getElementsByClassName("basedPrice")[0].value = ((parseInt(product.getElementsByClassName("totQty")[0].value))/packaging) * price;
     }
 </script>
 {{#order}}
@@ -39,7 +39,7 @@
         <div class="title">Order n°{{orderIndex}}</div>
         <div id="row1">
             {{#state}}
-            <form action="/en/createOrder" id="createOrderForm" method="post">
+            <form action="/en/createCrossOrder/{{orderIndex}}" id="createOrderForm" method="post">
                 <div id="selectContainer">
                     <select name="laboratorySelect" id="laboratorySelect" required onchange="showProducts(this)">
                         <option name="laboratory" id="laboratory" value="None">Select a laboratory</option>
@@ -50,18 +50,6 @@
                         <option name="allProducts" value="all">All Products</option>
                     </select>
                     <div id="datesField">
-                        {{#owner}}
-                        <div id="startDate">
-                            <label for="dateStartField">Open Date</label>
-                            <input type="date" name="dateStartField" id="dateStartField" value="{{openDate}}"
-                                required>
-                        </div>
-                        <div id="endDate">
-                            <label for="dateEndField">Close Date</label>
-                            <input type="date" name="dateEndField" id="dateEndField" value="{{closeDate}}" required>
-                        </div>
-                        {{/owner}}
-                        {{^owner}}
                         <div id="startDate">
                             <label for="dateStartField">Open Date</label>
                             <input type="date" name="dateStartField" id="dateStartField" value="{{currentDate}}"
@@ -71,7 +59,6 @@
                             <label for="dateEndField">Close Date</label>
                             <input type="date" name="dateEndField" id="dateEndField" value="{{endDate}}" readonly>
                         </div>
-                        {{/owner}}
                     </div>
                 </div>
                 <table id="" class="productTable">
@@ -96,14 +83,14 @@
                                 name="productName"></td>
                         <td class="tableContent"><input type="text" class="packaging" value="{{packaging}}" readonly
                                 name="packaging"></td>
-                        <td class="tableContent"><input type="number" class="quantity" value="{{quantity}}" name="quantity"
-                                onchange="updateQuantity('{{ean13}}')"></td>
+                        <td class="tableContent"><input type="number" class="quantity" value="0" name="quantity"
+                                onchange="updateQuantity('{{ean13}}', '{{quantity}}')"></td>
                         <td class="tableContent"><input type="text" class="price" value="{{price}}" readonly
                                 name="price">
                         </td>
                         <td class="tableContent"><input type="number" class="totQty" value="{{quantity}}" name="totQty" readonly>
                         </td>
-                        <td class="tableContent"><input type="number" class="basedPrice" value="0" name="basedPrice"
+                        <td class="tableContent"><input type="number" class="basedPrice" value="{{basedPrice}}" name="basedPrice"
                                 readonly></td>
                     </tr>
                     {{/products}}

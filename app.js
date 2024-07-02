@@ -55,8 +55,9 @@ function sanitize(str) {
     return newStr;
 };
 
-function now() {
+function now(nBdays = 0) {
     let currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + nBdays);
     let day = currentDate.getDate();
     let month = currentDate.getMonth() + 1;
     let year = currentDate.getFullYear();
@@ -130,32 +131,35 @@ app.get("/:lang/orders", (req, res) => {
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
-app.get('/:lang/insertFile', (req, res) => {
+app.get("/:lang/insertFile", (req, res) => {
     if (req.session.authenticated) {
         return res.render("./" + req.params.lang + "/insertFile.html", { css: "/insertFile.css", currentDate: now() });
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
-app.get('/:lang/newOrder', (req, res) => {
+app.get("/:lang/newOrder", (req, res) => {
     if (req.session.authenticated) {
-        return res.render("./" + req.params.lang + "/newOrder.html", { css: "/newOrder.css", laboratories: products.getLaboratories(), products: products.list(), currentDate: now(), endDate: now() });
+        return res.render("./" + req.params.lang + "/newOrder.html", { css: "/newOrder.css", laboratories: products.getLaboratories(), products: products.list(), currentDate: now(), endDate: now(1)});
     } res.redirect('/' + req.params.lang + '/signin');
 });
 
-app.get('/:lang/editAccount', (req, res) => {
+app.get("/:lang/editAccount", (req, res) => {
     if (req.session.authenticated) {
         let account = accounts.get(req.session.id);
         return res.render("./" + req.params.lang + "/editAccount.html", { css: "/editAccount.css", account: account });
     } res.redirect('/' + req.params.lang + '/signin')
 })
 
-app.get("/:lang/orderDetails/:orderIndex", (req, res) => {
+app.get("/:lang/order/:orderIndex", (req, res) => {
     if (req.session.authenticated) {
         let orderIndex = req.params.orderIndex;
         let order = orders.getOrder(orderIndex);
         let productsList = orders.getProductsListFromOrderIndex(orderIndex);
-        console.log(productsList)
-        return res.render("./" + req.params.lang + "/orderDetails.html", { css: "/orderDetails.css", order: order, productsList: productsList });
+        let owner = false;
+        if (order.ownerIndex == req.session.id) {
+            owner = true;
+        }
+        return res.render("./" + req.params.lang + "/newCrossOrder.html", { css: "/orderDetails.css", laboratories : products.getLaboratories(), orderIndex : orderIndex, order: order, products: productsList, owner : owner });
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
@@ -348,15 +352,34 @@ app.post('/:lang/createOrder', (req, res) => {
         let ownerIndex = req.session.id;
         let openDate = req.body.dateStartField;
         let closeDate = req.body.dateEndField;
+        console.log(table)
         for (let i = 0; i < listSize; i++) {
             if (table.quantity[i] != 0) {
-                productsIndex.push([table.ean13[i], parseInt(table.quantity[i])]);
+                console.log(parseInt(table.quantity[i]) * parseInt(table.packaging[i]))
+                productsIndex.push([table.ean13[i], parseInt(table.quantity[i]) * parseInt(table.packaging[i])]);
             }
         }
         orders.createOrder(ownerIndex, productsIndex, openDate, closeDate);
         return res.redirect('/' + req.params.lang + '/orders');
     } res.redirect('/' + req.params.lang + '/signin');
 });
+
+app.post('/:lang/createCrossOrder/:orderIndex', (req, res) => {
+    if (req.session.authenticated) {
+        let orderIndex = req.params.orderIndex;
+        let table = req.body;
+        let productsIndex = [];
+        let listSize = table.quantity.length;
+        for (let i = 0; i < listSize; i++) {
+            if (table.quantity[i] != 0) {
+                productsIndex.push([table.ean13[i], parseInt(table.quantity[i])]);
+            }
+        }
+        orders.createCrossOrder(orderIndex, req.session.id, productsIndex);
+        return res.redirect('/' + req.params.lang + '/orders');
+    } res.redirect('/' + req.params.lang + '/signin');
+});
+
 // LISTEN
 
 app.listen(3000, () => {
