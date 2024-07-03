@@ -146,20 +146,27 @@ exports.getCrossOrders = function () {
 }
 
 exports.getCrossOrder = function (crossOrderIndex) {
-    return db.prepare('SELECT * FROM crossOrders WHERE originalOrderIndex = ?').all(crossOrderIndex);
+    return db.prepare('SELECT * FROM crossOrders WHERE crossOrderIndex = ?').all(crossOrderIndex);
 }
 
 exports.getProductsListFromOrderIndex = function (orderIndex) {
     let crossOrders = db.prepare('SELECT * FROM productInventory WHERE orderIndex = ?').all(orderIndex)
+    let productsIndexList = []
     let productsList = [];
+    let getTotQty = db.prepare('SELECT SUM(quantity) FROM productInventory WHERE orderIndex = ? AND productIndex = ?');
     for (let indexProduct = 0; indexProduct < crossOrders.length; indexProduct++) {
-        if (productsList.includes(crossOrders[indexProduct].productIndex)) {
-
-        } else {
-            productsList.push(products.getFromEan(crossOrders[indexProduct].productIndex));
-            productsList[productsList.length - 1].quantity = crossOrders[indexProduct].quantity;
-        }
-        productsList[productsList.length - 1].basedPrice = crossOrders[indexProduct].quantity / productsList[productsList.length - 1].packaging * productsList[productsList.length - 1].price;
+        if (!productsList.includes(crossOrders[indexProduct].productIndex)) productsIndexList.push(crossOrders[indexProduct].productIndex);
+    }
+    for (let indexProduct = 0; indexProduct < productsIndexList.length; indexProduct++) {
+        let ean13 = productsIndexList[indexProduct];
+        let product = products.getFromEan(ean13);
+        let totQty = getTotQty.get(orderIndex, ean13)['SUM(quantity)'];
+        let quantity = crossOrders[indexProduct].quantity;
+        let packaging = product.packaging;
+        product.quantity = quantity;
+        product.totQty = totQty;
+        product.basedPrice = quantity / packaging * product.price;
+        productsList.push(product);
     }
     return productsList;
 }
@@ -167,8 +174,9 @@ exports.getProductsListFromOrderIndex = function (orderIndex) {
 exports.getProductsListFromCrossOrderIndex = function (crossOrderIndex) {
     let productsList = db.prepare('SELECT * FROM productInventory WHERE crossOrderIndex = ?').all(crossOrderIndex);
     for (let indexProduct = 0; indexProduct < productsList.length; indexProduct++) {
+        let quantity = productsList[indexProduct].quantity;
         productsList[indexProduct] = products.getFromEan(productsList[indexProduct].productIndex);
-        
+        productsList[indexProduct].quantity = quantity;
     }
     return productsList;
 }

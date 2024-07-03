@@ -30,6 +30,7 @@
         let packaging = product.getElementsByClassName("packaging")[0].value;
         let price = product.getElementsByClassName("price")[0].value;
         product.getElementsByClassName("totQty")[0].value = parseInt(originalQty) + parseInt((quantity * packaging));
+        console.log(product.getElementsByClassName("totQty")[0].value + " " + quantity + " " + packaging + " " + price);
         let basedPrice = product.getElementsByClassName("basedPrice")[0].value = ((parseInt(product.getElementsByClassName("totQty")[0].value)) / packaging) * price;
     }
 </script>
@@ -52,12 +53,12 @@
                     <div id="datesField">
                         <div id="startDate">
                             <label for="dateStartField">Open Date</label>
-                            <input type="date" name="dateStartField" id="dateStartField" value="{{currentDate}}"
+                            <input type="date" name="dateStartField" id="dateStartField" value="{{openDate}}"
                                 readonly>
                         </div>
                         <div id="endDate">
                             <label for="dateEndField">Close Date</label>
-                            <input type="date" name="dateEndField" id="dateEndField" value="{{endDate}}" readonly>
+                            <input type="date" name="dateEndField" id="dateEndField" value="{{closeDate}}" readonly>
                         </div>
                     </div>
                 </div>
@@ -83,12 +84,12 @@
                                 name="productName"></td>
                         <td class="tableContent"><input type="text" class="packaging" value="{{packaging}}" readonly
                                 name="packaging"></td>
-                        <td class="tableContent"><input type="number" class="quantity" value="0" name="quantity"
-                                onchange="updateQuantity('{{ean13}}', '{{quantity}}')"></td>
+                        <td class="tableContent"><input type="number" class="quantity" value="{{quantity}}" name="quantity"
+                                onchange="updateQuantity('{{ean13}}', '{{totQty}}')"></td>
                         <td class="tableContent"><input type="text" class="price" value="{{price}}" readonly
                                 name="price">
                         </td>
-                        <td class="tableContent"><input type="number" class="totQty" value="{{quantity}}" name="totQty"
+                        <td class="tableContent"><input type="number" class="totQty" value="{{totQty}}" name="totQty"
                                 readonly>
                         </td>
                         <td class="tableContent"><input type="number" class="basedPrice" value="{{basedPrice}}"

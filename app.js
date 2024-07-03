@@ -117,26 +117,13 @@ app.get("/:lang/account", (req, res) => {
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
-app.get("/:lang/updateCrossOrder/:crossOrderIndex", (req, res) => {
+app.get("/:lang/crossOrder/:crossOrderIndex", (req, res) => {
     if(req.session.authenticated) {
         let crossOrderIndex = req.params.crossOrderIndex;
         let crossOrder = orders.getCrossOrder(crossOrderIndex)[0];
         let order = orders.getOrder(crossOrder.originalOrderIndex);
         let productsList = orders.getProductsListFromOrderIndex(order.orderIndex);
-        crossOrder = orders.getProductsListFromCrossOrderIndex(crossOrder.crossOrderIndex);
-        for (let i = 0; i < productsList.length; i++) {
-            for(let j = 0; j < crossOrder.length; j++) {
-                if(productsList[i].ean13 == crossOrder[j].ean13) {
-                    productsList[i].quantity = crossOrder[j].quantity;
-                } else {
-                    productsList[i].quantity = 0;   
-                }
-            }
-        }
-        console.log("pd",productsList)
-        if (crossOrder.crossOrderOwner == req.session.id) {
-            return res.render("./" + req.params.lang + "/updateCrossOrder.html", { css: "/updateCrossOrder.css", laboratories : products.getLaboratories(), crossOrderIndex : crossOrderIndex });
-        } 
+        return res.render("./" + req.params.lang + "/crossOrder.html", { css: "/crossOrder.css", laboratories : products.getLaboratories(), orderIndex : order.orderIndex, order: order, products: productsList});
     } res.redirect('/' + req.params.lang + '/signin');
 });
 
