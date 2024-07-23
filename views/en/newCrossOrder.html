@@ -29,8 +29,8 @@
         }
         let packaging = product.getElementsByClassName("packaging")[0].value;
         let price = product.getElementsByClassName("price")[0].value;
-        product.getElementsByClassName("totQty")[0].value = parseInt(originalQty) +  parseInt((quantity * packaging));
-        let basedPrice = product.getElementsByClassName("basedPrice")[0].value = ((parseInt(product.getElementsByClassName("totQty")[0].value))/packaging) * price;
+        product.getElementsByClassName("totQty")[0].value = parseInt(originalQty) +  parseInt(quantity);
+        product.getElementsByClassName("basedPrice")[0].value = parseInt(product.getElementsByClassName("totQty")[0].value) * price;
     }
 </script>
 {{#order}}
@@ -52,12 +52,12 @@
                     <div id="datesField">
                         <div id="startDate">
                             <label for="dateStartField">Open Date</label>
-                            <input type="date" name="dateStartField" id="dateStartField" value="{{currentDate}}"
+                            <input type="date" name="dateStartField" id="dateStartField" value="{{openDate}}"
                                 readonly>
                         </div>
                         <div id="endDate">
                             <label for="dateEndField">Close Date</label>
-                            <input type="date" name="dateEndField" id="dateEndField" value="{{endDate}}" readonly>
+                            <input type="date" name="dateEndField" id="dateEndField" value="{{closeDate}}" readonly>
                         </div>
                     </div>
                 </div>
@@ -112,12 +112,12 @@
                     <div id="datesField">
                         <div id="startDate">
                             <label for="dateStartField">Open Date</label>
-                            <input type="date" name="dateStartField" id="dateStartField" value="{{currentDate}}"
+                            <input type="date" name="dateStartField" id="dateStartField" value="{{openDate}}"
                                 readonly>
                         </div>
                         <div id="endDate">
                             <label for="dateEndField">Close Date</label>
-                            <input type="date" name="dateEndField" id="dateEndField" value="{{endDate}}" readonly>
+                            <input type="date" name="dateEndField" id="dateEndField" value="{{closeDate}}" readonly>
                         </div>
                     </div>
                 </div>

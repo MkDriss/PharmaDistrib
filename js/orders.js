@@ -150,22 +150,25 @@ exports.getCrossOrder = function (crossOrderIndex) {
 }
 
 exports.getProductsListFromOrderIndex = function (orderIndex) {
+    //get all crossOrders
     let crossOrders = db.prepare('SELECT * FROM productInventory WHERE orderIndex = ?').all(orderIndex)
     let productsIndexList = []
     let productsList = [];
+    //prepare a commande to get the total quantity of a product
     let getTotQty = db.prepare('SELECT SUM(quantity) FROM productInventory WHERE orderIndex = ? AND productIndex = ?');
     for (let indexProduct = 0; indexProduct < crossOrders.length; indexProduct++) {
+        //get all the products index
         if (!productsList.includes(crossOrders[indexProduct].productIndex)) productsIndexList.push(crossOrders[indexProduct].productIndex);
     }
     for (let indexProduct = 0; indexProduct < productsIndexList.length; indexProduct++) {
+        //create product object with all the information
         let ean13 = productsIndexList[indexProduct];
         let product = products.getFromEan(ean13);
         let totQty = getTotQty.get(orderIndex, ean13)['SUM(quantity)'];
         let quantity = crossOrders[indexProduct].quantity;
-        let packaging = product.packaging;
         product.quantity = quantity;
         product.totQty = totQty;
-        product.basedPrice = quantity / packaging * product.price;
+        product.basedPrice = quantity * product.price;
         productsList.push(product);
     }
     return productsList;

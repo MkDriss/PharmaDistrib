@@ -123,6 +123,7 @@ app.get("/:lang/crossOrder/:crossOrderIndex", (req, res) => {
         let crossOrder = orders.getCrossOrder(crossOrderIndex)[0];
         let order = orders.getOrder(crossOrder.originalOrderIndex);
         let productsList = orders.getProductsListFromOrderIndex(order.orderIndex);
+        console.log("pd", productsList)
         return res.render("./" + req.params.lang + "/crossOrder.html", { css: "/crossOrder.css", laboratories : products.getLaboratories(), orderIndex : order.orderIndex, order: order, products: productsList});
     } res.redirect('/' + req.params.lang + '/signin');
 });
@@ -164,12 +165,15 @@ app.get("/:lang/order/:orderIndex", (req, res) => {
     if (req.session.authenticated) {
         let orderIndex = req.params.orderIndex;
         let order = orders.getOrder(orderIndex);
-        let productsList = orders.getProductsListFromOrderIndex(orderIndex);
         let owner = false;
         if (order.ownerIndex == req.session.id) {
-            owner = true;
+            return res.redirect('/' + req.params.lang + '/crossOrder/' + orderIndex);
         }
-        return res.render("./" + req.params.lang + "/newCrossOrder.html", { css: "/orderDetails.css", laboratories : products.getLaboratories(), orderIndex : orderIndex, order: order, products: productsList, owner : owner });
+        let productsList = orders.getProductsListFromOrderIndex(orderIndex);
+        
+        
+        console.log(productsList)
+        return res.render("./" + req.params.lang + "/newCrossOrder.html", { css: "/newCrossOrder.css", laboratories : products.getLaboratories(), orderIndex : orderIndex, order: order, products: productsList, owner : owner });
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
@@ -362,11 +366,10 @@ app.post('/:lang/createOrder', (req, res) => {
         let ownerIndex = req.session.id;
         let openDate = req.body.dateStartField;
         let closeDate = req.body.dateEndField;
-        console.log(table)
         for (let i = 0; i < listSize; i++) {
             if (table.quantity[i] != 0) {
                 console.log(parseInt(table.quantity[i]) * parseInt(table.packaging[i]))
-                productsIndex.push([table.ean13[i], parseInt(table.quantity[i]) * parseInt(table.packaging[i])]);
+                productsIndex.push([table.ean13[i], parseInt(table.quantity[i])]);
             }
         }
         orders.createOrder(ownerIndex, productsIndex, openDate, closeDate);

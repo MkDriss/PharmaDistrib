@@ -29,9 +29,9 @@
         }
         let packaging = product.getElementsByClassName("packaging")[0].value;
         let price = product.getElementsByClassName("price")[0].value;
-        product.getElementsByClassName("totQty")[0].value = parseInt(originalQty) + parseInt((quantity * packaging));
-        console.log(product.getElementsByClassName("totQty")[0].value + " " + quantity + " " + packaging + " " + price);
-        let basedPrice = product.getElementsByClassName("basedPrice")[0].value = ((parseInt(product.getElementsByClassName("totQty")[0].value)) / packaging) * price;
+        product.getElementsByClassName("totQty")[0].value = parseInt(originalQty) + parseInt((quantity));
+
+        let basedPrice = product.getElementsByClassName("basedPrice")[0].value = parseInt(product.getElementsByClassName("totQty")[0].value) * price;
     }
 </script>
 {{#order}}
@@ -99,7 +99,7 @@
                 </table>
                 <div>
                     <input type="submit" value="Confirm">
-                    <a href="/en/accounts">Cancel</a>
+                    <a href="/en/account">Cancel</a>
                 </div>
             </form>
             {{/state}}
