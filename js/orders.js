@@ -16,12 +16,15 @@ let initDatabase = function () {
     db.prepare('DROP TABLE IF EXISTS orders').run();
     console.log('orders table dropped');
 
-    db.prepare('CREATE TABLE IF NOT EXISTS orders (orderIndex INTEGER PRIMARY KEY AUTOINCREMENT, ownerIndex TEXT, openDate TEXT, closeDate TEXT, state boolean)').run();
+    db.prepare('CREATE TABLE IF NOT EXISTS orders (orderIndex INTEGER PRIMARY KEY AUTOINCREMENT, ownerIndex TEXT, openDate TEXT, ' +
+        'closeDate TEXT, state boolean)').run();
+
     db.prepare('CREATE TABLE IF NOT EXISTS crossOrders (crossOrderIndex INTEGER PRIMARY KEY AUTOINCREMENT,' +
         'originalOrderIndex INTEGER, crossOrderOwner TEXT,' +
         'FOREIGN KEY(originalOrderIndex) REFERENCES orders(orderIndex))').run();
-    db.prepare('CREATE TABLE IF NOT EXISTS productInventory (orderIndex INTEGER, crossOrderIndex INTEGER, productIndex TEXT, quantity INT,' +
-        'FOREIGN KEY(crossOrderIndex) REFERENCES crossOrders(crossOrderIndex),' +
+
+    db.prepare('CREATE TABLE IF NOT EXISTS productInventory (orderIndex INTEGER, crossOrderIndex INTEGER, productIndex TEXT, quantity INT,'
+        + 'FOREIGN KEY(crossOrderIndex) REFERENCES crossOrders(crossOrderIndex),' +
         'FOREIGN KEY(orderIndex) REFERENCES orders(orderIndex))').run();
 }
 
@@ -155,34 +158,59 @@ exports.getProductsListFromOrderIndex = function (orderIndex) {
     let productsIndexList = []
     let productsList = [];
     //prepare a commande to get the total quantity of a product
-    let getTotQty = db.prepare('SELECT SUM(quantity) FROM productInventory WHERE orderIndex = ? AND productIndex = ?');
-    for (let indexProduct = 0; indexProduct < crossOrders.length; indexProduct++) {
-        //get all the products index
-        if (!productsList.includes(crossOrders[indexProduct].productIndex)) productsIndexList.push(crossOrders[indexProduct].productIndex);
+    let getTotQty = db.prepare('SELECT SUM(quantity) FROM productInventory WHERE orderIndex = ? AND productIndex = ?')
+    //parse all crossOrder
+    for (let crossOrderIndex = 0; crossOrderIndex < crossOrders.length; crossOrderIndex++) {
+        //parse all products in the crossOrder
+        for (let indexProduct = 0; indexProduct < crossOrders.length; indexProduct++) {
+
+            let ean13 = crossOrders[indexProduct].productIndex;
+            // check if the product is already in the list
+            if (productsIndexList.includes(ean13)) continue;
+            productsIndexList.push(ean13);
+            //create product object with all the information
+            let product = products.getFromEan(ean13);
+            let totQty = getTotQty.get(orderIndex, ean13)['SUM(quantity)'];
+            let quantity = crossOrders[indexProduct].quantity;
+            product.quantity = quantity;
+            product.totQty = totQty;
+            product.basedPrice = quantity * product.price;
+            productsList.push(product);
+        }
     }
-    for (let indexProduct = 0; indexProduct < productsIndexList.length; indexProduct++) {
-        //create product object with all the information
-        let ean13 = productsIndexList[indexProduct];
-        let product = products.getFromEan(ean13);
-        let totQty = getTotQty.get(orderIndex, ean13)['SUM(quantity)'];
-        let quantity = crossOrders[indexProduct].quantity;
+    //console.log(productsList)
+    return productsList;
+}
+
+exports.getProductsListFromCrossOrderIndex = function (orderIndex, userCrossOrderIndex) {
+    let productsIndexList = db.prepare('SELECT DISTINCT productIndex FROM productInventory WHERE crossOrderIndex = ?').all(orderIndex);
+    let productsList = [];
+    //prepare a commande to get the total quantity of a product
+    let getTotQty = db.prepare('SELECT SUM(quantity) FROM productInventory WHERE orderIndex = ? AND productIndex = ?')
+    let getQty = db.prepare('SELECT quantity FROM productInventory WHERE orderIndex = ? AND productIndex = ? AND crossOrderIndex = ?')
+    for (let productIndex = 0; productIndex < productsIndexList.length; productIndex++) {
+        let product = products.getFromEan(productsIndexList[productIndex].productIndex);
+        let quantity;
+        if (getQty.get(orderIndex, productsIndexList[productIndex].productIndex, userCrossOrderIndex) === undefined) {
+            quantity = 0;
+        } else {
+            quantity = getQty.get(orderIndex, productsIndexList[productIndex].productIndex, userCrossOrderIndex).quantity;
+        }
+        let totQty = getTotQty.get(orderIndex, productsIndexList[productIndex].productIndex)['SUM(quantity)'];
         product.quantity = quantity;
         product.totQty = totQty;
         product.basedPrice = quantity * product.price;
         productsList.push(product);
     }
+    console.log(productsList)
     return productsList;
 }
 
-exports.getProductsListFromCrossOrderIndex = function (crossOrderIndex) {
-    let productsList = db.prepare('SELECT * FROM productInventory WHERE crossOrderIndex = ?').all(crossOrderIndex);
-    for (let indexProduct = 0; indexProduct < productsList.length; indexProduct++) {
-        let quantity = productsList[indexProduct].quantity;
-        productsList[indexProduct] = products.getFromEan(productsList[indexProduct].productIndex);
-        productsList[indexProduct].quantity = quantity;
-    }
-    return productsList;
+exports.getCrossOrderIndexFromOrderIndex = function (orderIndex, ownerIndex) {
+    return db.prepare('SELECT crossOrderIndex FROM crossOrders WHERE originalOrderIndex = ? AND crossOrderOwner = ?').get(orderIndex, ownerIndex)['crossOrderIndex'];
 }
+
+
 
 //UPDATE
 
@@ -207,6 +235,12 @@ exports.setState = function (orderIndex, state) {
     db.prepare('UPDATE orders SET state = ? WHERE orderIndex = ?').run(state, orderIndex);
 }
 
+exports.closeOrder = function (orderIndex) {
+    db.prepare('UPDATE orders SET closeDate = ? WHERE orderIndex = ?').run(new Date().toISOString().slice(0, 19).replace('T', ' '), orderIndex);
+    db.prepare('UPDATE orders SET state = ? WHERE orderIndex = ?').run(0, orderIndex);
+    console.log('Order closed');
+}
+
 // DELETE
 
 exports.deleteOrderFromId = function (id) {
@@ -221,4 +255,10 @@ exports.deleteOrderFromId = function (id) {
     });
     db.prepare('DELETE FROM orders WHERE id = ?').run(id);
     console.log('Order deleted');
+}
+
+//CHECK 
+
+exports.hasACrossOrder = function (orderIndex, userIndex) {
+    return db.prepare('SELECT COUNT(*) FROM crossOrders WHERE originalOrderIndex = ? AND crossOrderOwner = ?').get(orderIndex, userIndex)['COUNT(*)'];
 }

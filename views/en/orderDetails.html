@@ -33,13 +33,14 @@
         product.getElementsByClassName("totQty")[0].value = quantity * packaging;
     }
 </script>
+
 {{#order}}
-<div id="newOrderContainer">
+<div id="orderContainer">
     <div id="content">
         <div class="title">Order n°{{orderIndex}}</div>
         <div id="row1">
             {{#state}}
-            <form action="/en/createOrder" id="createOrderForm" method="post">
+            <form action="/en/updateOrder" id="updateOrderForm" method="post">
                 <div id="selectContainer">
                     <select name="laboratorySelect" id="laboratorySelect" required onchange="showProducts(this)">
                         <option name="laboratory" id="laboratory" value="None">Select a laboratory</option>
@@ -101,7 +102,7 @@
                         <td class="tableContent"><input type="text" class="price" value="{{price}}" readonly
                                 name="price">
                         </td>
-                        <td class="tableContent"><input type="number" class="totQty" value="{{quantity}}" name="totQty" readonly>
+                        <td class="tableContent"><input type="number" class="totQty" value="{{totQty}}" name="totQty" readonly>
                         </td>
                         <td class="tableContent"><input type="number" class="basedPrice" value="0" name="basedPrice"
                                 readonly></td>
@@ -111,8 +112,12 @@
                 <input type="submit" value="Confirm">
             </form>
             {{/state}}
+
+
+
+
             {{^state}}
-            <div id="createOrderForm">
+            <div id="updateOrderForm">
                 <div id="selectContainer">
                     <select name="laboratorySelect" id="laboratorySelect" required onchange="showProducts(this)">
                         <option name="laboratory" id="laboratory" value="None">Select a laboratory</option>
@@ -161,7 +166,7 @@
                         <td class="tableContent"><input type="text" class="price" value="{{price}}" readonly
                                 name="price">
                         </td>
-                        <td class="tableContent"><input type="number" class="totQty" value="{{quantity}}" name="totQty" readonly>
+                        <td class="tableContent"><input type="number" class="totQty" value="{{totQty}}" name="totQty" readonly>
                         </td>
                         <td class="tableContent"><input type="number" class="basedPrice" value="0" name="basedPrice"
                                 readonly></td>
@@ -175,6 +180,4 @@
 </div>
 {{/order}}
 
-{{^order}}
-{{/order}}
 {{>./en/footer}}

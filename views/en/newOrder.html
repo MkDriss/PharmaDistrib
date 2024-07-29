@@ -1,4 +1,4 @@
-{{>./fr/header}}
+{{>./en/header}}
 
 <script>
     function showProducts(element) {
@@ -38,7 +38,7 @@
     <div id="content">
         <div class="title">New Order</div>
         <div id="row1">
-            <form action="/fr/createOrder" id="createOrderForm" method="post">
+            <form action="/en/createOrder" id="createOrderForm" method="post">
                 <div id="selectContainer">
                     <select name="laboratorySelect" id="laboratorySelect" required onchange="showProducts(this)">
                         <option name="laboratory" id="laboratory" value="None">Select a laboratory</option>
@@ -99,4 +99,4 @@
         </div>
     </div>
 </div>
-{{>./fr/footer}}
+{{>./en/footer}}

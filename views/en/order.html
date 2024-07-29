@@ -33,6 +33,7 @@
         product.getElementsByClassName("basedPrice")[0].value = parseInt(product.getElementsByClassName("totQty")[0].value) * price;
     }
 </script>
+
 {{#order}}
 <div id="newOrderContainer">
     <div id="content">
@@ -88,7 +89,7 @@
                         <td class="tableContent"><input type="text" class="price" value="{{price}}" readonly
                                 name="price">
                         </td>
-                        <td class="tableContent"><input type="number" class="totQty" value="{{quantity}}" name="totQty" readonly>
+                        <td class="tableContent"><input type="number" class="totQty" value="{{totQty}}" name="totQty" readonly>
                         </td>
                         <td class="tableContent"><input type="number" class="basedPrice" value="{{basedPrice}}" name="basedPrice"
                                 readonly></td>
@@ -163,5 +164,6 @@
 {{/order}}
 
 {{^order}}
+<span>no order</span>
 {{/order}}
 {{>./en/footer}}
