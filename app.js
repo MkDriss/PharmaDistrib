@@ -389,12 +389,13 @@ app.post('/:lang/deleteCrossOrder/:crossOrderIndex', (req, res) => {
     } return res.redirect('/' + req.params.lang + '/signin');
 });
 
-app.post('/:lang/closeOrder/:orderIndex', (req, res) => {
+app.post('/:lang/updateOrder/:orderIndex', (req, res) => {
     if (req.session.authenticated) {
         let orderIndex = req.params.orderIndex;
         let order = orders.getOrder(orderIndex);
         if (order.ownerIndex === req.session.id) {
-            orders.getProductsListFromOrderIndex(orderIndex)
+            orders.getProductsListFromOrderIndex(orderIndex);
+            orders.getOrderSummary(orderIndex);
         }
     } return res.redirect('/' + req.params.lang + '/signin');
 });

@@ -36,5 +36,20 @@
         1
       ]
     ]
+  },
+  {
+    "crossOrderIndex": 3,
+    "originalOrderIndex": "1",
+    "crossOrderOwner": "b1980132af634fb3b4f383626d77dbca8ac6921a21642ca400abe95f698c2112",
+    "productInventory": [
+      [
+        "3056565165149",
+        1
+      ],
+      [
+        "3701063807410",
+        1
+      ]
+    ]
   }
 ]

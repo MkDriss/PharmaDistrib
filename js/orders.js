@@ -178,7 +178,6 @@ exports.getProductsListFromOrderIndex = function (orderIndex) {
             productsList.push(product);
         }
     }
-    //console.log(productsList)
     return productsList;
 }
 
@@ -190,10 +189,8 @@ exports.getProductsListFromCrossOrderIndex = function (orderIndex, userCrossOrde
     let getQty = db.prepare('SELECT quantity FROM productInventory WHERE orderIndex = ? AND productIndex = ? AND crossOrderIndex = ?')
     for (let productIndex = 0; productIndex < productsIndexList.length; productIndex++) {
         let product = products.getFromEan(productsIndexList[productIndex].productIndex);
-        let quantity;
-        if (getQty.get(orderIndex, productsIndexList[productIndex].productIndex, userCrossOrderIndex) === undefined) {
-            quantity = 0;
-        } else {
+        let quantity = 0;
+        if (getQty.get(orderIndex, productsIndexList[productIndex].productIndex, userCrossOrderIndex) != undefined) {
             quantity = getQty.get(orderIndex, productsIndexList[productIndex].productIndex, userCrossOrderIndex).quantity;
         }
         let totQty = getTotQty.get(orderIndex, productsIndexList[productIndex].productIndex)['SUM(quantity)'];
@@ -202,8 +199,20 @@ exports.getProductsListFromCrossOrderIndex = function (orderIndex, userCrossOrde
         product.basedPrice = quantity * product.price;
         productsList.push(product);
     }
-    console.log(productsList)
     return productsList;
+}
+
+exports.getOrderSummary = function (orderIndex) {
+    // get all accounts
+    let accounts = db.prepare('SELECT DISTINCT crossOrderOwner FROM crossOrders WHERE originalOrderIndex = ?').all(orderIndex);
+    // get all products by accounts
+    let getProducts = db.prepare('SELECT productIndex, quantity FROM productInventory INNER JOIN crossOrders ON productInventory.crossOrderIndex = crossOrders.crossOrderIndex WHERE orderIndex = ? AND crossOrderOwner = ?');
+    let summary = [];
+    for(let accountIndex = 0; accountIndex < accounts.length; accountIndex++){
+        let products = getProducts.all(orderIndex, accounts[accountIndex].crossOrderOwner);
+        // fill products with product information
+    }
+
 }
 
 exports.getCrossOrderIndexFromOrderIndex = function (orderIndex, ownerIndex) {

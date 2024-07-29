@@ -40,7 +40,7 @@
         <div class="title">Order n°{{orderIndex}}</div>
         <div id="row1">
             {{#state}}
-            <form action="/en/createCrossOrder/{{orderIndex}}" id="createOrderForm" method="post">
+            <form action="/en/updateOrder/{{orderIndex}}" id="updateOrderForm" method="post">
                 <div id="selectContainer">
                     <select name="laboratorySelect" id="laboratorySelect" required onchange="showProducts(this)">
                         <option name="laboratory" id="laboratory" value="None">Select a laboratory</option>
@@ -98,7 +98,7 @@
                     {{/products}}
                 </table>
                 <div>
-                    <input type="submit" value="Confirm">
+                    <input type="submit" value="Close">
                     <a href="/en/account">Cancel</a>
                 </div>
             </form>
