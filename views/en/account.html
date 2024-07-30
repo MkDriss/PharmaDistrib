@@ -2,16 +2,16 @@
 
 <script>
     function checkPassword() {
-        let newPas = document.getElementById("newPasswordField")
-        let confirmPas = document.getElementById("confirmPasswordField")
-        let msg = document.getElementById("errorMessage")
-        let btn = document.getElementById("changePsswdSub")
+        let newPas = document.getElementById('newPasswordField')
+        let confirmPas = document.getElementById('confirmPasswordField')
+        let msg = document.getElementById('errorMessage')
+        let btn = document.getElementById('changePsswdSub')
         if (newPas.value != confirmPas.value) {
-            msg.style.display = "block"
-            btn.type = "button"
+            msg.style.display = 'block'
+            btn.type = 'button'
         } else {
-            msg.style.display = "none"
-            btn.type = "submit"
+            msg.style.display = 'none'
+            btn.type = 'submit'
         }
     }
 
@@ -28,13 +28,13 @@
 
     function showPassword(name, show, hide, value) {
         if (value) {
-            document.getElementById(name).type = "text"
-            document.getElementById(show).style.display = "none"
-            document.getElementById(hide).style.display = "flex"
+            document.getElementById(name).type = 'text'
+            document.getElementById(show).style.display = 'none'
+            document.getElementById(hide).style.display = 'flex'
         } else {
-            document.getElementById(name).type = "password"
-            document.getElementById(show).style.display = "flex"
-            document.getElementById(hide).style.display = "none"
+            document.getElementById(name).type = 'password'
+            document.getElementById(show).style.display = 'flex'
+            document.getElementById(hide).style.display = 'none'
         }
     }
 </script>
@@ -45,148 +45,166 @@
 {{/script}}
 
 {{#account}}
-<div id="accountContainer">
-    <div id="column1">
-        <div id="primarySection">
-            <img src="../{{profilePicture}}" alt="profilePicture" class="profilePicture">
-            <div id="nameSection">
-                <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Name" readonly>
-                <input type="text" name="lastNameField" id="lastNameField" value="{{userLastName}}"
-                    placeholder="Last Name" readonly>
+<div id='accountContainer'>
+    <section class='hidden'>
+        <div id='column1'>
+            <div id='primarySection'>
+                <img src='../{{profilePicture}}' alt='profilePicture' class='profilePicture'>
+                <div id='nameSection'>
+                    <input type='text' name='nameField' id='nameField' value='{{userName}}' placeholder='Name' readonly>
+                    <input type='text' name='lastNameField' id='lastNameField' value='{{userLastName}}'
+                        placeholder='Last Name' readonly>
+                </div>
+            </div>
+            <div id='contactSection'>
+                <input type='email' name='emailField' id='emailField' value='{{email}}' placeholder='Email' readonly>
+                <input type='tel' name='phoneNumberField' id='phoneNumberField' value='{{phone}}'
+                    placeholder='Phone Number' readonly>
+            </div>
+
+            <input type='text' name='adressField' id='adressField' value='{{adress}}' placeholder='Address' readonly>
+
+            <div id='localisationSection'>
+                <input type='text' name='cityField' id='cityField' value='{{city}}' placeholder='City' readonly>
+                <input type='text' name='zipCodeField' id='zipCodeField' value='{{zipCode}}' placeholder='Zip Code'
+                    readonly>
+            </div>
+            <div id='changePsswdSection'>
+                <input type='button' name='changePsswdBtn' id='changePsswdBtn' value='Change Password'
+                    onclick="showElement('updatePasswordForm','changePsswdBtn', 1)">
+
+                <form action='/en/updatePassword/{{token}}' method='post' style='display: none;'
+                    id='updatePasswordForm'>
+                    <div id='oldPasswordSection'>
+                        <input type='password' name='oldPasswordField' id='oldPasswordField' placeholder='Old Password'>
+
+                        <input type='button' name='showOldPassBtn' id='showOldPassBtn'
+                            onclick="showPassword('oldPasswordField','showOldPassLabel','hideOldPassLabel',true)"
+                            hidden>
+                        <label for='showOldPassBtn' id='showOldPassLabel'>
+                            <img src='../showPass.svg' class='icoPass' alt='show Old Password'>
+                        </label>
+                        <input type='button' name='hideOldPasswdBtn' id='hideOldPasswdBtn'
+                            onclick="showPassword('oldPasswordField','showOldPassLabel','hideOldPassLabel',false)"
+                            hidden>
+                        <label for='hideOldPasswdBtn' style='display: none;' id='hideOldPassLabel'>
+                            <img src='../hidePass.svg' class='icoPass' alt='hide OldPassword'>
+                        </label>
+                    </div>
+                    <div id='newPasswordSection'>
+                        <input type='password' name='newPasswordField' id='newPasswordField' placeholder='New Password'>
+                        <input type='button' name='showNewPassBtn' id='showNewPassBtn'
+                            onclick="showPassword('newPasswordField','showNewPassLabel','hideNewPassLabel',true)"
+                            hidden>
+                        <label for='showNewPassBtn' id='showNewPassLabel'>
+                            <img src='../showPass.svg' class='icoPass' alt='show New Password'>
+                        </label>
+                        <input type='button' name='hideNewPasswdBtn' id='hideNewPasswdBtn'
+                            onclick="showPassword('newPasswordField','showNewPassLabel','hideNewPassLabel',false)"
+                            hidden>
+                        <label for='hideNewPasswdBtn' style='display: none;' id='hideNewPassLabel'>
+                            <img src='../hidePass.svg' class='icoPass' alt='hide NewPassword'>
+                        </label>
+                    </div>
+                    <div id='confirmPasswordSection'>
+                        <input type='password' name='confirmPasswordField' id='confirmPasswordField'
+                            placeholder='Confirm Password'>
+                        <input type='button' name='showConfirmPassBtn' id='showConfirmPassBtn'
+                            onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',true)"
+                            hidden>
+                        <label for='showConfirmPassBtn' id='showConfirmPassLabel'>
+                            <img src='../showPass.svg' class='icoPass' alt='show Confirm Password'>
+                        </label>
+                        <input type='button' name='hideConfirmPasswdBtn' id='hideConfirmPasswdBtn'
+                            onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',false)"
+                            hidden>
+                        <label for='hideConfirmPasswdBtn' style='display: none;' id='hideConfirmPassLabel'>
+                            <img src='../hidePass.svg' class='icoPass' alt='hide Confirm Password'>
+                        </label>
+                    </div>
+                    <span id='errorMessage' style='display: none;'>Passwords aren't matching</span>
+                    <input type='button' name='cancelBtn' id='cancelBtn' value='Cancel'
+                        onclick="showElement('changePsswdBtn', 'updatePasswordForm', 0)">
+                    <input type='submit' name='changePsswdSub' id='changePsswdSub' value='Confirm'
+                        onclick='checkPassword()'>
+                </form>
+                <a href='/en/editAccount' id='editProfileLink'>Edit</a>
+            </div>
+
+        </div>
+    </section>
+    <section class='hidden'>
+        <div id='column2'>
+            <div id='column2Content'>
+                <span class='title'>My Orders</span>
+                <div id='orderList'>
+                    {{#orders}}
+                    <a href='/en/crossOrder/{{crossOrderIndex}}' class='row'>
+                        <span>{{orderIndex}}</span>
+                        <span>{{openDate}}</span>
+                        <span>{{closeDate}}</span>
+                        {{#state}}
+                        <svg class='checkSvgIco' width='30px' height='30px' viewBox='0 0 24 24' fill='none'
+                            xmlns='http://www.w3.org/2000/svg'>
+                            <g id='SVGRepo_bgCarrier' stroke-width='0' />
+                            <g id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round' />
+                            <g id='SVGRepo_iconCarrier'>
+                                <path d='M4 12.6111L8.92308 17.5L20 6.5' stroke-width='2' stroke-linecap='round'
+                                    stroke-linejoin='round' />
+                            </g>
+                        </svg>
+                        {{/state}}
+                        {{^state}}
+                        <svg class='crossSvgIco' width='30px' height='30px' viewBox='0 0 24 24' fill='none'
+                            xmlns='http://www.w3.org/2000/svg'>
+                            <g id='SVGRepo_bgCarrier' stroke-width='0' />
+                            <g id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round' />
+                            <g id='SVGRepo_iconCarrier'>
+                                <path fill-rule='evenodd' clip-rule='evenodd'
+                                    d='M5.46967 5.46967C5.76256 5.17678 6.23744 5.17678 6.53033 5.46967L18.5303 17.4697C18.8232 17.7626 18.8232 18.2374 18.5303 18.5303C18.2374 18.8232 17.7626 18.8232 17.4697 18.5303L5.46967 6.53033C5.17678 6.23744 5.17678 5.76256 5.46967 5.46967Z' />
+                                <path fill-rule='evenodd' clip-rule='evenodd'
+                                    d='M18.5303 5.46967C18.8232 5.76256 18.8232 6.23744 18.5303 6.53033L6.53035 18.5303C6.23745 18.8232 5.76258 18.8232 5.46969 18.5303C5.17679 18.2374 5.17679 17.7626 5.46968 17.4697L17.4697 5.46967C17.7626 5.17678 18.2374 5.17678 18.5303 5.46967Z' />
+                            </g>
+                        </svg>
+                        {{/state}}
+                        <span>{{ownerName}}</span>
+                    </a>
+                    {{/orders}}
+                    <a href='/en/myOrders' id='myOrderBtn'>See More</a>
+                    {{^orders}}
+                    <span class='text'>You have no orders yet</span>
+                    <a href='/en/newOrder' id='newOrderBtn'>New Order</a>
+                    {{/orders}}
+                </div>
             </div>
         </div>
-        <div id="contactSection">
-            <input type="email" name="emailField" id="emailField" value="{{email}}" placeholder="Email" readonly>
-            <input type="tel" name="phoneNumberField" id="phoneNumberField" value="{{phone}}" placeholder="Phone Number"
-                readonly>
-        </div>
-
-        <input type="text" name="adressField" id="adressField" value="{{adress}}" placeholder="Address" readonly>
-
-        <div id="localisationSection">
-            <input type="text" name="cityField" id="cityField" value="{{city}}" placeholder="City" readonly>
-            <input type="text" name="zipCodeField" id="zipCodeField" value="{{zipCode}}" placeholder="Zip Code"
-                readonly>
-        </div>
-        <div id="changePsswdSection">
-            <input type="button" name="changePsswdBtn" id="changePsswdBtn" value="Change Password"
-                onclick="showElement('updatePasswordForm','changePsswdBtn', 1)">
-
-            <form action="/en/updatePassword/{{token}}" method="post" style="display: none;" id="updatePasswordForm">
-                <div id="oldPasswordSection">
-                    <input type="password" name="oldPasswordField" id="oldPasswordField" placeholder="Old Password">
-
-                    <input type="button" name="showOldPassBtn" id="showOldPassBtn"
-                        onclick="showPassword('oldPasswordField','showOldPassLabel','hideOldPassLabel',true)" hidden>
-                    <label for="showOldPassBtn" id="showOldPassLabel">
-                        <img src="../showPass.svg" class="icoPass" alt="show Old Password">
-                    </label>
-                    <input type="button" name="hideOldPasswdBtn" id="hideOldPasswdBtn"
-                        onclick="showPassword('oldPasswordField','showOldPassLabel','hideOldPassLabel',false)" hidden>
-                    <label for="hideOldPasswdBtn" style="display: none;" id="hideOldPassLabel">
-                        <img src="../hidePass.svg" class="icoPass" alt="hide OldPassword">
-                    </label>
-                </div>
-                <div id="newPasswordSection">
-                    <input type="password" name="newPasswordField" id="newPasswordField" placeholder="New Password">
-                    <input type="button" name="showNewPassBtn" id="showNewPassBtn"
-                        onclick="showPassword('newPasswordField','showNewPassLabel','hideNewPassLabel',true)" hidden>
-                    <label for="showNewPassBtn" id="showNewPassLabel">
-                        <img src="../showPass.svg" class="icoPass" alt="show New Password">
-                    </label>
-                    <input type="button" name="hideNewPasswdBtn" id="hideNewPasswdBtn"
-                        onclick="showPassword('newPasswordField','showNewPassLabel','hideNewPassLabel',false)" hidden>
-                    <label for="hideNewPasswdBtn" style="display: none;" id="hideNewPassLabel">
-                        <img src="../hidePass.svg" class="icoPass" alt="hide NewPassword">
-                    </label>
-                </div>
-                <div id="confirmPasswordSection">
-                    <input type="password" name="confirmPasswordField" id="confirmPasswordField"
-                        placeholder="Confirm Password">
-                    <input type="button" name="showConfirmPassBtn" id="showConfirmPassBtn"
-                        onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',true)"
-                        hidden>
-                    <label for="showConfirmPassBtn" id="showConfirmPassLabel">
-                        <img src="../showPass.svg" class="icoPass" alt="show Confirm Password">
-                    </label>
-                    <input type="button" name="hideConfirmPasswdBtn" id="hideConfirmPasswdBtn"
-                        onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',false)"
-                        hidden>
-                    <label for="hideConfirmPasswdBtn" style="display: none;" id="hideConfirmPassLabel">
-                        <img src="../hidePass.svg" class="icoPass" alt="hide Confirm Password">
-                    </label>
-                </div>
-                <span id="errorMessage" style="display: none;">Passwords aren't matching</span>
-                <input type="button" name="cancelBtn" id="cancelBtn" value="Cancel"
-                    onclick="showElement('changePsswdBtn', 'updatePasswordForm', 0)">
-                <input type="submit" name="changePsswdSub" id="changePsswdSub" value="Confirm"
-                    onclick="checkPassword()">
-            </form>
-            <a href="/en/editAccount" id="editProfileLink">Edit</a>
-        </div>
-
-    </div>
-    <div id="column2">
-        <div id="column2Content">
-            <span class="title">My Orders</span>
-            <div id="orderList">
-                {{#orders}}
-                <a href="/en/crossOrder/{{crossOrderIndex}}" class="row">
-                    <span>{{orderIndex}}</span>
-                    <span>{{openDate}}</span>
-                    <span>{{closeDate}}</span>
-                    {{#state}}
-                    <svg class="checkSvgIco" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-                        <g id="SVGRepo_iconCarrier"> <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> </g>
-                        </svg>
-                    {{/state}}
-                    {{^state}}
-                    <svg class="crossSvgIco" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-                        <g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" 
-                            d="M5.46967 5.46967C5.76256 5.17678 6.23744 5.17678 6.53033 5.46967L18.5303 17.4697C18.8232 17.7626 18.8232 18.2374 18.5303 18.5303C18.2374 18.8232 17.7626 18.8232 17.4697 18.5303L5.46967 6.53033C5.17678 6.23744 5.17678 5.76256 5.46967 5.46967Z" 
-                            /><path fill-rule="evenodd" clip-rule="evenodd" d="M18.5303 5.46967C18.8232 5.76256 18.8232 6.23744 18.5303 6.53033L6.53035 18.5303C6.23745 18.8232 5.76258 18.8232 5.46969 18.5303C5.17679 18.2374 5.17679 17.7626 5.46968 17.4697L17.4697 5.46967C17.7626 5.17678 18.2374 5.17678 18.5303 5.46967Z"
-                            /> </g>
-                        </svg>
-                    {{/state}}
-                    <span>{{ownerName}}</span>
-                </a>
-                {{/orders}}
-                <a href="/en/myOrders" id="myOrderBtn">See More</a>
-                {{^orders}}
-                <span class="text">You have no orders yet</span>
-                <a href="/en/newOrder" id="newOrderBtn">New Order</a>
-                {{/orders}}
-            </div>
-        </div>
-    </div>
+    </section>
 </div>
 
 {{#admin}}
-<div id="row2">
-    <div id="unverifiedAccountsContainer">
-        <div class="title">Unverified Accounts</div>
-        {{#unverifiedAccounts}}
-        <div class="unverifiedAccountContent">
-            <img src="/account.svg" alt="defaultProfilePicture" class="profilePicture">
-            <div class="userInfoSection">
-                <div class="inputSection"><input type="text" value="{{userName}}" id="userName-{{id}}" readonly>
-                    <form action="/en/rejectAccount/{{token}}" method="post" class="rejectAccountForm"><input type="image" src="/cross.svg"
-                            class="rejectBtn"></form>
-                </div>
-                <div class="inputSection"><input type="text" value="{{email}}" id="email-{{id}}" readonly>
-                    <form action="/en/verifyAccount/{{token}}" method="post" class="verifyAccountForm"><input type="image" src="/check.svg"
-                            class="verifyBtn"></form>
+<section class='hidden'>
+    <div id='row2'>
+        <div id='unverifiedAccountsContainer'>
+            <div class='title'>Unverified Accounts</div>
+            {{#unverifiedAccounts}}
+            <div class='unverifiedAccountContent'>
+                <img src='/account.svg' alt='defaultProfilePicture' class='profilePicture'>
+                <div class='userInfoSection'>
+                    <div class='inputSection'><input type='text' value='{{userName}}' id='userName-{{id}}' readonly>
+                        <form action='/en/rejectAccount/{{token}}' method='post' class='rejectAccountForm'><input
+                                type='image' src='/cross.svg' class='rejectBtn'></form>
+                    </div>
+                    <div class='inputSection'><input type='text' value='{{email}}' id='email-{{id}}' readonly>
+                        <form action='/en/verifyAccount/{{token}}' method='post' class='verifyAccountForm'><input
+                                type='image' src='/check.svg' class='verifyBtn'></form>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        {{/unverifiedAccounts}}
+            {{/unverifiedAccounts}}
+        </div>
     </div>
-</div>
+</section>
 {{/admin}}
 {{/account}}
 

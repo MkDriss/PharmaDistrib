@@ -75,6 +75,10 @@ exports.get = function (id) {
       return db.prepare('SELECT * FROM user WHERE id = ?').get(id);
 }
 
+exports.getName = function (id) {
+      return db.prepare('SELECT username FROM user WHERE id = ?').get(id);
+}
+
 exports.list = function () {
       return db.prepare('SELECT * FROM user').all();
 }

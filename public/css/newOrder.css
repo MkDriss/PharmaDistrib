@@ -48,6 +48,12 @@ select{
     font-weight: 500;
     border-radius: 10px;
     display: flex;
+    
+}
+
+#table-scroll{
+    overflow-y: scroll;
+    max-height: 600px;
 }
 
 input[type="submit"]:hover{
@@ -85,6 +91,11 @@ table{
     border-spacing: 40px 10px;
 }
 
+tbody{
+    max-height: 400px;
+    overflow-y: scroll;
+    
+}
 #content{
     display: flex;
     flex-direction: column;
@@ -93,7 +104,6 @@ table{
     background-color: #a0a0a069;
     padding: 25px;
     border-radius: 10px;
-    margin-bottom: 50px;
     width: 1600px;
 }
 

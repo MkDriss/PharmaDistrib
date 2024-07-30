@@ -1,19 +1,23 @@
 {{>./en/header}}
+<section class='hidden'>
+    <div id='homeContainer'>
+        <div class='content'>
 
-<div id="homeContainer">
-    <div class="content">
+            <span id='title'>Pharma Distrib</span>
 
-        <span id="title">Pharma Distrib</span>
 
-        <div class="row">
-            <a href="/en/orders" id="seeOrderLink">See Orders</a>
-            {{#authenticated}}
-            <a href="/en/newOrder" id="newOrderLink">New Order</a>
-            {{/authenticated}}
-            {{^authenticated}}
-            <a href="/en/signin" id="newOrderLink">New Order</a>
-            {{/authenticated}}
+            <div class='row'>
+                <a href='/en/orders' id='seeOrderLink'>See Orders</a>
+                {{#authenticated}}
+                <a href='/en/newOrder' id='newOrderLink'>New Order</a>
+                {{/authenticated}}
+                {{^authenticated}}
+                <a href='/en/signin' id='newOrderLink'>New Order</a>
+                {{/authenticated}}
+
+            </div>
+
         </div>
     </div>
-</div>
+</section>
 {{>./en/footer}}

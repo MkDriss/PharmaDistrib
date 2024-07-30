@@ -5,6 +5,7 @@ const { Console } = require('console');
 const fs = require('fs');
 let db = new Sqlite('db.sqlite');
 var products = require('./products.js');
+var accounts = require('./accounts.js');
 
 
 let initDatabase = function () {
@@ -204,15 +205,30 @@ exports.getProductsListFromCrossOrderIndex = function (orderIndex, userCrossOrde
 
 exports.getOrderSummary = function (orderIndex) {
     // get all accounts
-    let accounts = db.prepare('SELECT DISTINCT crossOrderOwner FROM crossOrders WHERE originalOrderIndex = ?').all(orderIndex);
+    let accountsList = db.prepare('SELECT DISTINCT crossOrderOwner FROM crossOrders WHERE originalOrderIndex = ?').all(orderIndex);
     // get all products by accounts
     let getProducts = db.prepare('SELECT productIndex, quantity FROM productInventory INNER JOIN crossOrders ON productInventory.crossOrderIndex = crossOrders.crossOrderIndex WHERE orderIndex = ? AND crossOrderOwner = ?');
-    let summary = [];
-    for(let accountIndex = 0; accountIndex < accounts.length; accountIndex++){
-        let products = getProducts.all(orderIndex, accounts[accountIndex].crossOrderOwner);
+    let OrderSummary = [];
+    for (let accountIndex = 0; accountIndex < accountsList.length; accountIndex++) {
+        let productsList = getProducts.all(orderIndex, accountsList[accountIndex].crossOrderOwner);
+        console.log(accounts.getName(accountsList[accountIndex].crossOrderOwner))
+        let accountSummary = {
+            "account": accounts.getName(accountsList[accountIndex].crossOrderOwner).userName,
+            "products": [],
+            "totalPrice": 0
+        }
         // fill products with product information
+        for (let index = 0; index < productsList.length; index++) {
+            let product = productsList[index];
+            let productInfo = products.getFromEan(product.productIndex);
+            productInfo.quantity = product.quantity;
+            productInfo.basedPrice = product.quantity * productInfo.price;
+            accountSummary.products.push(productInfo);
+            accountSummary.totalPrice += productInfo.basedPrice;
+        }
+        OrderSummary.push(accountSummary);
     }
-
+    return OrderSummary;
 }
 
 exports.getCrossOrderIndexFromOrderIndex = function (orderIndex, ownerIndex) {
