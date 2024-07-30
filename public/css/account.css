@@ -23,6 +23,10 @@
     gap: 20px;
 }
 
+#column1, #column2{
+    height: 380px;
+}
+
 #unverifiedAccountsContainer {
     align-items: center;
 }
@@ -154,7 +158,6 @@
 }
 
 #updatePasswordForm {
-    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;

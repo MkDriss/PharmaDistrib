@@ -1,12 +1,12 @@
 const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.classList.add('show');
+            entry.target.classList.add('show-up');
         }
     });
 });
 
-const hiddenElements = document.querySelectorAll('.hidden');
+const hiddenElements = document.querySelectorAll('.hidden-up');
 hiddenElements.forEach(element => { observer.observe(element); });
 
 function search() {
@@ -139,4 +139,37 @@ function showPassword(name, show, hide, value) {
         document.getElementById(show).style.display = "flex"
         document.getElementById(hide).style.display = "none"
     }
+}
+
+function showProducts(element) {
+    let laboratory = element.value;
+    let products = document.getElementsByClassName('productTable')[0].getElementsByTagName('tr');
+    if (laboratory === 'all') {
+        for (let i = 0; i < products.length; i++) {
+            products[i].style.display = 'table-row';
+        }
+    } else {
+        for (let i = 0; i < products.length; i++) {
+            if (products[i].classList.value === (laboratory) || products[i].classList.contains('firstRow')) {
+                products[i].style.display = 'table-row';
+            } else {
+                products[i].style.display = 'none';
+            }
+        }
+    }
+}
+
+function updateQuantity(productId, originalQty) {
+    let product = document.getElementById(productId);
+    let quantity = product.getElementsByClassName('quantity')[0].value;
+    if (quantity < 0) {
+        product.getElementsByClassName('quantity')[0].value = 0;
+        alert('La quantité ne peut pas être négative');
+        return;
+    }
+    let packaging = product.getElementsByClassName('packaging')[0].value;
+    let price = product.getElementsByClassName('price')[0].value;
+    product.getElementsByClassName('totQty')[0].value = parseInt(originalQty) + parseInt((quantity));
+
+    let basedPrice = product.getElementsByClassName('basedPrice')[0].value = parseInt(product.getElementsByClassName('totQty')[0].value) * price;
 }

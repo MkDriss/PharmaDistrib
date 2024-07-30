@@ -62,14 +62,14 @@ body {
     height: 30px;
 }
 
-.hidden{
+.hidden-up{
     opacity: 0;
     blur-filter: blur(2px);
     transform: translateY(+20%);
     transition: all 0.5s ease;
 }
 
-.show{
+.show-up{
     opacity: 1;
     transform: translate(0);
     blur-filter: blur(0);

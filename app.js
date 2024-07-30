@@ -114,18 +114,29 @@ app.get('/:lang/account', (req, res) => {
             lastCrossOrdersList[i].state = orders.getOrder(lastCrossOrdersList[i].orderIndex).state;
         }
         let unverifiedAccounts = accounts.getUnverifiedAccounts();
-        return res.render('./' + req.params.lang + '/account.html', { css: '/account.css', 
-            account: account, admin: account.admin, unverifiedAccounts: unverifiedAccounts, orders : lastCrossOrdersList });
+        return res.render('./' + req.params.lang + '/account.html', {
+            css: '/account.css',
+            account: account, admin: account.admin, unverifiedAccounts: unverifiedAccounts, orders: lastCrossOrdersList
+        });
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
 app.get('/:lang/crossOrder/:crossOrderIndex', (req, res) => {
-    if(req.session.authenticated) {
+    if (req.session.authenticated) {
         let crossOrderIndex = req.params.crossOrderIndex;
         let crossOrder = orders.getCrossOrder(crossOrderIndex)[0];
         let order = orders.getOrder(crossOrder.originalOrderIndex);
-        let productsList = orders.getProductsListFromCrossOrderIndex(order.orderIndex ,crossOrder.crossOrderIndex);
-        return res.render('./' + req.params.lang + '/crossOrder.html', { css: '/crossOrder.css', laboratories : products.getLaboratories(), orderIndex : order.orderIndex, order: order, products: productsList});
+        order.crossOrderIndex = crossOrderIndex;
+        let owner = false;
+        if (order.ownerIndex === req.session.id) {
+            owner = true;
+        }
+        let productsList = orders.getProductsListFromCrossOrderIndex(order.orderIndex, crossOrder.crossOrderIndex);
+        return res.render('./' + req.params.lang + '/crossOrder.html',
+            {
+                css: '/crossOrder.css', laboratories: products.getLaboratories(), orderIndex: order.orderIndex, order: order,
+                products: productsList, owner: owner
+            });
     } res.redirect('/' + req.params.lang + '/signin');
 });
 
@@ -134,7 +145,7 @@ app.get('/:lang/orders', (req, res) => {
         let order = orders.getOrders();
         for (let i = 0; i < order.length; i++) {
             order[i].ownerName = accounts.get(order[i].ownerIndex).userName;
-            if(new Date(order[i].closeDate) - new Date() < 0) {
+            if (new Date(order[i].closeDate) - new Date() < 0) {
                 order[i].state = 0;
                 orders.setState(order[i].orderIndex, 0)
             }
@@ -151,7 +162,7 @@ app.get('/:lang/insertFile', (req, res) => {
 
 app.get('/:lang/newOrder', (req, res) => {
     if (req.session.authenticated) {
-        return res.render('./' + req.params.lang + '/newOrder.html', { css: '/newOrder.css', laboratories: products.getLaboratories(), products: products.list(), currentDate: now(), endDate: now(1)});
+        return res.render('./' + req.params.lang + '/newOrder.html', { css: '/newOrder.css', laboratories: products.getLaboratories(), products: products.list(), currentDate: now(), endDate: now(1) });
     } res.redirect('/' + req.params.lang + '/signin');
 });
 
@@ -172,7 +183,7 @@ app.get('/:lang/order/:orderIndex', (req, res) => {
             return res.redirect('/' + req.params.lang + '/crossOrder/' + crossOrderIndex);
         }
         let productsList = orders.getProductsListFromOrderIndex(orderIndex);
-        return res.render('./' + req.params.lang + '/order.html', { css: '/order.css', laboratories : products.getLaboratories(), orderIndex : orderIndex, order: order, products: productsList, owner : owner });
+        return res.render('./' + req.params.lang + '/order.html', { css: '/order.css', laboratories: products.getLaboratories(), orderIndex: orderIndex, order: order, products: productsList, owner: owner });
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
@@ -398,20 +409,53 @@ app.post('/:lang/createCrossOrder/:orderIndex', (req, res) => {
 
 app.post('/:lang/updateCrossOrder/:crossOrderIndex', (req, res) => {
     if (req.session.authenticated) {
+        let crossOrderIndex = req.params.crossOrderIndex;
+        let crossOrder = orders.getCrossOrder(crossOrderIndex)[0];
+        if (crossOrder.crossOrderOwner !== req.session.id) {
+            console.log('You are not the owner of this cross order');
+            return res.redirect('/' + req.params.lang + '/crossOrder/' + req.params.crossOrderIndex);
+        } else {
+            let table = req.body;
+            let closeDate = req.body.dateEndField;
+            let productsIndex = [];
+            let listSize = table.quantity.length;
+            for (let i = 0; i < listSize; i++) {
+                if (table.quantity[i] != 0) {
+                    productsIndex.push([table.ean13[i], parseInt(table.quantity[i])]);
+                }
+            }
+            orders.updateCrossOrder(crossOrderIndex, productsIndex, closeDate);
+            return res.redirect('/' + req.params.lang + '/orders');
+        }
+    } return res.redirect('/' + req.params.lang + '/signin');
+});
+
+app.post('/:lang/deleteOrder/:orderIndex', (req, res) => {
+    if (req.session.authenticated) {
+        let orderIndex = req.params.orderIndex;
+        if (orders.getOrder(orderIndex).ownerIndex === req.session.id) {
+            orders.deleteOrder(orderIndex);
+            return res.redirect('/' + req.params.lang + '/orders');
+        }
     } return res.redirect('/' + req.params.lang + '/signin');
 });
 
 app.post('/:lang/deleteCrossOrder/:crossOrderIndex', (req, res) => {
     if (req.session.authenticated) {
+        let crossOrderIndex = req.params.crossOrderIndex;
+        if (orders.getCrossOrder(crossOrderIndex)[0].crossOrderOwner === req.session.id) {
+            orders.deleteCrossOrder(crossOrderIndex);
+            return res.redirect('/' + req.params.lang + '/orders');
+        }
     } return res.redirect('/' + req.params.lang + '/signin');
 });
 
-app.post('/:lang/updateOrder/:orderIndex', (req, res) => {
+
+app.post('/:lang/closeOrder/:orderIndex', (req, res) => {
     if (req.session.authenticated) {
         return res.redirect('/' + req.params.lang + '/orderSummary/' + req.params.orderIndex);
-    } return res.redirect('/' + req.params.lang + '/signin');
+    } return res.redirect('/.' + req.params.lang + '/signin');
 });
-
 
 
 // LISTEN

@@ -1,5 +1,5 @@
 {{>./en/header}}
-<section class='hidden'>
+<section class='hidden-up'>
     <div id='newOrderContainer'>
         <div id='content'>
             <div class='title'>New Order</div>
@@ -27,9 +27,10 @@
                             </div>
                         </div>
                         <div id='search'>
-                            <input type='text' id='searchField' placeholder='Search'>
-                            <input type='button' value='Search' onclick='search()'>
-                        </div>
+                            <input type='text' id='searchField' placeholder='Type Ean13'>
+                            <label for="searchInput" id="searchLabel"><img src="/search.svg" alt="searchIco" id="searchIco"></label>
+                            <input type='button' name="searchIco" src='/search.svg' onclick='search()' id="searchInput" hidden>
+                        </div>  
                     </div>
                     <div id='table-scroll'>
                         <table id='' class='productTable'>

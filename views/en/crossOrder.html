@@ -1,49 +1,15 @@
 {{>./en/header}}
-
-<script>
-    function showProducts(element) {
-        let laboratory = element.value;
-        let products = document.getElementsByClassName('productTable')[0].getElementsByTagName('tr');
-        if (laboratory === 'all') {
-            for (let i = 0; i < products.length; i++) {
-                products[i].style.display = 'table-row';
-            }
-        } else {
-            for (let i = 0; i < products.length; i++) {
-                if (products[i].classList.value === (laboratory) || products[i].classList.contains('firstRow')) {
-                    products[i].style.display = 'table-row';
-                } else {
-                    products[i].style.display = 'none';
-                }
-            }
-        }
-    }
-
-    function updateQuantity(productId, originalQty) {
-        let product = document.getElementById(productId);
-        let quantity = product.getElementsByClassName('quantity')[0].value;
-        if (quantity < 0) {
-            product.getElementsByClassName('quantity')[0].value = 0;
-            alert('La quantité ne peut pas être négative');
-            return;
-        }
-        let packaging = product.getElementsByClassName('packaging')[0].value;
-        let price = product.getElementsByClassName('price')[0].value;
-        product.getElementsByClassName('totQty')[0].value = parseInt(originalQty) + parseInt((quantity));
-
-        let basedPrice = product.getElementsByClassName('basedPrice')[0].value = parseInt(product.getElementsByClassName('totQty')[0].value) * price;
-    }
-</script>
 {{#order}}
-<section class='hidden'>
+<section class='hidden-up'>
     <div id='newOrderContainer'>
         <div id='content'>
             <div class='title'>Order n°{{orderIndex}}</div>
             <div id='row1'>
                 {{#state}}
-                <form action='/en/updateOrder/{{orderIndex}}' id='updateOrderForm' method='post'>
+                <form action='/en/updateCrossOrder/{{orderIndex}}' id='updateOrderForm' method='post'>
                     <div id='selectContainer'>
-                        <select name='laboratorySelect' id='laboratorySelect' required onchange='showProducts(this)'>
+                        <select name='laboratorySelect' id='laboratorySelect' required onchange='showProducts(this)'
+                            title="laboratorySelector">
                             <option name='laboratory' id='laboratory' value='None'>Select a laboratory</option>
                             {{#laboratories}}
                             <option name='laboratory' id='{{laboratoryName}}' value='{{laboratoryName}}'>
@@ -59,7 +25,12 @@
                             </div>
                             <div id='endDate'>
                                 <label for='dateEndField'>Close Date</label>
+                                {{#owner}}
+                                <input type='date' name='dateEndField' id='dateEndField' value='{{closeDate}}'>
+                                {{/owner}}
+                                {{^owner}}
                                 <input type='date' name='dateEndField' id='dateEndField' value='{{closeDate}}' readonly>
+                                {{/owner}}
                             </div>
                         </div>
                     </div>
@@ -100,8 +71,15 @@
                         {{/products}}
                     </table>
                     <div>
-                        <input type='submit' value='Close'>
-                        <a href='/en/account'>Cancel</a>
+                        {{#owner}}
+                        <input type='submit' value='Close' formaction="/en/closeOrder/{{orderIndex}}">
+                        <input type='submit' value='Update' formaction="/en/updateCrossOrder/{{orderIndex}}">
+                        <input type='submit' value='Delete' formaction="/en/deleteOrder/{{orderIndex}}">
+                        {{/owner}}
+                        {{^owner}}
+                        <input type='submit' value='Update' formaction="/en/updateCrossOrder/{{crossOrderIndex}}">
+                        <input type='submit' value='Delete' formaction="/en/deleteCrossOrder/{{crossOrderIndex}}">
+                        {{/owner}}
                     </div>
                 </form>
                 {{/state}}
