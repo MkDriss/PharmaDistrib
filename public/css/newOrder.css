@@ -17,7 +17,6 @@
     align-items: center;
 }
 
-
 input,
 select {
     font-family: var(--font-family);
@@ -54,13 +53,28 @@ select {
     font-weight: 500;
     border-radius: 10px;
     display: flex;
-
 }
+
+
 
 #table-scroll {
-    overflow-y: scroll;
-    max-height: 600px;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
+
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: var(--text-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--background-color); 
+    border-radius: 10px;
+}
+
+
 
 input[type="submit"]:hover {
     cursor: pointer;
@@ -113,17 +127,8 @@ input[type="submit"]:hover {
     height: 36px;
 }
 
-th {
-    text-align: center;
-}
-
 table {
     border-spacing: 40px 10px;
-}
-
-tbody {
-    max-height: 400px;
-    overflow-y: scroll;
 }
 
 
@@ -135,6 +140,7 @@ tbody {
     background-color: #a0a0a069;
     padding: 25px;
     border-radius: 10px;
+    gap: 20px;
     width: 1600px;
 }
 
@@ -153,7 +159,8 @@ tbody {
     width: 60px;
 }
 
-.id {
+.id,
+.laboratoryProductName {
     width: 130px;
 }
 

@@ -18,14 +18,14 @@
             <div id='contactSection'>
                 <input type='email' name='emailField' id='emailField' value='{{email}}' placeholder='Email' readonly>
                 <input type='tel' name='phoneNumberField' id='phoneNumberField' value='{{phone}}'
-                    placeholder='Phone Number'>
+                    placeholder='Phone Number' onkeyup='checkNumbers(this)'>
             </div>
 
             <input type='text' name='adressField' id='adressField' value='{{adress}}' placeholder='Adress'>
 
             <div id='localisationSection'>
                 <input type='text' name='cityField' id='cityField' value='{{city}}' placeholder='City'>
-                <input type='text' name='zipCodeField' id='zipCodeField' value='{{zipCode}}' placeholder='Zip Code'>
+                <input type='text' name='zipCodeField' id='zipCodeField' value='{{zipCode}}' placeholder='Zip Code' onkeyup='checkNumbers(this)'>
             </div>
             <div id='buttonSection'>
                 <a href='/en/account' class='button'>Cancel</a>

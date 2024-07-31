@@ -106,7 +106,11 @@ app.get('/:lang/account', (req, res) => {
     if (req.session.authenticated) {
         let id = req.session.id;
         let account = accounts.get(id)
+        let seeMoreBtn = false;
         let lastCrossOrdersList = orders.getLastCrossOrdersFromOwnerIndex(id);
+        if (lastCrossOrdersList.length > 0) {
+            seeMoreBtn = true;
+        }
         for (let i = 0; i < lastCrossOrdersList.length; i++) {
             lastCrossOrdersList[i].orderIndex = lastCrossOrdersList[i].originalOrderIndex;
             lastCrossOrdersList[i].openDate = orders.getOrder(lastCrossOrdersList[i].orderIndex).openDate;
@@ -115,8 +119,8 @@ app.get('/:lang/account', (req, res) => {
         }
         let unverifiedAccounts = accounts.getUnverifiedAccounts();
         return res.render('./' + req.params.lang + '/account.html', {
-            css: '/account.css',
-            account: account, admin: account.admin, unverifiedAccounts: unverifiedAccounts, orders: lastCrossOrdersList
+            css: '/account.css', account: account, admin: account.admin, 
+            unverifiedAccounts: unverifiedAccounts, orders: lastCrossOrdersList, seeMoreBtn : seeMoreBtn
         });
     } res.redirect('/' + req.params.lang + '/signin')
 });
@@ -134,7 +138,7 @@ app.get('/:lang/crossOrder/:crossOrderIndex', (req, res) => {
         let productsList = orders.getProductsListFromCrossOrderIndex(order.orderIndex, crossOrder.crossOrderIndex);
         return res.render('./' + req.params.lang + '/crossOrder.html',
             {
-                css: '/crossOrder.css', laboratories: products.getLaboratories(), orderIndex: order.orderIndex, order: order,
+                css: '/crossOrder.css', laboratories: orders.getLaboratoriesFromCrossOrder(crossOrderIndex), orderIndex: order.orderIndex, order: order,
                 products: productsList, owner: owner
             });
     } res.redirect('/' + req.params.lang + '/signin');
@@ -195,6 +199,16 @@ app.get('/:lang/orderSummary/:orderIndex', (req, res) => {
             let orderSummary = orders.getOrderSummary(orderIndex);
             return res.render('./' + req.params.lang + '/orderSummary.html', { css: '/orderSummary.css', orderSummary: orderSummary });
         }
+    } return res.redirect('/' + req.params.lang + '/signin');
+});
+
+app.get('/:lang/myOrders', (req, res) => {
+    if (req.session.authenticated) {
+        let ordersList = orders.getCrossOrderFromUserId(req.session.id);
+        for(let i = 0; i < ordersList.length; i++) {
+            ordersList[i].ownerName = accounts.get(ordersList[i].ownerIndex).userName;
+        }
+        return res.render('./' + req.params.lang + '/myOrders.html', { css: '/myOrders.css', ordersList: ordersList });
     } return res.redirect('/' + req.params.lang + '/signin');
 });
 
@@ -396,6 +410,7 @@ app.post('/:lang/createCrossOrder/:orderIndex', (req, res) => {
         let listSize = table.quantity.length;
         for (let i = 0; i < listSize; i++) {
             if (table.quantity[i] != 0) {
+                console.log(table.ean13[i]);
                 productsIndex.push([table.ean13[i], parseInt(table.quantity[i])]);
             }
         }

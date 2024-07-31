@@ -1,3 +1,5 @@
+// ANIMATION ON SCROLL
+
 const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -8,6 +10,8 @@ const observer = new IntersectionObserver(entries => {
 
 const hiddenElements = document.querySelectorAll('.hidden-up');
 hiddenElements.forEach(element => { observer.observe(element); });
+
+// SEARCH PRODUCT
 
 function search() {
     let query = document.getElementById('searchField').value;
@@ -29,6 +33,8 @@ function search() {
     }
 }
 
+// SHOW FUNCTIONS
+
 function showProducts(element) {
     let laboratory = element.value;
     let products = document.getElementsByClassName('productTable')[0].getElementsByTagName('tr');
@@ -47,32 +53,18 @@ function showProducts(element) {
     }
 }
 
-function updateQuantity(productId) {
-    let product = document.getElementById(productId);
-    let quantity = product.getElementsByClassName('quantity')[0].value;
-    if (quantity < 0) {
-        product.getElementsByClassName('quantity')[0].value = 0;
-        alert('La quantité ne peut pas être négative');
-        return;
+function showPassword(name, show, hide, value) {
+    if (value) {
+        document.getElementById(name).type = "text"
+        document.getElementById(show).style.display = "none"
+        document.getElementById(hide).style.display = "flex"
+    } else {
+        document.getElementById(name).type = "password"
+        document.getElementById(show).style.display = "flex"
+        document.getElementById(hide).style.display = "none"
     }
-    let packaging = product.getElementsByClassName('packaging')[0].value;
-    let price = product.getElementsByClassName('price')[0].value;
-    product.getElementsByClassName('totQty')[0].value = quantity * packaging;
 }
 
-function checkPassword() {
-    let newPas = document.getElementById('newPassordField')
-    let confirmPas = document.getElementById('confirmPasField')
-    let msg = document.getElementById('errorMessage')
-    let btn = document.getElementById('changePsswdSub')
-    if (newPas.value != confirmPas.value) {
-        msg.style.display = 'block'
-        btn.type = 'button'
-    } else {
-        msg.style.display = 'none'
-        btn.type = 'submit'
-    }
-}
 
 function showElement(showElementId, hideElementId, cancel) {
 
@@ -94,24 +86,19 @@ function showDiv(divId, element) {
     }
 }
 
-function checkDate() {
-    let startDate = document.getElementById('dateStartField')
-    let endDate = document.getElementById('dateEndField')
-    if (startDate.value > endDate.value) {
-        alert('The start date must be before the end date')
-        endDate.value = startDate
-    }
-}
+// CHECK FUNCTIONS
 
-function showPassword(name, show, hide, value) {
-    if (value) {
-        document.getElementById(name).type = "text"
-        document.getElementById(show).style.display = "none"
-        document.getElementById(hide).style.display = "flex"
+function checkPassword() {
+    let newPas = document.getElementById('newPassordField')
+    let confirmPas = document.getElementById('confirmPasField')
+    let msg = document.getElementById('errorMessage')
+    let btn = document.getElementById('changePsswdSub')
+    if (newPas.value != confirmPas.value) {
+        msg.style.display = 'block'
+        btn.type = 'button'
     } else {
-        document.getElementById(name).type = "password"
-        document.getElementById(show).style.display = "flex"
-        document.getElementById(hide).style.display = "none"
+        msg.style.display = 'none'
+        btn.type = 'submit'
     }
 }
 
@@ -129,17 +116,46 @@ function checkPassword() {
     }
 }
 
-function showPassword(name, show, hide, value) {
-    if (value) {
-        document.getElementById(name).type = "text"
-        document.getElementById(show).style.display = "none"
-        document.getElementById(hide).style.display = "flex"
-    } else {
-        document.getElementById(name).type = "password"
-        document.getElementById(show).style.display = "flex"
-        document.getElementById(hide).style.display = "none"
+function checkDate() {
+    let startDate = document.getElementById('dateStartField')
+    let endDate = document.getElementById('dateEndField')
+    console.log(new Date(startDate.value) - new Date(endDate.value))
+    if ((new Date(startDate.value) - new Date(endDate.value)) > 0) {
+        alert('The start date must be before the end date')
+        console.log(now(1))
+        endDate.value = now(1)
     }
 }
+
+function checkNumbers(element){
+    let authorized = '0123456789'
+    console.log(element.value)
+    let phone = element.value
+    for (let i = 0; i < phone.length; i++){
+        if (!authorized.includes(phone[i])){
+            element.value = element.value.slice(phone[i], -1)
+            return
+        }
+    }
+}
+
+function now(nBdays = 0) {
+    let currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + nBdays);
+    let day = currentDate.getDate();
+    let month = currentDate.getMonth() + 1;
+    let year = currentDate.getFullYear();
+    if (day < 10) {
+        day = '0' + day;
+    }
+    if (month < 10) {
+        month = '0' + month;
+    }
+    let date = year + '-' + month + '-' + day;
+    return date;
+}
+
+
 
 function showProducts(element) {
     let laboratory = element.value;
@@ -150,7 +166,7 @@ function showProducts(element) {
         }
     } else {
         for (let i = 0; i < products.length; i++) {
-            if (products[i].classList.value === (laboratory) || products[i].classList.contains('firstRow')) {
+            if (products[i].classList.value === (laboratory) || products[i].classList.contains('firstRow')){
                 products[i].style.display = 'table-row';
             } else {
                 products[i].style.display = 'none';
@@ -166,10 +182,7 @@ function updateQuantity(productId, originalQty) {
         product.getElementsByClassName('quantity')[0].value = 0;
         alert('La quantité ne peut pas être négative');
         return;
-    }
-    let packaging = product.getElementsByClassName('packaging')[0].value;
-    let price = product.getElementsByClassName('price')[0].value;
+    } 
     product.getElementsByClassName('totQty')[0].value = parseInt(originalQty) + parseInt((quantity));
-
-    let basedPrice = product.getElementsByClassName('basedPrice')[0].value = parseInt(product.getElementsByClassName('totQty')[0].value) * price;
+    product.getElementsByClassName('basedPrice')[0].value = parseInt(product.getElementsByClassName('totQty')[0].value) * parseInt(product.getElementsByClassName('price')[0].value);
 }

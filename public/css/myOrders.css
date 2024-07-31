@@ -7,7 +7,7 @@
     gap: 20px;
 }
 
-#orderContainer,
+#myOrderContainer,
 #errorMessage,
 #content,#newOrder {
     display: flex;
@@ -23,20 +23,6 @@
     margin: 0px 0px 50px 0px;
 }
 
-#newOrder{
-    text-decoration: none;
-    color: var(--secondary-text-color);
-    padding: 10px 0px;
-    font-size: 17px;
-    width: 200px;
-    height: 30px;
-    font-weight: 500;
-    border-radius: 10px;
-    border: 3px solid #e0dedc88;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    backdrop-filter: blur(20px);
-}
 
 #table span, #table svg{
     width: 120px;
@@ -55,13 +41,22 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-right: 20px;
 }
 #firstRow{
     font-size: 20px;
     font-weight: 500;
     color: var(--text-color);
-    margin-right: 30px;
 }
+
+#table-scroll {
+    overflow-y:scroll;
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 
 .row{
     padding: 10px;
@@ -69,14 +64,12 @@
     border: 3px solid #e0dedc88;
     background-color: var(--text-color);
     color: var(--background-color);
-    margin-right: 20px;
     .checkSvgIco{
         stroke: var(--background-color);
     }
     .crossSvgIco{
         fill: var(--background-color);
     }
-    
 }
 
 .row:hover{
@@ -89,12 +82,4 @@
     .crossSvgIco{
         fill: var(--text-color);
     }
-}
-
-#table-scroll{
-    overflow-y:scroll;
-    max-height: 420px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
 }

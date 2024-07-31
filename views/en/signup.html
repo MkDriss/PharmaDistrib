@@ -7,11 +7,11 @@
                 <span id='title'>Sign Up</span>
                 <div id='inputSection'>
                     <div id='field'>
-                        <input type='text' name='name' placeholder='Name'>
-                        <input type='email' name='email' placeholder='Email'>
+                        <input type='text' name='name' placeholder='Name' required>
+                        <input type='email' name='email' placeholder='Email' required>
 
                         <div id='passwordSection'>
-                            <input type='password' name='passwordField' id='passwordField' placeholder='Password'>
+                            <input type='password' name='passwordField' id='passwordField' placeholder='Password' required>
                             <input type='button' name='showPassBtn' id='showPassBtn'
                                 onclick="showPassword('passwordField','showPassLabel','hidePassLabel',true)" hidden>
                             <label for='showPassBtn' id='showPassLabel'>
@@ -25,7 +25,7 @@
                         </div>
                         <div id='confirmPasswordSection'>
                             <input type='password' name='confirmPasswordField' id='confirmPasswordField'
-                                placeholder='Confirm Password'>
+                                placeholder='Confirm Password' required>
                             <input type='button' name='showConfirmPassBtn' id='showConfirmPassBtn'
                                 onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',true)"
                                 hidden>

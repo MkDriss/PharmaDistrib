@@ -1,8 +1,8 @@
 {{>./en/header}}
 <section class='hidden-up'>
-    <div id='orderContainer'>
+    <div id='myOrderContainer'>
         <div id='content'>
-            <span class='title'>Orders</span>
+            <span class='title'>My Orders</span>
             <div id='table'>
                 <div id='firstRow'>
                     <span>Number</span>
@@ -11,7 +11,7 @@
                     <span>State</span>
                     <span>Owner</span>
                 </div>
-                <div id="table-scroll">
+                <div id='table-scroll'>
                     {{#ordersList}}
                     <a href='/en/order/{{orderIndex}}' class='row'>
                         <span>{{orderIndex}}</span>
@@ -46,8 +46,9 @@
                     {{/ordersList}}
                 </div>
             </div>
-            <a href='/en/newOrder' id='newOrder'>New Order</a>
         </div>
+
+    </div>
     </div>
 </section>
 {{>./en/footer}}

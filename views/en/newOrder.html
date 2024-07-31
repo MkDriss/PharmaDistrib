@@ -19,18 +19,20 @@
                             <div id='startDate'>
                                 <label for='dateStartField'>Open Date</label>
                                 <input type='date' name='dateStartField' id='dateStartField' value='{{currentDate}}'
-                                    required>
+                                    required readonly>
                             </div>
                             <div id='endDate'>
                                 <label for='dateEndField'>Close Date</label>
-                                <input type='date' name='dateEndField' id='dateEndField' value='{{endDate}}' required>
+                                <input type='date' name='dateEndField' id='dateEndField' value='{{endDate}}' required onchange='checkDate()'>
                             </div>
                         </div>
                         <div id='search'>
                             <input type='text' id='searchField' placeholder='Type Ean13'>
-                            <label for="searchInput" id="searchLabel"><img src="/search.svg" alt="searchIco" id="searchIco"></label>
-                            <input type='button' name="searchIco" src='/search.svg' onclick='search()' id="searchInput" hidden>
-                        </div>  
+                            <label for="searchInput" id="searchLabel"><img src="/search.svg" alt="searchIco"
+                                    id="searchIco"></label>
+                            <input type='button' name="searchIco" src='/search.svg' onclick='search()' id="searchInput"
+                                hidden>
+                        </div>
                     </div>
                     <div id='table-scroll'>
                         <table id='' class='productTable'>
@@ -44,30 +46,32 @@
                                 <th>total Qty</th>
                                 <th>Based Price</th>
                             </tr>
-                            {{#products}}
-                            <tr class='{{laboratoryName}}' style='display: none;' id='{{ean13}}'>
-                                <td class='tableContent'><input type='text' class='id' value='{{ean13}}' readonly
-                                        name='ean13'>
-                                </td>
-                                <td class='tableContent'><input type='text' class='laboratoryProductName'
-                                        value='{{laboratoryName}}' readonly name='laboratoryName'>
-                                </td>
-                                <td class='tableContent'><input type='text' class='name' value='{{productName}}'
-                                        readonly name='productName'></td>
-                                <td class='tableContent'><input type='text' class='packaging' value='{{packaging}}'
-                                        readonly name='packaging'></td>
-                                <td class='tableContent'><input type='number' class='quantity' value='0' name='quantity'
-                                        onchange="updateQuantity('{{ean13}}')"></td>
-                                <td class='tableContent'><input type='text' class='price' value='{{price}}' readonly
-                                        name='price'>
-                                </td>
-                                <td class='tableContent'><input type='number' class='totQty' value='0' name='totQty'
-                                        readonly>
-                                </td>
-                                <td class='tableContent'><input type='number' class='basedPrice' value='0'
-                                        name='basedPrice' readonly></td>
-                            </tr>
-                            {{/products}}
+                            <tbody>
+                                {{#products}}
+                                <tr class='{{laboratoryName}}' style='display: none;' id='{{ean13}}'>
+                                    <td class='tableContent'><input type='text' class='id' value='{{ean13}}' readonly
+                                            name='ean13'>
+                                    </td>
+                                    <td class='tableContent'><input type='text' class='laboratoryProductName'
+                                            value='{{laboratoryName}}' readonly name='laboratoryName'>
+                                    </td>
+                                    <td class='tableContent'><input type='text' class='name' value='{{productName}}'
+                                            readonly name='productName'></td>
+                                    <td class='tableContent'><input type='text' class='packaging' value='{{packaging}}'
+                                            readonly name='packaging'></td>
+                                    <td class='tableContent'><input type='number' class='quantity' value='0'
+                                            name='quantity' onchange="updateQuantity('{{ean13}}', 0)"></td>
+                                    <td class='tableContent'><input type='text' class='price' value='{{price}}' readonly
+                                            name='price'>
+                                    </td>
+                                    <td class='tableContent'><input type='number' class='totQty' value='0' name='totQty'
+                                            readonly>
+                                    </td>
+                                    <td class='tableContent'><input type='number' class='basedPrice' value='0'
+                                            name='basedPrice' readonly></td>
+                                </tr>
+                                {{/products}}
+                            </tbody>
                         </table>
                     </div>
                     <input type='submit' value='Confirm'>

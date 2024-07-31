@@ -170,7 +170,9 @@
                         <span>{{ownerName}}</span>
                     </a>
                     {{/orders}}
+                    {{#seeMoreBtn}}
                     <a href='/en/myOrders' id='myOrderBtn'>See More</a>
+                    {{/seeMoreBtn}}
                     {{^orders}}
                     <span class='text'>You have no orders yet</span>
                     <a href='/en/newOrder' id='newOrderBtn'>New Order</a>

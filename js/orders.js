@@ -116,7 +116,7 @@ exports.createCrossOrder = function (originalOrderIndex, crossOrderOwnerIndex, p
         let crossOrderIndex = (db.prepare('SELECT MAX(crossOrderIndex) FROM crossOrders').get()['MAX(crossOrderIndex)']);
         let newCrossOrder = {
             "crossOrderIndex": crossOrderIndex,
-            "originalOrderIndex": originalOrderIndex,
+            "originalOrderIndex": parseInt(originalOrderIndex),
             "crossOrderOwner": crossOrderOwnerIndex,
             "productInventory": productsList
         }
@@ -144,6 +144,11 @@ exports.getOrders = function () {
     return db.prepare('SELECT * FROM orders ORDER BY orderIndex DESC').all();
 }
 
+exports.getCrossOrderFromUserId = function(ownerIndex) {
+    console.log(ownerIndex);
+    return db.prepare('SELECT * FROM crossOrders INNER JOIN orders ON crossOrders.originalOrderIndex = orders.orderIndex WHERE crossOrders.crossOrderOwner = ?').all(ownerIndex);
+}
+
 exports.getCrossOrders = function () {
     return db.prepare('SELECT * FROM crossOrders ORDER BY crossOrderIndex DESC').all();
 }
@@ -163,7 +168,6 @@ exports.getProductsListFromOrderIndex = function (orderIndex) {
     for (let crossOrderIndex = 0; crossOrderIndex < crossOrders.length; crossOrderIndex++) {
         //parse all products in the crossOrder
         for (let indexProduct = 0; indexProduct < crossOrders.length; indexProduct++) {
-
             let ean13 = crossOrders[indexProduct].productIndex;
             // check if the product is already in the list
             if (productsIndexList.includes(ean13)) continue;
@@ -182,7 +186,7 @@ exports.getProductsListFromOrderIndex = function (orderIndex) {
 }
 
 exports.getProductsListFromCrossOrderIndex = function (orderIndex, userCrossOrderIndex) {
-    let productsIndexList = db.prepare('SELECT DISTINCT productIndex FROM productInventory WHERE crossOrderIndex = ?').all(orderIndex);
+    let productsIndexList = db.prepare('SELECT DISTINCT productIndex FROM productInventory WHERE orderIndex = ?').all(orderIndex);
     let productsList = [];
     //prepare a commande to get the total quantity of a product
     let getTotQty = db.prepare('SELECT SUM(quantity) FROM productInventory WHERE orderIndex = ? AND productIndex = ?')
@@ -210,7 +214,6 @@ exports.getOrderSummary = function (orderIndex) {
     let OrderSummary = [];
     for (let accountIndex = 0; accountIndex < accountsList.length; accountIndex++) {
         let productsList = getProducts.all(orderIndex, accountsList[accountIndex].crossOrderOwner);
-        console.log(accounts.getName(accountsList[accountIndex].crossOrderOwner))
         let accountSummary = {
             "account": accounts.getName(accountsList[accountIndex].crossOrderOwner).userName,
             "products": [],
@@ -234,10 +237,13 @@ exports.getCrossOrderIndexFromOrderIndex = function (orderIndex, ownerIndex) {
     return db.prepare('SELECT crossOrderIndex FROM crossOrders WHERE originalOrderIndex = ? AND crossOrderOwner = ?').get(orderIndex, ownerIndex)['crossOrderIndex'];
 }
 
+exports.getLaboratoriesFromCrossOrder = function (crossOrderIndex){
+    return db.prepare('SELECT DISTINCT laboratoryName FROM productInventory INNER JOIN products ON productInventory.productIndex = products.ean13 WHERE crossOrderIndex = ?').all(crossOrderIndex);
+}
+
 
 
 //UPDATE
-
 exports.updateOrderCommentary = function (id, commentary) {
     db.prepare('UPDATE orders SET commentary = ? where id = ?').run(commentary, id);
 }
@@ -260,19 +266,35 @@ exports.setState = function (orderIndex, state) {
 }
 
 exports.updateCrossOrder = function(crossOrderIndex, productsList, closeDate){
+    //Check if the the productsList is empty
+    if(productsList.length == 0){
+        //Get the crossOrderOwner Id
+        let crossOrderOwner = db.prepare('SELECT crossOrderOwner FROM crossOrders WHERE crossOrderIndex = ?').get(crossOrderIndex).crossOrderOwner;
+        //Get the orderOwner Id
+        let orderOwner = db.prepare('SELECT ownerIndex FROM orders WHERE orderIndex = (SELECT originalOrderIndex FROM crossOrders WHERE crossOrderIndex = ?)').get(crossOrderIndex).ownerIndex;
+        //Check if the crossOrderOwner is the same as the orderOwner, if yes delete the order, else delete the crossOrder
+        if(crossOrderOwner == orderOwner){
+            return deleteOrderLocal(orderOwner);
+        }
+        return deleteCrossOrderLocal(crossOrderIndex);
+    }
+    //Set the quantity of all products in the crossOrder to 0
     db.prepare('UPDATE productInventory SET quantity = 0 WHERE crossOrderIndex = ?').run(crossOrderIndex);
     for (let indexProduct = 0; indexProduct < productsList.length; indexProduct++) {
+        //Set the new quantity of the product
         db.prepare('UPDATE productInventory SET quantity = ? WHERE productIndex = ? AND crossOrderIndex = ?').run(productsList[indexProduct][1], productsList[indexProduct][0], crossOrderIndex);
     }
-    updateOrderDate(crossOrderIndex, closeDate);
+    let orderIndex = db.prepare('SELECT originalOrderIndex FROM crossOrders WHERE crossOrderIndex = ?').get(crossOrderIndex).originalOrderIndex;
+    updateOrderDate(orderIndex, closeDate);
     fs.readFile('./json/crossOrders.json', (err, data) => {
         if (err) throw err;
         let crossOrders = JSON.parse(data);
         for (let indexCrossOrder = 0; indexCrossOrder < crossOrders.length; indexCrossOrder++) {
             if (crossOrders[indexCrossOrder].crossOrderIndex == crossOrderIndex) {
                 crossOrders[indexCrossOrder].productInventory = productsList;
+                break;
             }
-            break;
+            
         }
         fs.writeFileSync('./json/crossOrders.json', JSON.stringify(crossOrders, null, 2), function (err) {
             if (err) throw err;
@@ -289,6 +311,7 @@ exports.closeOrder = function (orderIndex) {
 }
 
 function updateOrderDate(orderIndex, date) {
+    console.log(date)
     //up to date the close date of the order
     db.prepare('UPDATE orders SET closeDate = ? WHERE orderIndex = ?').run(date, orderIndex);
     // up to date the json file
@@ -298,8 +321,10 @@ function updateOrderDate(orderIndex, date) {
         for (let indexOrder = 0; indexOrder < orders.length; indexOrder++) {
             if (orders[indexOrder].orderIndex == orderIndex) {
                 orders[indexOrder].closeDate = date;
+                break;
             }
-            break;
+            
+            
         }
         fs.writeFileSync('./json/orders.json', JSON.stringify(orders, null, 2), function (err) {
             if (err) throw err;
@@ -310,7 +335,38 @@ function updateOrderDate(orderIndex, date) {
 
 // DELETE
 
-exports.deleteOrder = function (orderIndex) {
+function deleteOrderLocal(orderIndex) {
+
+    //get crossOrders ensued from the order
+    let crossOrders = db.prepare('SELECT crossOrderIndex FROM crossOrders WHERE originalOrderIndex = ?').all(orderIndex);
+    //delete all products of the crossOrders
+    for (let indexCrossOrder = 0; indexCrossOrder < crossOrders.length; indexCrossOrder++) {
+        db.prepare('DELETE FROM productInventory WHERE crossOrderIndex = ?').run(crossOrders[indexCrossOrder].crossOrderIndex);
+    }
+    //delete all crossOrders
+    db.prepare('DELETE FROM crossOrders WHERE originalOrderIndex = ?').run(orderIndex);
+    //delete the order
+    db.prepare('DELETE FROM orders WHERE orderIndex = ?').run(orderIndex);
+
+    //delete the order from the json file
+    
+    fs.readFile('./json/crossOrders.json', (err, data) => {
+        if (err) throw err;
+        let crossOrders = JSON.parse(data);
+        //parse all the crossOrder to find the one to delete
+        for (let indexCrossOrder = 0; indexCrossOrder < crossOrders.length; indexCrossOrder++) {
+            if (crossOrders[indexCrossOrder].originalOrderIndex == orderIndex) {
+                //delete the crossOrder
+                crossOrders.splice(indexCrossOrder, 1);
+            }
+        }
+        //write the new json file
+        fs.writeFileSync('./json/crossOrders.json', JSON.stringify(crossOrders, null, 2), function (err) {
+            if (err) throw err;
+            console.log(err);
+        });
+    });
+
     //delete the order from the json file
     fs.readFile('./json/orders.json', (err, data) => {
         if (err) throw err;
@@ -329,20 +385,22 @@ exports.deleteOrder = function (orderIndex) {
             console.log(err);
         });
     });
-    //get crossOrders ensued from the order
-    let crossOrders = db.prepare('SELECT crossOrderIndex FROM crossOrders WHERE originalOrderIndex = ?').all(orderIndex);
-    //delete all products of the crossOrders
-    for (let indexCrossOrder = 0; indexCrossOrder < crossOrders.length; indexCrossOrder++) {
-        db.prepare('DELETE FROM productInventory WHERE crossOrderIndex = ?').run(crossOrders[indexCrossOrder].crossOrderIndex);
-    }
-    //delete all crossOrders
-    db.prepare('DELETE FROM crossOrders WHERE originalOrderIndex = ?').run(orderIndex);
-    //delete the order
-    db.prepare('DELETE FROM orders WHERE orderIndex = ?').run(orderIndex);
+
     console.log('Order deleted');
 }
 
-exports.deleteCrossOrder = function(crossOrderIndex) {
+exports.deleteOrder = function (orderIndex) {
+    return deleteOrderLocal(orderIndex);
+}
+
+function deleteCrossOrderLocal(crossOrderIndex) {
+
+    //delete all products of the crossOrder
+    db.prepare('DELETE FROM productInventory WHERE crossOrderIndex = ?').run(crossOrderIndex);
+    //delete the crossOrder
+    db.prepare('DELETE FROM crossOrders WHERE crossOrderIndex = ?').run(crossOrderIndex);
+    console.log('Cross Order deleted');
+
     //delete the crossOrder from the json file
     fs.readFile('./json/crossOrders.json', (err, data) => {
         if (err) throw err;
@@ -361,12 +419,11 @@ exports.deleteCrossOrder = function(crossOrderIndex) {
             console.log(err);
         });
     });
-    //delete all products of the crossOrder
-    db.prepare('DELETE FROM productInventory WHERE crossOrderIndex = ?').run(crossOrderIndex);
-    //delete the crossOrder
-    db.prepare('DELETE FROM crossOrders WHERE crossOrderIndex = ?').run(crossOrderIndex);
-    console.log('Cross Order deleted');
-    console.log(db.prepare('SELECT * FROM crossOrders').all());
+    
+}
+
+exports.deleteCrossOrder = function (crossOrderIndex) {
+    return deleteCrossOrderLocal(crossOrderIndex);
 }
 
 //CHECK 
