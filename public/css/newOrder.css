@@ -1,44 +1,49 @@
 #row1,
 #content,
-#newOrderContainer{
+#newOrderContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#row1{
+#row1 {
     gap: 30px;
     width: 1400px;
 }
 
-#getProductsForm{
+#getProductsForm {
     display: flex;
     gap: 20px;
     align-items: center;
 }
 
-
-input, select{
+input,
+select {
     font-family: var(--font-family);
     border: 3px solid #e0dedc88;
     backdrop-filter: blur(20px);
 }
 
-input, select{
+input,
+select {
     font-size: 15px;
     font-weight: 300;
     border-radius: 5px;
 }
-input[type="text"], input[type="decimal"], input[type="number"], input[type="date"]{
+
+input[type="text"],
+input[type="decimal"],
+input[type="number"],
+input[type="date"] {
     height: 30px;
 }
 
-select{
+select {
     height: 40px;
 }
- 
 
-#createOrderForm input[type="submit"]{
+
+#createOrderForm input[type="submit"] {
     background-color: var(--background-color);
     color: var(--text-color);
     border-radius: 5px;
@@ -50,42 +55,84 @@ select{
     display: flex;
 }
 
-input[type="submit"]:hover{
+
+
+#table-scroll {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: var(--text-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--background-color); 
+    border-radius: 10px;
+}
+
+
+
+input[type="submit"]:hover {
     cursor: pointer;
 }
 
-#createOrderForm{
+#createOrderForm {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    input[type="text"], input[type="decimal"], input[type="number"]{
+
+    input[type="text"],
+    input[type="decimal"],
+    input[type="number"] {
         padding-left: 10px;
     }
 }
 
-#selectContainer{
+#selectContainer {
     display: flex;
     gap: 20px;
     align-items: center;
 }
 
-#datesField{
+#datesField {
     display: flex;
     gap: 20px;
     align-items: center;
     font-weight: 500;
 }
 
-th{
-    text-align: center;
+#searchIco {
+    width: 20px;
+    height: 20px;
+    padding: 5px;
+    background-color: var(--background-color);
+    border-radius: 5px;
+    border: 3px solid #e0dedc88;
+    backdrop-filter: blur(20px);
 }
 
-table{
+#search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#searchLabel {
+    width: 36px;
+    height: 36px;
+}
+
+table {
     border-spacing: 40px 10px;
 }
 
-#content{
+
+#content {
     display: flex;
     flex-direction: column;
     border: 5px solid #ebebebb2;
@@ -93,25 +140,30 @@ table{
     background-color: #a0a0a069;
     padding: 25px;
     border-radius: 10px;
-    margin-bottom: 50px;
+    gap: 20px;
     width: 1600px;
 }
 
-#startDate, #endDate{
+#startDate,
+#endDate {
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-.price, .quantity, .packaging, .totQty, .basedPrice{
+.price,
+.quantity,
+.packaging,
+.totQty,
+.basedPrice {
     width: 60px;
 }
 
-.id{
+.id,
+.laboratoryProductName {
     width: 130px;
 }
 
-.name{
+.name {
     width: 400px;
 }
-

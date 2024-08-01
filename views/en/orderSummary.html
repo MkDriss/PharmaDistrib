@@ -1,0 +1,64 @@
+{{>./en/header}}
+<div id='orderSummaryContainer'>
+        <div id='content'>
+                {{#orderSummary}}
+                <section class='hidden-up'>
+                        {{#accountInfos}}
+                        <div class='accountSection'>
+                                <img src='/{{accountPicture}}' alt='accountPicture' class='accountProfilePicture'>
+                                <div class='accountInfos'>
+                                        <div class="accountNames">
+                                                <span>{{accountName}}</span>
+                                                <span>{{accountLastName}}</span>
+                                        </div>
+                                        <div class="accountAdress">
+                                                <span>{{accountAdress}}</span>
+                                                <span> {{accountzipCode}}</span>
+                                                <span>{{accountCity}}</span>
+                                        </div>
+                                </div>
+                        </div>
+                        {{/accountInfos}}
+                        <table id='productTable' class='productTable'>
+                                <tr class='firstRow'>
+                                        <th>EAN13</th>
+                                        <th>Laboratory</th>
+                                        <th>Name</th>
+                                        <th>Packaging</th>
+                                        <th>Qty</th>
+                                        <th>Price €</th>
+                                        <th>Based Price</th>
+                                </tr>
+                                {{#products}}
+                                <tr class='{{laboratoryName}}' style='display: table-row;' id='{{ean13}}'>
+                                        <td class='tableContent'><input type='text' class='id' value='{{ean13}}'
+                                                        readonly name='ean13'>
+                                        </td>
+                                        <td class='tableContent'><input type='text' class='laboratoryProductName'
+                                                        value='{{laboratoryName}}' readonly name='laboratoryName'>
+                                        </td>
+                                        <td class='tableContent'><input type='text' class='name' value='{{productName}}'
+                                                        readonly name='productName'></td>
+                                        <td class='tableContent'><input type='text' class='packaging'
+                                                        value='{{packaging}}' readonly name='packaging'></td>
+                                        <td class='tableContent'><input type='number' class='quantity'
+                                                        value='{{quantity}}' name='quantity' readonly></td>
+                                        <td class='tableContent'><input type='text' class='price' value='{{price}}'
+                                                        readonly name='price'>
+                                        </td>
+
+                                        <td class='tableContent'><input type='number' class='basedPrice'
+                                                        value='{{basedPrice}}' name='basedPrice' readonly></td>
+                                </tr>
+                                {{/products}}
+                        </table>
+                        <div class='totalPrice'>Total Price: {{totalPrice}} €</div>
+                        <hr>
+
+                </section>
+                {{/orderSummary}}
+        </div>
+</div>
+
+
+{{>./en/footer}}

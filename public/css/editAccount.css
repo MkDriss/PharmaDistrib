@@ -25,7 +25,6 @@
     width: 124px;
     height: 124px;
     border-radius: 10px;
-    background-color: var(--secondary-background-color);
     object-fit: cover;
 }
 
@@ -46,7 +45,6 @@
     padding-left: 10px;
     padding-right: 10px;
     height: 40px;
-    gap: 20px;
     font-size: 15px;
     font-weight: 500;
     margin: 10px 0px;
@@ -112,10 +110,7 @@
     width: 230px;
 }
 
-#buttonSection {
-    display: flex;
-}
-
 #editPicture:hover {
     cursor: pointer;
 }
+

@@ -12,7 +12,7 @@ const fileList = fs.readdirSync(directoryPath);
 db.prepare('DROP TABLE IF EXISTS products').run();
 console.log('Products table dropped');
 db.prepare('CREATE TABLE IF NOT EXISTS products (ean13 INT PRIMARY KEY,' +
-      'laboratoryName TEXT, productName TEXT, price FLOAT, packaging TEXT, qtyMin TEXT)').run();
+      'laboratoryName TEXT, productName TEXT, price FLOAT, packaging INT, qtyMin INT)').run();
 db.prepare('DROP TABLE IF EXISTS Laboratories').run();
 
 let loadProducts = function (filename) {

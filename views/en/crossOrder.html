@@ -1,111 +1,99 @@
 {{>./en/header}}
-
-<script>
-    function showProducts(element) {
-        let laboratory = element.value;
-        let products = document.getElementsByClassName("productTable")[0].getElementsByTagName("tr");
-        if (laboratory === "all") {
-            for (let i = 0; i < products.length; i++) {
-                products[i].style.display = "table-row";
-            }
-        } else {
-            for (let i = 0; i < products.length; i++) {
-                if (products[i].classList.value === (laboratory) || products[i].classList.contains("firstRow")) {
-                    products[i].style.display = "table-row";
-                } else {
-                    products[i].style.display = "none";
-                }
-            }
-        }
-    }
-
-    function updateQuantity(productId, originalQty) {
-        let product = document.getElementById(productId);
-        let quantity = product.getElementsByClassName("quantity")[0].value;
-        if (quantity < 0) {
-            product.getElementsByClassName("quantity")[0].value = 0;
-            alert("La quantité ne peut pas être négative");
-            return;
-        }
-        let packaging = product.getElementsByClassName("packaging")[0].value;
-        let price = product.getElementsByClassName("price")[0].value;
-        product.getElementsByClassName("totQty")[0].value = parseInt(originalQty) + parseInt((quantity * packaging));
-        console.log(product.getElementsByClassName("totQty")[0].value + " " + quantity + " " + packaging + " " + price);
-        let basedPrice = product.getElementsByClassName("basedPrice")[0].value = ((parseInt(product.getElementsByClassName("totQty")[0].value)) / packaging) * price;
-    }
-</script>
 {{#order}}
-<div id="newOrderContainer">
-    <div id="content">
-        <div class="title">Order n°{{orderIndex}}</div>
-        <div id="row1">
-            {{#state}}
-            <form action="/en/createCrossOrder/{{orderIndex}}" id="createOrderForm" method="post">
-                <div id="selectContainer">
-                    <select name="laboratorySelect" id="laboratorySelect" required onchange="showProducts(this)">
-                        <option name="laboratory" id="laboratory" value="None">Select a laboratory</option>
-                        {{#laboratories}}
-                        <option name="laboratory" id="{{laboratoryName}}" value="{{laboratoryName}}">
-                            {{laboratoryName}}</option>
-                        {{/laboratories}}
-                        <option name="allProducts" value="all">All Products</option>
-                    </select>
-                    <div id="datesField">
-                        <div id="startDate">
-                            <label for="dateStartField">Open Date</label>
-                            <input type="date" name="dateStartField" id="dateStartField" value="{{openDate}}"
-                                readonly>
-                        </div>
-                        <div id="endDate">
-                            <label for="dateEndField">Close Date</label>
-                            <input type="date" name="dateEndField" id="dateEndField" value="{{closeDate}}" readonly>
+<section class='hidden-up'>
+    <div id='newOrderContainer'>
+        <div id='content'>
+            <div class='title'>Order n°{{orderIndex}}</div>
+            <div id='row1'>
+                {{#state}}
+                <form action='/en/updateCrossOrder/{{orderIndex}}' id='updateOrderForm' method='post'>
+                    <div id='selectContainer'>
+                        <select name='laboratorySelect' id='laboratorySelect' required onchange='showProducts(this)'
+                            title="laboratorySelector">
+                            <option name='laboratory' id='laboratory' value='None'>Select a laboratory</option>
+                            {{#laboratories}}
+                            <option name='laboratory' id='{{laboratoryName}}' value='{{laboratoryName}}'>
+                                {{laboratoryName}}</option>
+                            {{/laboratories}}
+                            <option name='allProducts' value='all'>All Products</option>
+                        </select>
+                        <div id='datesField'>
+                            <div id='startDate'>
+                                <label for='dateStartField'>Open Date</label>
+                                <input type='date' name='dateStartField' id='dateStartField' value='{{openDate}}'
+                                    readonly>
+                            </div>
+                            <div id='endDate'>
+                                <label for='dateEndField'>Close Date</label>
+                                {{#owner}}
+                                <input type='date' name='dateEndField' id='dateEndField' value='{{closeDate}}'>
+                                {{/owner}}
+                                {{^owner}}
+                                <input type='date' name='dateEndField' id='dateEndField' value='{{closeDate}}' readonly>
+                                {{/owner}}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <table id="" class="productTable">
-                    <tr class="firstRow">
-                        <th>EAN13</th>
-                        <th>Laboratory</th>
-                        <th>Name</th>
-                        <th>Packaging</th>
-                        <th>Qty</th>
-                        <th>Price €</th>
-                        <th>total Qty</th>
-                        <th>Based Price</th>
-                    </tr>
-                    {{#products}}
-                    <tr class="{{laboratoryName}}" style="display: table-row;" id="{{ean13}}">
-                        <td class="tableContent"><input type="text" class="id" value="{{ean13}}" readonly name="ean13">
-                        </td>
-                        <td class="tableContent"><input type="text" class="laboratoryProductName"
-                                value="{{laboratoryName}}" readonly name="laboratoryName">
-                        </td>
-                        <td class="tableContent"><input type="text" class="name" value="{{productName}}" readonly
-                                name="productName"></td>
-                        <td class="tableContent"><input type="text" class="packaging" value="{{packaging}}" readonly
-                                name="packaging"></td>
-                        <td class="tableContent"><input type="number" class="quantity" value="{{quantity}}" name="quantity"
-                                onchange="updateQuantity('{{ean13}}', '{{totQty}}')"></td>
-                        <td class="tableContent"><input type="text" class="price" value="{{price}}" readonly
-                                name="price">
-                        </td>
-                        <td class="tableContent"><input type="number" class="totQty" value="{{totQty}}" name="totQty"
-                                readonly>
-                        </td>
-                        <td class="tableContent"><input type="number" class="basedPrice" value="{{basedPrice}}"
-                                name="basedPrice" readonly></td>
-                    </tr>
-                    {{/products}}
-                </table>
-                <div>
-                    <input type="submit" value="Confirm">
-                    <a href="/en/accounts">Cancel</a>
-                </div>
-            </form>
-            {{/state}}
+                    <div id='table-scroll'>
+                        <table class='productTable'>
+                            <tr class='firstRow'>
+                                <th>EAN13</th>
+                                <th>Laboratory</th>
+                                <th>Name</th>
+                                <th>Packaging</th>
+                                <th>Qty</th>
+                                <th>Price €</th>
+                                <th>total Qty</th>
+                                <th>Based Price</th>
+                            </tr>
+                            {{#products}}
+                            <tr class='{{laboratoryName}}' style='display: table-row;' id='{{ean13}}'>
+                                <td class='tableContent'><input type='text' class='id' value='{{ean13}}' readonly
+                                        name='ean13'>
+                                </td>
+                                <td class='tableContent'><input type='text' class='laboratoryProductName'
+                                        value='{{laboratoryName}}' readonly name='laboratoryName'>
+                                </td>
+                                <td class='tableContent'><input type='text' class='name' value='{{productName}}'
+                                        readonly name='productName'></td>
+                                <td class='tableContent'><input type='text' class='packaging' value='{{packaging}}'
+                                        readonly name='packaging'></td>
+                                <td class='tableContent'><input type='number' class='quantity' value='{{quantity}}'
+                                        name='quantity' onchange="updateQuantity('{{ean13}}', '{{totQty}}')"></td>
+                                <td class='tableContent'><input type='text' class='price' value='{{price}}' readonly
+                                        name='price'>
+                                </td>
+                                <td class='tableContent'><input type='number' class='totQty' value='{{totQty}}'
+                                        name='totQty' readonly>
+                                </td>
+                                <td class='tableContent'><input type='number' class='basedPrice' value='{{basedPrice}}'
+                                        name='basedPrice' readonly></td>
+                            </tr>
+                            {{/products}}
+                        </table>
+                    </div>
+                    <div id="sumbitSection">
+                        {{#owner}}
+                        <input type='submit' value='Close' formaction='/en/closeOrder/{{orderIndex}}' id='closeOrderBtn'
+                            class="button">
+                        <input type='submit' value='Update' formaction='/en/updateCrossOrder/{{crossOrderIndex}}'
+                            id='updateCrossOrderBtn' class='button'>
+                        <input type='submit' value='Delete' formaction='/en/deleteOrder/{{orderIndex}}'
+                            id="deleteCrossOrderBtn" class='button'>
+                        {{/owner}}
+                        {{^owner}}
+                        <input type='submit' value='Update' formaction='/en/updateCrossOrder/{{crossOrderIndex}}'
+                        id='updateCrossOrderBtn'  class='button'>
+                        <input type='submit' value='Delete' formaction='/en/deleteCrossOrder/{{crossOrderIndex}}'
+                            id="deleteCrossOrderBtn" class="button">
+                        {{/owner}}
+                    </div>
+                </form>
+                {{/state}}
+            </div>
         </div>
     </div>
-</div>
+</section>
 {{/order}}
 
 {{^order}}

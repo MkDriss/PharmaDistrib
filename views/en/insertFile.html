@@ -1,68 +1,51 @@
 {{>./en/header}}
-<script>
-    function showDiv(divId, element) {
-        if (element.value == "addLaboratory") {
-            document.getElementById(divId).style.display = "block";
-        }
-        else {
-            document.getElementById(divId).style.display = "none";
-        }
-    }
-
-    function checkDate() {
-        let startDate = document.getElementById("dateStartField")
-        let endDate = document.getElementById("dateEndField")
-        if (startDate.value > endDate.value) {
-            alert("The start date must be before the end date")
-            endDate.value = startDate
-        }
-    }
-</script>
-
-
-<div id="newOrderContainer">
-    <div id="content">
-        <span id="title">Insert Laboratory File</span>
-        <form action="/en/insertFile" method="post" id="insertFileForm" enctype="multipart/form-data">
-            <div id="upperForm">
-                <div id="infoSection">
-                    <input type="text" name="nameField" id="nameField" placeholder="Name" required>
-                    <select name="laboratorySelect" id="laboratorySelect" onchange="showDiv('newLaboratory',this)"
-                        required>
-                        <option name="laboratory" id="laboratory" value="None">Select a Laboratory</option>
-                        {{#laboratories}}
-                        <option name="laboratory" id="{{laboratory}}" value="{{laboratory}}">
-                            {{laboratory}}</option>
-                        {{/laboratories}}
-                        <option name="addLaboratory" id="addLaboratory" value="addLaboratory">New Laboratory</option>
-                        <input type="text" name="newLaboratory" id="newLaboratory" placeholder="New Laboratory"
-                            style="display: none;">
-                    </select>
-                </div>
-                <div id="dateSection">
-                    <div class="datePannel">
-                        <span>Start Date</span>
-                        <input type="date" name="dateStartField" id="dateStartField" value="{{currentDate}}" onchange="checkDate()" required>
+<section class="hidden-up">
+    <div id='newOrderContainer'>
+        <div id='content'>
+            <span id='title'>Insert Laboratory File</span>
+            <form action='/en/insertFile' method='post' id='insertFileForm' enctype='multipart/form-data'>
+                <div id='upperForm'>
+                    <div id='infoSection'>
+                        <input type='text' name='nameField' id='nameField' placeholder='Name' required>
+                        <select name='laboratorySelect' id='laboratorySelect' onchange="showDiv('newLaboratory',this)"
+                            required>
+                            <option name='laboratory' id='laboratory' value='None'>Select a Laboratory</option>
+                            {{#laboratories}}
+                            <option name='laboratory' id='{{laboratory}}' value='{{laboratory}}'>
+                                {{laboratory}}</option>
+                            {{/laboratories}}
+                            <option name='addLaboratory' id='addLaboratory' value='addLaboratory'>New Laboratory
+                            </option>
+                            <input type='text' name='newLaboratory' id='newLaboratory' placeholder='New Laboratory'
+                                style='display: none;'>
+                        </select>
                     </div>
-                    <div class="datePannel">
-                        <span>End Date</span>
-                        <input type="date" name="dateEndField" id="dateEndField" onchange="checkDate()" required>
+                    <div id='dateSection'>
+                        <div class='datePannel'>
+                            <span>Start Date</span>
+                            <input type='date' name='dateStartField' id='dateStartField' value='{{currentDate}}'
+                                onchange='checkDate()' required>
+                        </div>
+                        <div class='datePannel'>
+                            <span>End Date</span>
+                            <input type='date' name='dateEndField' id='dateEndField' onchange='checkDate()' required>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div id="bottomForm">
-                <div id="fileSection">
-                    <input type="file" accept="file/csv" name="fileField" id="fileField" hidden>
-                    <label for="fileField" id="labelfileField">
-                        Insert File
-                    </label>
-                    <span id="fileAccepted">Accept only .csv files</span>
+                <div id='bottomForm'>
+                    <div id='fileSection'>
+                        <input type='file' accept='file/csv' name='fileField' id='fileField' hidden>
+                        <label for='fileField' id='labelfileField'>
+                            Insert File
+                        </label>
+                        <span id='fileAccepted'>Accept only .csv files</span>
+                    </div>
+                    <div id='submitSection'>
+                        <input type='submit' value='Create' id='insertFileBtn'>
+                    </div>
                 </div>
-                <div id="submitSection">
-                    <input type="submit" value="Create" id="insertFileBtn">
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
+</section>
 {{>./en/footer}}
