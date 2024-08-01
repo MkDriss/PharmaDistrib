@@ -144,8 +144,7 @@ exports.getOrders = function () {
     return db.prepare('SELECT * FROM orders ORDER BY orderIndex DESC').all();
 }
 
-exports.getCrossOrderFromUserId = function(ownerIndex) {
-    console.log(ownerIndex);
+exports.getCrossOrderFromUserId = function (ownerIndex) {
     return db.prepare('SELECT * FROM crossOrders INNER JOIN orders ON crossOrders.originalOrderIndex = orders.orderIndex WHERE crossOrders.crossOrderOwner = ?').all(ownerIndex);
 }
 
@@ -215,9 +214,16 @@ exports.getOrderSummary = function (orderIndex) {
     for (let accountIndex = 0; accountIndex < accountsList.length; accountIndex++) {
         let productsList = getProducts.all(orderIndex, accountsList[accountIndex].crossOrderOwner);
         let accountSummary = {
-            "account": accounts.getName(accountsList[accountIndex].crossOrderOwner).userName,
-            "products": [],
-            "totalPrice": 0
+            'accountInfos': {
+                'accountName': accounts.getName(accountsList[accountIndex].crossOrderOwner).userName,
+                'accountLastName': accounts.getLastName(accountsList[accountIndex].crossOrderOwner).userLastName,
+                'accountAdress': accounts.getAdress(accountsList[accountIndex].crossOrderOwner).adress,
+                'accountCity': accounts.getCity(accountsList[accountIndex].crossOrderOwner).city,
+                'accountzipCode': accounts.getPostalCode(accountsList[accountIndex].crossOrderOwner).zipCode,
+                'accountPicture': accounts.getProfilePicture(accountsList[accountIndex].crossOrderOwner).profilePicture,
+            },
+            'products': [],
+            'totalPrice': 0
         }
         // fill products with product information
         for (let index = 0; index < productsList.length; index++) {
@@ -237,7 +243,7 @@ exports.getCrossOrderIndexFromOrderIndex = function (orderIndex, ownerIndex) {
     return db.prepare('SELECT crossOrderIndex FROM crossOrders WHERE originalOrderIndex = ? AND crossOrderOwner = ?').get(orderIndex, ownerIndex)['crossOrderIndex'];
 }
 
-exports.getLaboratoriesFromCrossOrder = function (crossOrderIndex){
+exports.getLaboratoriesFromCrossOrder = function (crossOrderIndex) {
     return db.prepare('SELECT DISTINCT laboratoryName FROM productInventory INNER JOIN products ON productInventory.productIndex = products.ean13 WHERE crossOrderIndex = ?').all(crossOrderIndex);
 }
 
@@ -265,15 +271,15 @@ exports.setState = function (orderIndex, state) {
     db.prepare('UPDATE orders SET state = ? WHERE orderIndex = ?').run(state, orderIndex);
 }
 
-exports.updateCrossOrder = function(crossOrderIndex, productsList, closeDate){
+exports.updateCrossOrder = function (crossOrderIndex, productsList, closeDate) {
     //Check if the the productsList is empty
-    if(productsList.length == 0){
+    if (productsList.length == 0) {
         //Get the crossOrderOwner Id
         let crossOrderOwner = db.prepare('SELECT crossOrderOwner FROM crossOrders WHERE crossOrderIndex = ?').get(crossOrderIndex).crossOrderOwner;
         //Get the orderOwner Id
         let orderOwner = db.prepare('SELECT ownerIndex FROM orders WHERE orderIndex = (SELECT originalOrderIndex FROM crossOrders WHERE crossOrderIndex = ?)').get(crossOrderIndex).ownerIndex;
         //Check if the crossOrderOwner is the same as the orderOwner, if yes delete the order, else delete the crossOrder
-        if(crossOrderOwner == orderOwner){
+        if (crossOrderOwner == orderOwner) {
             return deleteOrderLocal(orderOwner);
         }
         return deleteCrossOrderLocal(crossOrderIndex);
@@ -294,7 +300,7 @@ exports.updateCrossOrder = function(crossOrderIndex, productsList, closeDate){
                 crossOrders[indexCrossOrder].productInventory = productsList;
                 break;
             }
-            
+
         }
         fs.writeFileSync('./json/crossOrders.json', JSON.stringify(crossOrders, null, 2), function (err) {
             if (err) throw err;
@@ -323,8 +329,8 @@ function updateOrderDate(orderIndex, date) {
                 orders[indexOrder].closeDate = date;
                 break;
             }
-            
-            
+
+
         }
         fs.writeFileSync('./json/orders.json', JSON.stringify(orders, null, 2), function (err) {
             if (err) throw err;
@@ -349,7 +355,7 @@ function deleteOrderLocal(orderIndex) {
     db.prepare('DELETE FROM orders WHERE orderIndex = ?').run(orderIndex);
 
     //delete the order from the json file
-    
+
     fs.readFile('./json/crossOrders.json', (err, data) => {
         if (err) throw err;
         let crossOrders = JSON.parse(data);
@@ -419,7 +425,7 @@ function deleteCrossOrderLocal(crossOrderIndex) {
             console.log(err);
         });
     });
-    
+
 }
 
 exports.deleteCrossOrder = function (crossOrderIndex) {

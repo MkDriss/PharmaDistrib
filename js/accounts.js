@@ -79,6 +79,25 @@ exports.getName = function (id) {
       return db.prepare('SELECT username FROM user WHERE id = ?').get(id);
 }
 
+exports.getProfilePicture = function (id) {
+      return db.prepare('SELECT profilePicture FROM user WHERE id = ?').get(id);
+}
+
+exports.getLastName = function (id) {
+      return db.prepare('SELECT userLastName FROM user WHERE id = ?').get(id);
+}
+
+exports.getAdress = function (id) {
+      return db.prepare('SELECT adress FROM user WHERE id = ?').get(id);
+}
+
+exports.getCity = function (id) {
+      return db.prepare('SELECT city FROM user WHERE id = ?').get(id);
+}
+exports.getPostalCode = function (id) {
+      return db.prepare('SELECT zipCode FROM user WHERE id = ?').get(id);
+}
+
 exports.list = function () {
       return db.prepare('SELECT * FROM user').all();
 }
