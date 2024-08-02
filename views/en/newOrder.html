@@ -23,7 +23,8 @@
                             </div>
                             <div id='endDate'>
                                 <label for='dateEndField'>Close Date</label>
-                                <input type='date' name='dateEndField' id='dateEndField' value='{{endDate}}' required onchange='checkDate()'>
+                                <input type='date' name='dateEndField' id='dateEndField' value='{{endDate}}' required
+                                    onchange='checkDate()'>
                             </div>
                         </div>
                         <div id='search'>
@@ -74,7 +75,10 @@
                             </tbody>
                         </table>
                     </div>
-                    <input type='submit' value='Confirm'>
+                    <div id="submitSection">
+                        <input type='submit' value='Confirm' class="button" id="confirmBtn">
+                        <input type="submit" value="Cancel" class="button" id="cancelBtn" formaction="/en/previousUrl">
+                    </div>
                 </form>
             </div>
         </div>

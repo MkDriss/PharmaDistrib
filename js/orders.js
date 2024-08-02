@@ -267,9 +267,26 @@ exports.updateOrderState = function (id, state) {
     db.prepare('UPDATE orders SET state = ? WHERE id = ?').run(state, id);
 }
 
-exports.setState = function (orderIndex, state) {
-    db.prepare('UPDATE orders SET state = ? WHERE orderIndex = ?').run(state, orderIndex);
+exports.updateOrderState = function () {
+    fs.readFile('./json/orders.json', (err, data) => {
+        if (err) throw err;
+        let ordersList = JSON.parse(data);
+        for (let indexOrder = 0; indexOrder < ordersList.length; indexOrder++) {
+            if ((new Date(ordersList[indexOrder].closeDate) - new Date()) < 0){
+                db.prepare('UPDATE orders SET state = ? WHERE orderIndex = ?').run(0, ordersList[indexOrder].orderIndex);
+                ordersList[indexOrder].state = 0;
+            } else {
+                db.prepare('UPDATE orders SET state = ? WHERE orderIndex = ?').run(1, ordersList[indexOrder].orderIndex);
+                ordersList[indexOrder].state = 1;
+            }
+        }
+        fs.writeFileSync('./json/orders.json', JSON.stringify(ordersList, null, 2), function (err) {
+            if (err) throw err;
+            console.log(err);
+        });
+    })
 }
+
 
 exports.updateCrossOrder = function (crossOrderIndex, productsList, closeDate) {
     //Check if the the productsList is empty
@@ -311,8 +328,26 @@ exports.updateCrossOrder = function (crossOrderIndex, productsList, closeDate) {
 }
 
 exports.closeOrder = function (orderIndex) {
-    db.prepare('UPDATE orders SET closeDate = ? WHERE orderIndex = ?').run(new Date().toISOString().slice(0, 19).replace('T', ' '), orderIndex);
+    let closeDate = now();
+    console.log(closeDate)
+    db.prepare('UPDATE orders SET closeDate = ? WHERE orderIndex = ?').run(closeDate, orderIndex);
     db.prepare('UPDATE orders SET state = ? WHERE orderIndex = ?').run(0, orderIndex);
+
+    fs.readFile('./json/orders.json', (err, data) => {
+        if (err) throw err;
+        let orders = JSON.parse(data);
+        for (let indexOrder = 0; indexOrder < orders.length; indexOrder++) {
+            if (orders[indexOrder].orderIndex == orderIndex) {
+                orders[indexOrder].state = 0;
+                orders[indexOrder].closeDate = closeDate;
+                break;
+            }
+        }
+        fs.writeFileSync('./json/orders.json', JSON.stringify(orders, null, 2), function (err) {
+            if (err) throw err;
+            console.log(err);
+        });
+    });
     console.log('Order closed');
 }
 
@@ -434,6 +469,26 @@ exports.deleteCrossOrder = function (crossOrderIndex) {
 
 //CHECK 
 
-exports.hasACrossOrder = function (orderIndex, userIndex) {
+exports.hasCrossOrder = function (orderIndex, userIndex) {
     return db.prepare('SELECT COUNT(*) FROM crossOrders WHERE originalOrderIndex = ? AND crossOrderOwner = ?').get(orderIndex, userIndex)['COUNT(*)'];
+}
+
+// FUNCTIONS
+
+function now(nBdays = 0) {
+    let currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + nBdays);
+    let day = currentDate.getDate();
+    let month = currentDate.getMonth() + 1;
+    let year = currentDate.getFullYear();
+
+    if (day < 10) {
+        day = '0' + day;
+    }
+    if (month < 10) {
+        month = '0' + month;
+    }
+
+    let date = year + '-' + month + '-' + day;
+    return date;
 }

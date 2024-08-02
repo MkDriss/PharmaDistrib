@@ -5,6 +5,10 @@
     gap: 20px;
 }
 
+#accountContainer {
+    margin: 50px 0px;
+}
+
 #column1,
 #column2,
 #unverifiedAccountsContainer {
@@ -15,7 +19,6 @@
     background-color: #a0a0a069;
     padding: 25px;
     border-radius: 10px;
-    margin-bottom: 20px;
 }
 
 #column1 {

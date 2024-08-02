@@ -14,10 +14,6 @@
     background-color: #a0a0a069;
     border-radius: 10px;
     gap: 20px;
-    #content {
-    border-radius: 10px;
-    width: 1600px;
-    }
 }
 
 #selectContainer {
@@ -75,6 +71,11 @@
 #table-scroll{
     overflow-y: auto;
     max-height: 500px;
+}
+
+#cancelBtn{
+    color: var(--background-color);
+    background-color: var(--text-color);
 }
 
 input,

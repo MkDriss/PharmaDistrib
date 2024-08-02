@@ -33,6 +33,10 @@
                                 {{/owner}}
                             </div>
                         </div>
+                        <div id="sumbitSection">
+                            <input type="submit" value="Cancel" class="button" id="cancelBtn"
+                                formaction="/en/previousUrl">
+                        </div>
                     </div>
                     <div id='table-scroll'>
                         <table class='productTable'>
@@ -74,8 +78,8 @@
                     </div>
                     <div id="sumbitSection">
                         {{#owner}}
-                        <input type='submit' value='Close' formaction='/en/closeOrder/{{orderIndex}}' id='closeOrderBtn'
-                            class="button">
+                        <input type='submit' value='Close' formaction='/en/orderSummary/{{orderIndex}}'
+                            id='closeOrderBtn' class="button">
                         <input type='submit' value='Update' formaction='/en/updateCrossOrder/{{crossOrderIndex}}'
                             id='updateCrossOrderBtn' class='button'>
                         <input type='submit' value='Delete' formaction='/en/deleteOrder/{{orderIndex}}'
@@ -83,12 +87,86 @@
                         {{/owner}}
                         {{^owner}}
                         <input type='submit' value='Update' formaction='/en/updateCrossOrder/{{crossOrderIndex}}'
-                        id='updateCrossOrderBtn'  class='button'>
+                            id='updateCrossOrderBtn' class='button'>
                         <input type='submit' value='Delete' formaction='/en/deleteCrossOrder/{{crossOrderIndex}}'
                             id="deleteCrossOrderBtn" class="button">
                         {{/owner}}
                     </div>
                 </form>
+                {{/state}}
+                {{^state}}
+                <div id='updateOrderForm'>
+                    <div id='selectContainer'>
+                        <select name='laboratorySelect' id='laboratorySelect' required onchange='showProducts(this)'
+                            title="laboratorySelector">
+                            <option name='laboratory' id='laboratory' value='None'>Select a laboratory</option>
+                            {{#laboratories}}
+                            <option name='laboratory' id='{{laboratoryName}}' value='{{laboratoryName}}'>
+                                {{laboratoryName}}</option>
+                            {{/laboratories}}
+                            <option name='allProducts' value='all'>All Products</option>
+                        </select>
+                        <div id='datesField'>
+                            <div id='startDate'>
+                                <label for='dateStartField'>Open Date</label>
+                                <input type='date' name='dateStartField' id='dateStartField' value='{{openDate}}'
+                                    readonly>
+                            </div>
+                            <div id='endDate'>
+                                <label for='dateEndField'>Close Date</label>
+                                {{#owner}}
+                                <input type='date' name='dateEndField' id='dateEndField' value='{{closeDate}}'>
+                                {{/owner}}
+                                {{^owner}}
+                                <input type='date' name='dateEndField' id='dateEndField' value='{{closeDate}}' readonly>
+                                {{/owner}}
+                            </div>
+                        </div>
+                        <div id="sumbitSection">
+                            <form action="/en/previousUrl">
+                                <input type="submit" value="Cancel" class="button" id="cancelBtn">
+                            </form>
+                        </div>
+                    </div>
+                    <div id='table-scroll'>
+                        <table class='productTable'>
+                            <tr class='firstRow'>
+                                <th>EAN13</th>
+                                <th>Laboratory</th>
+                                <th>Name</th>
+                                <th>Packaging</th>
+                                <th>Qty</th>
+                                <th>Price €</th>
+                                <th>total Qty</th>
+                                <th>Based Price</th>
+                            </tr>
+                            {{#products}}
+                            <tr class='{{laboratoryName}}' style='display: table-row;' id='{{ean13}}'>
+                                <td class='tableContent'><input type='text' class='id' value='{{ean13}}' readonly
+                                        name='ean13'>
+                                </td>
+                                <td class='tableContent'><input type='text' class='laboratoryProductName'
+                                        value='{{laboratoryName}}' readonly name='laboratoryName'>
+                                </td>
+                                <td class='tableContent'><input type='text' class='name' value='{{productName}}'
+                                        readonly name='productName'></td>
+                                <td class='tableContent'><input type='text' class='packaging' value='{{packaging}}'
+                                        readonly name='packaging'></td>
+                                <td class='tableContent'><input type='number' class='quantity' value='{{quantity}}'
+                                        name='quantity' onchange="updateQuantity('{{ean13}}', '{{totQty}}')"></td>
+                                <td class='tableContent'><input type='text' class='price' value='{{price}}' readonly
+                                        name='price'>
+                                </td>
+                                <td class='tableContent'><input type='number' class='totQty' value='{{totQty}}'
+                                        name='totQty' readonly>
+                                </td>
+                                <td class='tableContent'><input type='number' class='basedPrice' value='{{basedPrice}}'
+                                        name='basedPrice' readonly></td>
+                            </tr>
+                            {{/products}}
+                        </table>
+                    </div>
+                </div>
                 {{/state}}
             </div>
         </div>

@@ -11,9 +11,23 @@
     backdrop-filter: blur(2px);
     background-color: #a0a0a069;
     border-radius: 10px;
-    gap: 50px;
     border-radius: 10px;
-    width: 1600px;
+    row-gap: 20px;
+}
+
+#buttons{
+    display: flex;
+    gap: 20px;
+}
+
+#cancelBtn{
+    color: var(--background-color);
+    background-color: var(--text-color);
+}
+
+#submitBtn{
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 
@@ -23,6 +37,7 @@ hr{
     height: 2px;
     border: none;
     border-radius: 10px;
+    margin: 50px 0px;
 }
 
 
@@ -42,6 +57,10 @@ input[type='decimal'],
 input[type='number'],
 input[type='date'] {
     height: 30px;
+}
+
+input[type='submit']:hover, input[type='button']:hover {
+    cursor: pointer;
 }
 
 table{
@@ -95,4 +114,10 @@ table{
 
 .totalPrice{
     margin-left: 40px;
+}
+.button{
+    width: 100px;
+    height: 40px;
+    font-weight: 500;
+    border-radius: 10px;
 }

@@ -13,7 +13,7 @@
                 </div>
                 <div id='table-scroll'>
                     {{#ordersList}}
-                    <a href='/en/order/{{orderIndex}}' class='row'>
+                    <a href='/en/crossOrder/{{crossOrderIndex}}' class='row'>
                         <span>{{orderIndex}}</span>
                         <span>{{openDate}}</span>
                         <span>{{closeDate}}</span>
@@ -45,6 +45,11 @@
                     </a>
                     {{/ordersList}}
                 </div>
+            </div>
+            <div id="sumbitSection">
+                <form action="/en/previousUrl">
+                    <input type="submit" value="Cancel" class="button" id="cancelBtn">
+                </form>
             </div>
         </div>
 

@@ -1,6 +1,9 @@
 {{>./en/header}}
 <div id='orderSummaryContainer'>
         <div id='content'>
+                <div class="title">
+                        Order Summary
+                </div>
                 {{#orderSummary}}
                 <section class='hidden-up'>
                         {{#accountInfos}}
@@ -54,9 +57,24 @@
                         </table>
                         <div class='totalPrice'>Total Price: {{totalPrice}} €</div>
                         <hr>
-
                 </section>
                 {{/orderSummary}}
+                <div>Global Amount : {{globalAmount}} €</div>
+                {{#state}}
+                <div id="buttons">
+                        <form action="/en/closeOrder/{{orderIndex}}" method="post">
+                                <input type='submit' value="Close" class="button" id="submitBtn"
+                                        formaction="/en/closeOrder/{{orderIndex}}">
+                        </form>
+                        <a href='/en/order/{{orderIndex}}'><input type='button' id='cancelBtn' value='Cancel'
+                                        class="button"></a>
+                </div>
+                {{/state}}
+                {{^state}}
+                <form action="/en/previousUrl">
+                        <input type="submit" value="Cancel" class="button" id="cancelBtn">
+                </form>
+                {{/state}}
         </div>
 </div>
 

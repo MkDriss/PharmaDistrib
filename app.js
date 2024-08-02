@@ -90,6 +90,10 @@ app.get('/:lang', (req, res) => {
 });
 
 app.get('/:lang/home', (req, res) => {
+    if (req.session.authenticated) {
+        req.session.previousPage = req.session.currentPage
+        req.session.currentPage = '/' + req.params.lang + '/home'
+    }
     res.render('./' + req.params.lang + '/home.html', { css: '/home.css' });
 })
 
@@ -104,6 +108,10 @@ app.get('/:lang/signup', (req, res) => {
 
 app.get('/:lang/account', (req, res) => {
     if (req.session.authenticated) {
+
+        req.session.previousPage = req.session.currentPage
+        req.session.currentPage = '/' + req.params.lang + '/account'
+
         let id = req.session.id;
         let account = accounts.get(id)
         let seeMoreBtn = false;
@@ -119,23 +127,35 @@ app.get('/:lang/account', (req, res) => {
         }
         let unverifiedAccounts = accounts.getUnverifiedAccounts();
         return res.render('./' + req.params.lang + '/account.html', {
-            css: '/account.css', account: account, admin: account.admin, 
-            unverifiedAccounts: unverifiedAccounts, orders: lastCrossOrdersList, seeMoreBtn : seeMoreBtn
+            css: '/account.css', account: account, admin: account.admin,
+            unverifiedAccounts: unverifiedAccounts, orders: lastCrossOrdersList, seeMoreBtn: seeMoreBtn
         });
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
 app.get('/:lang/crossOrder/:crossOrderIndex', (req, res) => {
     if (req.session.authenticated) {
+
         let crossOrderIndex = req.params.crossOrderIndex;
         let crossOrder = orders.getCrossOrder(crossOrderIndex)[0];
         let order = orders.getOrder(crossOrder.originalOrderIndex);
         order.crossOrderIndex = crossOrderIndex;
+        
+        if (order.ownerIndex === req.session.id && order.state === 0) {
+            return res.redirect('/' + req.params.lang + '/orderSummary/' + order.orderIndex);
+        }
+
+
+        req.session.previousPage = req.session.currentPage;
+        req.session.currentPage = '/' + req.params.lang + '/crossOrder/' + req.params.crossOrderIndex;
+        
+        
         let owner = false;
         if (order.ownerIndex === req.session.id) {
             owner = true;
         }
         let productsList = orders.getProductsListFromCrossOrderIndex(order.orderIndex, crossOrder.crossOrderIndex);
+        console.log(order.state)
         return res.render('./' + req.params.lang + '/crossOrder.html',
             {
                 css: '/crossOrder.css', laboratories: orders.getLaboratoriesFromCrossOrder(crossOrderIndex), orderIndex: order.orderIndex, order: order,
@@ -146,13 +166,14 @@ app.get('/:lang/crossOrder/:crossOrderIndex', (req, res) => {
 
 app.get('/:lang/orders', (req, res) => {
     if (req.session.authenticated) {
+
+        req.session.previousPage = req.session.currentPage
+        req.session.currentPage = '/' + req.params.lang + '/orders'
+
+        orders.updateOrderState();
         let order = orders.getOrders();
         for (let i = 0; i < order.length; i++) {
             order[i].ownerName = accounts.get(order[i].ownerIndex).userName;
-            if (new Date(order[i].closeDate) - new Date() < 0) {
-                order[i].state = 0;
-                orders.setState(order[i].orderIndex, 0)
-            }
         }
         return res.render('./' + req.params.lang + '/orders.html', { css: '/orders.css', ordersList: order });
     } res.redirect('/' + req.params.lang + '/signin')
@@ -160,18 +181,24 @@ app.get('/:lang/orders', (req, res) => {
 
 app.get('/:lang/insertFile', (req, res) => {
     if (req.session.authenticated) {
+        req.session.previousPage = req.session.currentPage
+        req.session.currentPage = '/' + req.params.lang + '/insertFile'
         return res.render('./' + req.params.lang + '/insertFile.html', { css: '/insertFile.css', currentDate: now() });
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
 app.get('/:lang/newOrder', (req, res) => {
     if (req.session.authenticated) {
+        req.session.previousPage = req.session.currentPage
+        req.session.currentPage = '/' + req.params.lang + '/newOrder'
         return res.render('./' + req.params.lang + '/newOrder.html', { css: '/newOrder.css', laboratories: products.getLaboratories(), products: products.list(), currentDate: now(), endDate: now(1) });
     } res.redirect('/' + req.params.lang + '/signin');
 });
 
 app.get('/:lang/editAccount', (req, res) => {
     if (req.session.authenticated) {
+        req.session.previousPage = req.session.currentPage
+        req.session.currentPage = '/' + req.params.lang + '/editAccount'
         let account = accounts.get(req.session.id);
         return res.render('./' + req.params.lang + '/editAccount.html', { css: '/editAccount.css', account: account });
     } res.redirect('/' + req.params.lang + '/signin')
@@ -181,34 +208,56 @@ app.get('/:lang/order/:orderIndex', (req, res) => {
     if (req.session.authenticated) {
         let orderIndex = req.params.orderIndex;
         let order = orders.getOrder(orderIndex);
-        let owner = false;
-        if (orders.hasACrossOrder(orderIndex, req.session.id)) {
+
+        req.session.previousPage = req.session.currentPage
+
+        if (orders.hasCrossOrder(orderIndex, req.session.id)) {
+
             let crossOrderIndex = orders.getCrossOrderIndexFromOrderIndex(orderIndex, req.session.id);
             return res.redirect('/' + req.params.lang + '/crossOrder/' + crossOrderIndex);
         }
+
+        
+        req.session.currentPage = '/' + req.params.lang + '/order/' + req.params.orderIndex
+
         let productsList = orders.getProductsListFromOrderIndex(orderIndex);
-        return res.render('./' + req.params.lang + '/order.html', { css: '/order.css', laboratories: products.getLaboratories(), orderIndex: orderIndex, order: order, products: productsList, owner: owner });
+        return res.render('./' + req.params.lang + '/order.html', { css: '/order.css', laboratories: products.getLaboratories(), orderIndex: orderIndex, order: order, products: productsList });
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
 app.get('/:lang/orderSummary/:orderIndex', (req, res) => {
     if (req.session.authenticated) {
+        req.session.previousPage = req.session.currentPage
+        req.session.currentPage = '/' + req.params.lang + '/orderSummary/' + req.params.orderIndex;
         let orderIndex = req.params.orderIndex;
         let order = orders.getOrder(orderIndex);
         if (order.ownerIndex === req.session.id) {
             let orderSummary = orders.getOrderSummary(orderIndex);
-            return res.render('./' + req.params.lang + '/orderSummary.html', { css: '/orderSummary.css', orderSummary: orderSummary });
+            let globalAmount = 0;
+            for (let i = 0; i < orderSummary.length; i++) {
+                globalAmount += orderSummary[i].totalPrice;
+            }
+            return res.render('./' + req.params.lang + '/orderSummary.html', { css: '/orderSummary.css', orderIndex: orderIndex, orderSummary: orderSummary, globalAmount: globalAmount, state: order.state });
         }
     } return res.redirect('/' + req.params.lang + '/signin');
 });
 
 app.get('/:lang/myOrders', (req, res) => {
     if (req.session.authenticated) {
+        req.session.previousPage = req.session.currentPage
+        req.session.currentPage = '/' + req.params.lang + '/myOrders'
         let ordersList = orders.getCrossOrderFromUserId(req.session.id);
-        for(let i = 0; i < ordersList.length; i++) {
+        console.log(ordersList)
+        for (let i = 0; i < ordersList.length; i++) {
             ordersList[i].ownerName = accounts.get(ordersList[i].ownerIndex).userName;
         }
         return res.render('./' + req.params.lang + '/myOrders.html', { css: '/myOrders.css', ordersList: ordersList });
+    } return res.redirect('/' + req.params.lang + '/signin');
+});
+
+app.get('/:lang/previousUrl', (req, res) => {
+    if (req.session.authenticated) {
+        return res.redirect(req.session.previousPage);
     } return res.redirect('/' + req.params.lang + '/signin');
 });
 
@@ -227,6 +276,8 @@ app.post('/:lang/signin', (req, res) => {
         req.session.email = email;
         req.session.username = accounts.get(req.session.id).userName;
         req.session.authenticated = true;
+        req.session.previousPage = req.headers.referer;
+        req.session.currentPage = req.headers.referer;
         if (accounts.get(req.session.id).admin === 1) {
             req.session.admin = true;
         } else { req.session.admin = false; }
@@ -466,12 +517,27 @@ app.post('/:lang/deleteCrossOrder/:crossOrderIndex', (req, res) => {
 });
 
 
-app.post('/:lang/closeOrder/:orderIndex', (req, res) => {
+app.post('/:lang/orderSummary/:orderIndex', (req, res) => {
     if (req.session.authenticated) {
         return res.redirect('/' + req.params.lang + '/orderSummary/' + req.params.orderIndex);
     } return res.redirect('/.' + req.params.lang + '/signin');
 });
 
+app.post('/:lang/closeOrder/:orderIndex', (req, res) => {
+    if (req.session.authenticated) {
+        let orderIndex = req.params.orderIndex;
+        if (orders.getOrder(orderIndex).ownerIndex === req.session.id) {
+            orders.closeOrder(orderIndex);
+            return res.redirect('/' + req.params.lang + '/orders');
+        }
+    } return res.redirect('/' + req.params.lang + '/signin');
+});
+
+app.post('/:lang/previousUrl', (req,res) => {
+    if (req.session.authenticated) {
+        return res.redirect(req.session.previousPage);
+    } return res.redirect('/' + req.params.lang + '/signin');
+})
 
 // LISTEN
 

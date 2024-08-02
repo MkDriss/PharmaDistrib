@@ -43,17 +43,7 @@ select {
 }
 
 
-#createOrderForm input[type="submit"] {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    border-radius: 5px;
-    height: 50px;
-    width: 150px;
-    font-size: 15px;
-    font-weight: 500;
-    border-radius: 10px;
-    display: flex;
-}
+
 
 
 
@@ -62,19 +52,6 @@ select {
     overflow-y: auto;
     overflow-x: hidden;
 }
-
-::-webkit-scrollbar {
-    width: 10px;
-    background-color: var(--text-color);
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--background-color); 
-    border-radius: 10px;
-}
-
-
 
 input[type="submit"]:hover {
     cursor: pointer;
@@ -127,6 +104,24 @@ input[type="submit"]:hover {
     height: 36px;
 }
 
+#cancelBtn{
+    background-color: var(--text-color);
+    color: var(--background-color);
+}
+
+
+#confirmBtn{
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+#submitSection{
+    display: flex;
+    gap: 20px;
+}
+
+
+
 table {
     border-spacing: 40px 10px;
 }
@@ -167,3 +162,13 @@ table {
 .name {
     width: 400px;
 }
+
+.button {
+    border-radius: 1àpx;
+    height: 40px;
+    width: 100px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 10px;
+}
+
