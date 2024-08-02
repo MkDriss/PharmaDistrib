@@ -3,6 +3,7 @@
     <div id='orderContainer'>
         <div id='content'>
             <span class='title'>Orders</span>
+            {{#hasOrders}}
             <div id='table'>
                 <div id='firstRow'>
                     <span>Number</span>
@@ -46,6 +47,10 @@
                     {{/ordersList}}
                 </div>
             </div>
+            {{/hasOrders}}
+            {{^hasOrders}}
+            <div>There is no orders yet</div>
+            {{/hasOrders}}
             <a href='/en/newOrder' id='newOrder'>New Order</a>
         </div>
     </div>

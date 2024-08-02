@@ -8,7 +8,6 @@
 
 #row1 {
     gap: 30px;
-    width: 1400px;
 }
 
 #getProductsForm {
@@ -34,18 +33,14 @@ select {
 input[type="text"],
 input[type="decimal"],
 input[type="number"],
-input[type="date"] {
+input[type="date"]{
     height: 30px;
 }
 
 select {
     height: 40px;
+    background-color: var(--text-color);
 }
-
-
-
-
-
 
 #table-scroll {
     max-height: 500px;
@@ -136,7 +131,6 @@ table {
     padding: 25px;
     border-radius: 10px;
     gap: 20px;
-    width: 1600px;
 }
 
 #startDate,

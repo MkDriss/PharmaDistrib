@@ -27,21 +27,6 @@
     "zipCode": "",
     "phone": "",
     "profilePicture": "account.svg",
-    "verified": 1
-  },
-  {
-    "id": "722370dc14408c823f751182de17208c7d5aeb8db85efcb7cd4e95a5a9abe25e",
-    "username": "marie",
-    "userLastName": "",
-    "email": "mtav@gmail.com",
-    "token": "7f89a188e9ab3648bc50316edf3722aff8fc7bfdb2076a08f8d62953665c26b005419918422de514536d5abf5a4d2a485baf8bd7c9afebc4a658b43b50a6494d626ff2ec74cfd2ffd0679e0d82ff4570860d5440c60d86e4396272cea5473c427e678d7f0674dd02eec0385f1dff42bbb2cd68a8776f08edc82c206699b5d6b2",
-    "password": "mtav",
-    "admin": 0,
-    "adress": "",
-    "city": "",
-    "zipCode": "",
-    "phone": "",
-    "profilePicture": "account.svg",
-    "verified": 1
+    "verified": 0
   }
 ]

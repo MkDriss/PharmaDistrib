@@ -1,17 +1,19 @@
 #accountContainer,
-#row2 {
+#row2,
+#row1 {
     display: flex;
     justify-content: center;
     gap: 20px;
 }
 
 #accountContainer {
+    flex-direction: column;
     margin: 50px 0px;
 }
 
 #column1,
 #column2,
-#unverifiedAccountsContainer {
+.bottomContainers {
     display: flex;
     flex-direction: column;
     border: 5px solid #ebebebb2;
@@ -188,9 +190,12 @@
     border-radius: 10px;
 }
 
-#column2,
-#unverifiedAccountsContainer {
+#column2 {
     width: 500px;
+}
+
+.bottomContainers{
+    width: 373px;
 }
 
 

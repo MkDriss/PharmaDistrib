@@ -145,7 +145,6 @@ app.get('/:lang/crossOrder/:crossOrderIndex', (req, res) => {
             return res.redirect('/' + req.params.lang + '/orderSummary/' + order.orderIndex);
         }
 
-
         req.session.previousPage = req.session.currentPage;
         req.session.currentPage = '/' + req.params.lang + '/crossOrder/' + req.params.crossOrderIndex;
         
@@ -172,10 +171,17 @@ app.get('/:lang/orders', (req, res) => {
 
         orders.updateOrderState();
         let order = orders.getOrders();
+        let hasOrders;
+        if (order.length > 0){
+            hasOrders = 1
+        } else {
+            hasOrders = 0
+        }
+        console.log(hasOrders)
         for (let i = 0; i < order.length; i++) {
             order[i].ownerName = accounts.get(order[i].ownerIndex).userName;
         }
-        return res.render('./' + req.params.lang + '/orders.html', { css: '/orders.css', ordersList: order });
+        return res.render('./' + req.params.lang + '/orders.html', { css: '/orders.css', ordersList: order, hasOrders : hasOrders});
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
