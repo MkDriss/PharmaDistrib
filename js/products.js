@@ -13,7 +13,8 @@ db.prepare('DROP TABLE IF EXISTS products').run();
 console.log('Products table dropped');
 db.prepare('CREATE TABLE IF NOT EXISTS products (ean13 INT PRIMARY KEY,' +
       'laboratoryName TEXT, productName TEXT, price FLOAT, packaging INT, qtyMin INT)').run();
-db.prepare('DROP TABLE IF EXISTS Laboratories').run();
+db.prepare('DROP TABLE IF EXISTS files').run();
+db.prepare('CREATE TABLE IF NOT EXISTS files (filename TEXT PRIMARY KEY)').run();
 
 let loadProducts = function (filename) {
       let insertProduct = db.prepare('INSERT INTO products VALUES (?, ?, ?, ?, ?, ?)');
@@ -39,6 +40,7 @@ let loadProducts = function (filename) {
 
 for (let i = 0; i < fileList.length; i++) {
       let file = fileList[i];
+      db.prepare('INSERT INTO files VALUES (?)').run(file);
       loadProducts(directoryPath + '/' + file);
 }
 
@@ -67,6 +69,10 @@ exports.getLaboratories = function () {
 
 exports.list = function () {
       return db.prepare('SELECT * FROM products').all();
+}
+
+exports.getFiles = function () {
+      return db.prepare('SELECT * FROM files').all();
 }
 
 //UPDATE

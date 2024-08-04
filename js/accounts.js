@@ -106,6 +106,10 @@ exports.getUnverifiedAccounts = function () {
       return db.prepare('SELECT * FROM user WHERE verified = 0').all();
 }
 
+exports.getLastAccounts = function(){
+      return db.prepare('SELECT * FROM user WHERE verified = 1 LIMIT 3').all();
+}
+
 // SET
 
 exports.setAdmin = function (id) {
