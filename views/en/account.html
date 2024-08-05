@@ -190,53 +190,60 @@
     {{#admin}}
     <section class='hidden-up'>
         <div id='row2'>
-            <div id="Accounts">
-                <div class="title">
-                    Accounts
+            <div id='unverifiedAccountsContainer' class="bottomContainers">
+                <div class='title'>Unverified Accounts</div>
+                {{#unverifiedAccounts}}
+                <div class='unverifiedAccountContent'>
+                    <img src='/account.svg' alt='defaultProfilePicture' class='unverifiedProfilePicture'>
+                    <div class='userInfoSection'>
+                        <div class='inputSection'><input type='text' value='{{userName}}' id='userName-{{id}}' readonly>
+                            <form action='/en/rejectAccount/{{token}}' method='post' class='rejectAccountForm'><input
+                                    type='image' src='/cross.svg' class='rejectBtn'></form>
+                        </div>
+                        <div class='inputSection'><input type='text' value='{{email}}' id='email-{{id}}' readonly>
+                            <form action='/en/verifyAccount/{{token}}' method='post' class='verifyAccountForm'><input
+                                    type='image' src='/check.svg' class='verifyBtn'></form>
+                        </div>
+                    </div>
                 </div>
-                <table>
-                    <tr>
-                        <th>Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Address</th>
-                        <th>Zip Code</th>
-                        <th>City</th>
-                        <th>Rôle</th>
-                    </tr>
-                    {{#lastAccounts}}
-                    <tr>
-                        <td>
-                            <input type="text" value="{{userName}}">
-                        </td>
-                        <td>
-                            <input type="text" value="{{userLastName}}">
-                        </td>
-                        <td>
-                            <input type="text" value="{{email}}">
-                        </td>
-                        <td>
-                            <input type="tel" value="{{phone}}">
-                        </td>
-                        <td>
-                            <input type="text" value="{{adress}}">
-                        </td>
-                        <td>
-                            <input type="text" value="{{zipCode}}">
-                        </td>
-                        <td>
-                            <input type="text" value="{{city}}">
-                        </td>
-                        <td>
-                            <input type="number" value="{{admin}}">
-                        </td>
-                    </tr>
-                    {{/lastAccounts}}
-                </table>
-                {{^lastAccounts}}
-                <span class='text'>There are no accounts yet</span>
+                {{/unverifiedAccounts}}
+                {{^unverifiedAccounts}}
+                <div>All accounts are verified</div>
+                {{/unverifiedAccounts}}
+            </div>
+            <div id="allAccountsContainer" class="bottomContainers">
+                <div class="title">Accounts</div>
+                {{#lastAccounts}}
+                <a href="/en/account-admin-view/{{id}}">
+                    <div class='allAccountsContent'>
+                        <img src='/{{profilePicture}}' alt='defaultProfilePicture' class='accountProfilePicture'>
+                        <div class='userInfoSection'>
+                            <div class='inputSection'><input type='text' value='{{userName}}' id='userName-{{id}}'
+                                    readonly>
+                            </div>
+                            <div class='inputSection'><input type='text' value='{{email}}' id='email-{{id}}' readonly>
+                            </div>
+                        </div>
+                    </div>
+                </a>
                 {{/lastAccounts}}
+                <a href='/en/allAccounts' id='allAccountsBtn'><input type="button" value="See More" id="SeeMoreAccountBtn"></a>
+            </div>
+            <div id="csvFiles" class="bottomContainers">
+                <div class="title">
+                    .CSV Files
+                </div>
+                {{#files}}
+                <div>
+                    <div>{{filename}}</div>
+                    <form action='/en/deleteFile/{{token}}' method='post' class='deleteFileForm'>
+                        <input type='image' src='/cross.svg' class='rejectBtn'>
+                    </form>
+                </div>
+                {{/files}}
+                {{^files}}
+                <div>There is no .csv files</div>
+                {{/files}}
             </div>
         </div>
     </section>
