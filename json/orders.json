@@ -5,6 +5,7 @@
     "openDate": "2024-08-02",
     "closeDate": "2024-08-03",
     "state": 0
+<<<<<<< HEAD
   },
   {
     "orderIndex": 3,
@@ -19,5 +20,7 @@
     "openDate": "2024-08-11",
     "closeDate": "2024-08-12",
     "state": 1
+=======
+>>>>>>> bf6075be236cba713904896b411e9adb6e338fe3
   }
 ]

@@ -8,8 +8,6 @@ const uploadProfilePicture = multer({ dest: 'public/profiles_pictures/' });
 const uploadCSVFiles = multer({ dest: './csv/' });
 
 const fs = require('fs');
-const { parse } = require('csv-parse');
-
 const app = express();
 
 
@@ -132,7 +130,11 @@ app.get('/:lang/account', (req, res) => {
             let unverifiedAccounts = accounts.getUnverifiedAccounts();
             return res.render('./' + req.params.lang + '/account.html', {
                 css: '/account.css', account: account, admin: account.admin, orders: lastCrossOrdersList, seeMoreBtn: seeMoreBtn,
+<<<<<<< HEAD
                 unverifiedAccounts: unverifiedAccounts, csvFiles: files, lastAccounts: lastAccounts
+=======
+                unverifiedAccounts: unverifiedAccounts, files: files, lastAccounts: lastAccounts
+>>>>>>> bf6075be236cba713904896b411e9adb6e338fe3
             });
         }
 
@@ -140,7 +142,26 @@ app.get('/:lang/account', (req, res) => {
             css: '/account.css', account: account,
             orders: lastCrossOrdersList, seeMoreBtn: seeMoreBtn,
         });
-    } res.redirect('/' + req.params.lang + '/signin')
+    } res.redirect('/' + req.params.lang + '/signin');
+});
+
+app.get('/:lang/allAccounts', (req, res) => {
+    if (req.session.authenticated) {
+        if (req.session.admin) {
+            let accountsList = accounts.getAllAccounts();
+            return res.render('./' + req.params.lang + '/allAccounts.html', { css: '/allAccounts.css', accountsList: accountsList, admin: req.session.admin });
+        }
+    } res.redirect('/' + req.params.lang + '/signin');
+});
+
+app.get('/:lang/account-admin-view/:id', (req, res) => {
+    if (req.session.authenticated) {
+        if (req.session.admin) {
+            let account = accounts.get(req.params.id);
+            return res.render('./' + req.params.lang + '/account-admin-view.html', { css: '/account-admin-view.css', 
+                account: account, admin: req.session.admin });
+        } return res.redirect('/' + req.params.lang + '/home');
+    } res.redirect ('/' + req.params.lang + '/signin');
 });
 
 app.get('/:lang/crossOrder/:crossOrderIndex', (req, res) => {
@@ -405,6 +426,7 @@ app.post('/:lang/editAccount', uploadProfilePicture.single('updateProfilePicture
                 let src = fs.createReadStream(tmp_path);
                 let dest = fs.createWriteStream(target_path);
                 src.pipe(dest);
+
             }
 
             return res.redirect('/' + req.params.lang + '/account');
