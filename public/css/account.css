@@ -1,4 +1,5 @@
 #accountContainer,
+#row3,
 #row2,
 #row1 {
     display: flex;
@@ -28,7 +29,8 @@
     gap: 20px;
 }
 
-#column1, #column2{
+#column1,
+#column2 {
     min-height: 380px;
 }
 
@@ -66,8 +68,8 @@
 }
 
 .unverifiedProfilePicture {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 10px;
     object-fit: cover;
 }
@@ -131,7 +133,7 @@
     display: flex;
     align-items: center;
     height: 40px;
-    
+
 }
 
 #oldPasswordField,
@@ -201,7 +203,7 @@
     width: 500px;
 }
 
-.bottomContainers{
+.bottomContainers {
     width: 373px;
 }
 
@@ -223,6 +225,39 @@ label img {
     height: 30px;
     padding: 5px;
 }
+
+table {
+    padding: 20px 20px;
+    border-spacing: 0px 0px;
+    background-color: #a0a0a069;
+    border-left: 3px solid #ebebebb2;
+    border-right: 3px solid #ebebebb2;
+    border-bottom: 3px solid #ebebebb2;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    width: 1340px;
+}
+
+.table-title {
+    background-color: #a0a0a069;
+    border-top: 3px solid #ebebebb2;
+    border-left: 3px solid #ebebebb2;
+    border-right: 3px solid #ebebebb2;
+    padding: 10px 0px 0px 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+th {
+    border-bottom: 1px solid black;
+    height: 50px;
+}
+
+td {
+    height: 50px;
+    text-align: center;
+}
+
 
 .hiddenInput {
     display: none;
@@ -248,6 +283,10 @@ label img {
     background-color: var(--text-color);
 }
 
+#fileFieldLabel:hover{
+    cursor: pointer;
+}
+
 input[type="button"]:hover,
 input[type="submit"]:hover {
     cursor: pointer;
@@ -259,43 +298,25 @@ input[type="submit"]:hover {
     align-items: center;
 }
 
-.rejectBtn,
-.verifyBtn {
-    height: 30px;
-    width: 30px;
-    padding: 5px;
-}
 
-.rejectBtn {
-    background-color: var(--text-color);
-}
-
-.verifyBtn {
-    background-color: var(--background-color);
-}
-
-.rejectAccountForm, .verifyAccountForm {
-    height: 40px;
-}
-
-
-#table span, #table svg{
+#table span,
+#table svg {
     width: 120px;
     display: flex;
     justify-content: center;
 }
 
-#table{
+#table {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.row{
+.row {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap : 20px;
+    gap: 20px;
     align-items: center;
     width: 400px;
     padding: 10px;
@@ -303,22 +324,57 @@ input[type="submit"]:hover {
     border: 3px solid #e0dedc88;
     background-color: var(--text-color);
     color: var(--background-color);
-    .checkSvgIco{
+
+    .checkSvgIco {
         stroke: var(--background-color);
     }
-    .crossSvgIco{
+
+    .crossSvgIco {
         fill: var(--background-color);
     }
 }
 
-.row:hover{
+.row:hover {
     cursor: pointer;
     background-color: var(--background-color);
     color: var(--text-color);
-    .checkSvgIco{
+
+    .checkSvgIco {
         stroke: var(--text-color);
     }
-    .crossSvgIco{
+
+    .crossSvgIco {
         fill: var(--text-color);
     }
+}
+
+.name,
+.lastName {
+    width: 100px;
+}
+
+.phone {
+    width: 90px;
+}
+
+.city,
+.zipCode {
+    width: 70px;
+}
+
+.admin,
+.state {
+    width: 25px;
+}
+
+.table-clickable:hover {
+    cursor: pointer;
+    background-color: #a0a0a079;
+}
+
+.deleteFileIco{
+    width: 30px;
+    height: 30px;
+    padding: 0px 20px;
+    border-radius: 5px;
 }

@@ -14,7 +14,7 @@ console.log('Products table dropped');
 db.prepare('CREATE TABLE IF NOT EXISTS products (ean13 INT PRIMARY KEY,' +
       'laboratoryName TEXT, productName TEXT, price FLOAT, packaging INT, qtyMin INT)').run();
 db.prepare('DROP TABLE IF EXISTS files').run();
-db.prepare('CREATE TABLE IF NOT EXISTS files (filename TEXT PRIMARY KEY)').run();
+db.prepare('CREATE TABLE IF NOT EXISTS files (filename TEXT PRIMARY KEY, size FLOAT)').run();
 
 let loadProducts = function (filename) {
       let insertProduct = db.prepare('INSERT INTO products VALUES (?, ?, ?, ?, ?, ?)');
@@ -40,7 +40,8 @@ let loadProducts = function (filename) {
 
 for (let i = 0; i < fileList.length; i++) {
       let file = fileList[i];
-      db.prepare('INSERT INTO files VALUES (?)').run(file);
+      let size = Math.ceil(fs.statSync(directoryPath + '/' + file).size / 1024);
+      db.prepare('INSERT INTO files VALUES (?, ?)').run(file, size);
       loadProducts(directoryPath + '/' + file);
 }
 

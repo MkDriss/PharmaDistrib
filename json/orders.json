@@ -4,6 +4,20 @@
     "ownerIndex": "4e8deba6c0d48b2396875fd170eb08294bf5ade4b105320b2eddc96c15058157",
     "openDate": "2024-08-02",
     "closeDate": "2024-08-03",
+    "state": 0
+  },
+  {
+    "orderIndex": 3,
+    "ownerIndex": "b1980132af634fb3b4f383626d77dbca8ac6921a21642ca400abe95f698c2112",
+    "openDate": "2024-08-11",
+    "closeDate": "2024-08-11",
+    "state": 0
+  },
+  {
+    "orderIndex": 4,
+    "ownerIndex": "b1980132af634fb3b4f383626d77dbca8ac6921a21642ca400abe95f698c2112",
+    "openDate": "2024-08-11",
+    "closeDate": "2024-08-12",
     "state": 1
   }
 ]

@@ -191,7 +191,7 @@
     <section class='hidden-up'>
         <div id='row2'>
             <div id="Accounts">
-                <div class="title">
+                <div class="title table-title">
                     Accounts
                 </div>
                 <table>
@@ -203,34 +203,35 @@
                         <th>Address</th>
                         <th>Zip Code</th>
                         <th>City</th>
-                        <th>Rôle</th>
+                        <th>Role</th>
+                        <th>State</th>
                     </tr>
+
+                    {{#unverifiedAccounts}}
+                    <tr class="table-clickable unverifiedAccountsRow"
+                        onclick="window.open('/en/account/{{id}}', '_self')">
+                        <td>{{userName}}</td>
+                        <td>{{userLastName}}</td>
+                        <td>{{email}}</td>
+                        <td>{{phone}}</td>
+                        <td>{{adress}}</td>
+                        <td>{{zipCode}}</td>
+                        <td>{{city}}</td>
+                        <td>{{admin}}</td>
+                        <td>{{verified}}</td>
+                    </tr>
+                    {{/unverifiedAccounts}}
                     {{#lastAccounts}}
-                    <tr>
-                        <td>
-                            <input type="text" value="{{userName}}">
-                        </td>
-                        <td>
-                            <input type="text" value="{{userLastName}}">
-                        </td>
-                        <td>
-                            <input type="text" value="{{email}}">
-                        </td>
-                        <td>
-                            <input type="tel" value="{{phone}}">
-                        </td>
-                        <td>
-                            <input type="text" value="{{adress}}">
-                        </td>
-                        <td>
-                            <input type="text" value="{{zipCode}}">
-                        </td>
-                        <td>
-                            <input type="text" value="{{city}}">
-                        </td>
-                        <td>
-                            <input type="number" value="{{admin}}">
-                        </td>
+                    <tr class="table-clickable" onclick="window.open('/en/account/{{id}}','_self')">
+                        <td>{{userName}}</td>
+                        <td>{{userLastName}}</td>
+                        <td>{{email}}</td>
+                        <td>{{phone}}</td>
+                        <td>{{adress}}</td>
+                        <td>{{zipCode}}</td>
+                        <td>{{city}}</td>
+                        <td>{{admin}}</td>
+                        <td>{{verified}}</td>
                     </tr>
                     {{/lastAccounts}}
                 </table>
@@ -240,7 +241,48 @@
             </div>
         </div>
     </section>
-    {{/admin}}
+    <section class='hidden-up'>
+        <div id='row3'>
+            <div id="files">
+                <div class="title table-title">
+                    .CSV Files
+                </div>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>Delete</th>
+                    </tr>
+
+                    {{#csvFiles}}
+                    <tr class="table-clickable csvFileRow" onclick="window.open('/en/file/{{filename}}', '_self')">
+                        <td>{{filename}}</td>
+                        <td>{{size}} kb</td>
+                        <td>
+                            <form action="/en/deleteFile/{{fileName}}">
+                                <input type="image" src="/trash.svg" alt="delete" class="deleteFileIco">
+                            </form>
+                        </td>
+                    </tr>
+                    {{/csvFiles}}
+                </table>
+                {{^csvFiles}}
+                <span class='text'>There are no .csv files yet</span>
+                {{/csvFiles}}
+                <form action='/en/insertFile' method='post' enctype='multipart/form-data' id='insertFileForm'>
+                    <div>
+                        <input type='file' accept='file/csv' name='fileField' id='fileField'>
+                        <label for='fileField' id='fileFieldLabel' class='button'>Add File</label>
+                    </div>
+                    <div>
+                        <input type='submit' value='Confirm' id='confirmBtn' class='button'>
+                    </div>
+                </form>
+            </div>
+        </div>
+</div>
+</section>
+{{/admin}}
 </div>
 {{/account}}
 

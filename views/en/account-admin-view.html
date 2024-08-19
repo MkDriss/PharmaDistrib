@@ -1,0 +1,38 @@
+{{>./en/header}}
+<div class="container">
+    <div class="content">
+        <div class="title table-title">
+            Accounts
+        </div>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Zip Code</th>
+                <th>City</th>
+                <th>Role</th>
+                <th>State</th>
+            </tr>
+            {{#account}}
+            <tr>
+                <td><input type="text" value="{{userName}}" required placeholder="Name"></td>
+                <td><input type="text" value="{{userLastName}}" required placeholder="Last Name">{{userLastName}}</td>
+                <td><input type="email" value="{{email}}" required placeholder="Email"></td>
+                <td><input type="text" value={{phone}}" type="tel" placeholder="Phone Number"></td>
+                <td><input type="text" value="{{adress}}" placeholder="Address"></td>
+                <td><input type="text" value="{{zipCode}}" placeholder="Zip Code"></td>
+                <td><input type="text" value="{{city}}" placeholder="City"><td>
+                <td><input type="number" value="{{admin}}" onchange="isValidBoolean(this)" placeholder="0" required></td>
+                <td><input type="number" value="{{verified}}" onchange="isValidBoolean(this)" placeholder="0" required>{{verified}}</td>
+            </tr>
+            {{/account}}
+            </table>
+            {{^account}}
+            <span class="text">Unknowned Account</span>
+            {{/account}}
+    </div>
+</div>
+{{>./en/footer}}

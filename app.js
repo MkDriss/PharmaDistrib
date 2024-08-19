@@ -129,11 +129,10 @@ app.get('/:lang/account', (req, res) => {
         if (account.admin) {
             let files = products.getFiles();
             let lastAccounts = accounts.getLastAccounts();
-            console.log(lastAccounts)
             let unverifiedAccounts = accounts.getUnverifiedAccounts();
             return res.render('./' + req.params.lang + '/account.html', {
                 css: '/account.css', account: account, admin: account.admin, orders: lastCrossOrdersList, seeMoreBtn: seeMoreBtn,
-                unverifiedAccounts: unverifiedAccounts, files: files, lastAccounts : lastAccounts
+                unverifiedAccounts: unverifiedAccounts, csvFiles: files, lastAccounts: lastAccounts
             });
         }
 
@@ -275,6 +274,19 @@ app.get('/:lang/myOrders', (req, res) => {
 app.get('/:lang/previousUrl', (req, res) => {
     if (req.session.authenticated) {
         return res.redirect(req.session.previousPage);
+    } return res.redirect('/' + req.params.lang + '/signin');
+});
+
+app.get('/:lang/account/:id', (req, res) => {
+    if (req.session.authenticated) {
+        req.session.previousPage = req.session.currentPage
+        req.session.currentPage = '/' + req.params.lang + '/account/' + req.params.id;
+        if (req.session.admin) {
+            let account = accounts.get(req.params.id);
+            console.log(account)
+            return res.render('./' + req.params.lang + '/account-admin-view.html'), {css : '/account-admin-view.css', account : account}
+        }
+        return res.send(403)
     } return res.redirect('/' + req.params.lang + '/signin');
 });
 
