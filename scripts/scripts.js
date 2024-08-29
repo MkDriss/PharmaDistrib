@@ -186,3 +186,16 @@ function updateQuantity(productId, originalQty) {
     product.getElementsByClassName('totQty')[0].value = parseInt(originalQty) + parseInt((quantity));
     product.getElementsByClassName('basedPrice')[0].value = parseInt(product.getElementsByClassName('totQty')[0].value) * parseInt(product.getElementsByClassName('price')[0].value);
 }
+
+function showPopUp(){
+    let popUp = document.getElementById('popUpContainer');
+    popUp.classList.add('show')
+    popUp.classList.remove('popUp')
+}
+    
+
+function hidePopUp(){
+    let popUp = document.getElementById('popUpContainer');
+    popUp.classList.remove('show')
+    popUp.classList.add('popUp')
+}

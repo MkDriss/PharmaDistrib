@@ -190,12 +190,11 @@
     {{#admin}}
     <section class='hidden-up'>
         <div id='row2'>
-<<<<<<< HEAD
             <div id="Accounts">
                 <div class="title table-title">
                     Accounts
                 </div>
-                <table>
+                <table id="accountTable">
                     <tr>
                         <th>Name</th>
                         <th>Last Name</th>
@@ -222,7 +221,7 @@
                         <td>{{verified}}</td>
                     </tr>
                     {{/unverifiedAccounts}}
-                    {{#lastAccounts}}
+                    {{#accounts}}
                     <tr class="table-clickable" onclick="window.open('/en/account/{{id}}','_self')">
                         <td>{{userName}}</td>
                         <td>{{userLastName}}</td>
@@ -234,68 +233,12 @@
                         <td>{{admin}}</td>
                         <td>{{verified}}</td>
                     </tr>
-                    {{/lastAccounts}}
+                    {{/accounts}}
                 </table>
-                {{^lastAccounts}}
+                {{^accounts}}
                 <span class='text'>There are no accounts yet</span>
-=======
-            <div id='unverifiedAccountsContainer' class="bottomContainers">
-                <div class='title'>Unverified Accounts</div>
-                {{#unverifiedAccounts}}
-                <div class='unverifiedAccountContent'>
-                    <img src='/account.svg' alt='defaultProfilePicture' class='unverifiedProfilePicture'>
-                    <div class='userInfoSection'>
-                        <div class='inputSection'><input type='text' value='{{userName}}' id='userName-{{id}}' readonly>
-                            <form action='/en/rejectAccount/{{token}}' method='post' class='rejectAccountForm'><input
-                                    type='image' src='/cross.svg' class='rejectBtn'></form>
-                        </div>
-                        <div class='inputSection'><input type='text' value='{{email}}' id='email-{{id}}' readonly>
-                            <form action='/en/verifyAccount/{{token}}' method='post' class='verifyAccountForm'><input
-                                    type='image' src='/check.svg' class='verifyBtn'></form>
-                        </div>
-                    </div>
-                </div>
-                {{/unverifiedAccounts}}
-                {{^unverifiedAccounts}}
-                <div>All accounts are verified</div>
-                {{/unverifiedAccounts}}
+                {{/accounts}}
             </div>
-            <div id="allAccountsContainer" class="bottomContainers">
-                <div class="title">Accounts</div>
-                {{#lastAccounts}}
-                <a href="/en/account-admin-view/{{id}}">
-                    <div class='allAccountsContent'>
-                        <img src='/{{profilePicture}}' alt='defaultProfilePicture' class='accountProfilePicture'>
-                        <div class='userInfoSection'>
-                            <div class='inputSection'><input type='text' value='{{userName}}' id='userName-{{id}}'
-                                    readonly>
-                            </div>
-                            <div class='inputSection'><input type='text' value='{{email}}' id='email-{{id}}' readonly>
-                            </div>
-                        </div>
-                    </div>
-                </a>
->>>>>>> bf6075be236cba713904896b411e9adb6e338fe3
-                {{/lastAccounts}}
-                <a href='/en/allAccounts' id='allAccountsBtn'><input type="button" value="See More" id="SeeMoreAccountBtn"></a>
-            </div>
-            <div id="csvFiles" class="bottomContainers">
-                <div class="title">
-                    .CSV Files
-                </div>
-                {{#files}}
-                <div>
-                    <div>{{filename}}</div>
-                    <form action='/en/deleteFile/{{token}}' method='post' class='deleteFileForm'>
-                        <input type='image' src='/cross.svg' class='rejectBtn'>
-                    </form>
-                </div>
-                {{/files}}
-                {{^files}}
-                <div>There is no .csv files</div>
-                {{/files}}
-            </div>
-        </div>
     </section>
     <section class='hidden-up'>
         <div id='row3'>
@@ -310,36 +253,46 @@
                         <th>Delete</th>
                     </tr>
 
-                    {{#csvFiles}}
-                    <tr class="table-clickable csvFileRow" onclick="window.open('/en/file/{{filename}}', '_self')">
+                    {{#files}}
+                    <tr class="table-clickable csvFileRow">
                         <td>{{filename}}</td>
                         <td>{{size}} kb</td>
                         <td>
-                            <form action="/en/deleteFile/{{fileName}}">
-                                <input type="image" src="/trash.svg" alt="delete" class="deleteFileIco">
+                            <form action="/en/deleteFile/{{fileIndex}}" method="post">
+                                <img src="/trash.svg" alt="delete" class="deleteFileIco" onclick="showPopUp()">
+                                <div id="popUpContainer" class="hidden popUp">
+                                    Do you really want to delete this file ?
+                                    <div id="submitSection">
+                                        <input type="submit" value="Confirm" class="button" id="submitBtn">
+                                        <input type="button" value="Cancel" class="button" id="cancelDeleteFileBtn"
+                                            onclick="hidePopUp()">
+                                    </div>
+                                </div>
                             </form>
                         </td>
                     </tr>
-                    {{/csvFiles}}
+                    {{/files}}
                 </table>
-                {{^csvFiles}}
+
+                {{^files}}
                 <span class='text'>There are no .csv files yet</span>
-                {{/csvFiles}}
+                {{/files}}
                 <form action='/en/insertFile' method='post' enctype='multipart/form-data' id='insertFileForm'>
-                    <div>
-                        <input type='file' accept='file/csv' name='fileField' id='fileField'>
-                        <label for='fileField' id='fileFieldLabel' class='button'>Add File</label>
+                    <div id="uploadFileSection">
+                        <input type='file' accept='file/csv' name='fileField' id='fileField' hidden>
+                        <label for='fileField' id='fileFieldLabel'>Upload File</label>
+                        <span>Accept Only .csv files</span>
                     </div>
                     <div>
-                        <input type='submit' value='Confirm' id='confirmBtn' class='button'>
+                        <input type='button' value='Confirm' id='confirmBtn' class='button'>
                     </div>
                 </form>
             </div>
         </div>
+    </section>
+    {{/admin}}
 </div>
-</section>
-{{/admin}}
-</div>
+
 {{/account}}
 
 {{>./en/footer}}

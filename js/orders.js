@@ -1,7 +1,6 @@
 'use strict';
 
 const Sqlite = require('better-sqlite3');
-const { Console } = require('console');
 const fs = require('fs');
 let db = new Sqlite('db.sqlite');
 var products = require('./products.js');
@@ -65,9 +64,9 @@ console.log('Orders loaded');
 
 exports.createOrder = function (ownerIndex, productsList, openDate, closeDate) {
     db.prepare('INSERT INTO orders(ownerIndex, openDate, closeDate, state) VALUES (?, ?, ?, ?)').run(ownerIndex, openDate, closeDate, 1);
-    let orderIndex = (db.prepare('SELECT MAX(orderIndex) FROM orders').get()['MAX(orderIndex)']);
+    let orderIndex = db.prepare('SELECT MAX(orderIndex) FROM orders').get()['MAX(orderIndex)'];
     db.prepare('INSERT INTO crossOrders(originalOrderIndex, crossOrderOwner) VALUES (?, ?)').run(orderIndex, ownerIndex);
-    let crossOrderIndex = (db.prepare('SELECT MAX(crossOrderIndex) FROM crossOrders').get()['MAX(crossOrderIndex)']);
+    let crossOrderIndex = db.prepare('SELECT MAX(crossOrderIndex) FROM crossOrders').get()['MAX(crossOrderIndex)'];
     for (let indexProduct = 0; indexProduct < productsList.length; indexProduct++) {
         db.prepare('INSERT INTO productInventory(orderIndex, crossOrderIndex, productIndex, quantity) VALUES (?, ?, ?, ?)').run(orderIndex, crossOrderIndex, productsList[indexProduct][0], productsList[indexProduct][1]);
     }

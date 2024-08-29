@@ -1,0 +1,118 @@
+
+.container{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+table {
+    padding: 20px 20px;
+    border-spacing: 0px 20px;
+    background-color: #a0a0a069;
+    border-left: 3px solid #ebebebb2;
+    border-right: 3px solid #ebebebb2;
+}
+
+.table-title {
+    background-color: #a0a0a069;
+    border-top: 3px solid #ebebebb2;
+    border-left: 3px solid #ebebebb2;
+    border-right: 3px solid #ebebebb2;
+    padding: 10px 0px 0px 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+select {
+    background-color: var(--text-color);
+    padding: 0px 10px;
+    height: 46px;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: var(--font-family);
+    border: 3px solid #e0dedc88;
+    backdrop-filter: blur(20px);
+    font-size: 15px;
+    font-weight: 300;
+    border-radius: 10px;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="number"] {
+    padding: 0px 10px;
+    height: 40px;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: var(--font-family);
+    border: 3px solid #e0dedc88;
+    backdrop-filter: blur(20px);
+    font-size: 15px;
+    font-weight: 300;
+    border-radius: 10px;
+}
+
+td, tr{
+    height: 50px;
+}
+
+
+th {
+    border-bottom: 1px solid black;
+    height: 50px;
+}
+
+#nameField,
+#lastNameField{
+    width: 100px;
+}
+
+#cityField{
+    width: 150px;
+}
+
+#phoneNumberField,
+#postCodeField{
+    width: 100px;
+}
+
+
+#submitSection{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    background-color: #a0a0a069;
+    border-left: 3px solid #ebebebb2;
+    border-right: 3px solid #ebebebb2;
+    border-bottom: 3px solid #ebebebb2;
+    padding-top: 20px;
+    padding-bottom: 100px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#submitBtn{
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+#cancelBtn{
+    color: var(--background-color);
+    background-color: var(--text-color);
+}
+
+.button {
+    height: 50px;
+    width: 200px;
+    font-size: 17px;
+    font-weight: 500;
+    border-radius: 10px;
+    border: 3px solid #e0dedc88;
+    backdrop-filter: blur(20px);
+    font-family: var(--font-family);
+}
+
+.button:hover{
+    cursor: pointer;
+}

@@ -126,15 +126,11 @@ app.get('/:lang/account', (req, res) => {
 
         if (account.admin) {
             let files = products.getFiles();
-            let lastAccounts = accounts.getLastAccounts();
+            let accountsList = accounts.getLastAccounts();
             let unverifiedAccounts = accounts.getUnverifiedAccounts();
             return res.render('./' + req.params.lang + '/account.html', {
                 css: '/account.css', account: account, admin: account.admin, orders: lastCrossOrdersList, seeMoreBtn: seeMoreBtn,
-<<<<<<< HEAD
-                unverifiedAccounts: unverifiedAccounts, csvFiles: files, lastAccounts: lastAccounts
-=======
-                unverifiedAccounts: unverifiedAccounts, files: files, lastAccounts: lastAccounts
->>>>>>> bf6075be236cba713904896b411e9adb6e338fe3
+                unverifiedAccounts: unverifiedAccounts, files: files, accounts: accountsList
             });
         }
 
@@ -147,7 +143,7 @@ app.get('/:lang/account', (req, res) => {
 
 app.get('/:lang/allAccounts', (req, res) => {
     if (req.session.authenticated) {
-        if (req.session.admin) {
+        if (req.session.admin === true) {
             let accountsList = accounts.getAllAccounts();
             return res.render('./' + req.params.lang + '/allAccounts.html', { css: '/allAccounts.css', accountsList: accountsList, admin: req.session.admin });
         }
@@ -156,12 +152,14 @@ app.get('/:lang/allAccounts', (req, res) => {
 
 app.get('/:lang/account-admin-view/:id', (req, res) => {
     if (req.session.authenticated) {
-        if (req.session.admin) {
+        if (req.session.admin === true) {
             let account = accounts.get(req.params.id);
-            return res.render('./' + req.params.lang + '/account-admin-view.html', { css: '/account-admin-view.css', 
-                account: account, admin: req.session.admin });
+            return res.render('./' + req.params.lang + '/account-admin-view.html', {
+                css: '/account-admin-view.css',
+                account: account, admin: req.session.admin
+            });
         } return res.redirect('/' + req.params.lang + '/home');
-    } res.redirect ('/' + req.params.lang + '/signin');
+    } res.redirect('/' + req.params.lang + '/signin');
 });
 
 app.get('/:lang/crossOrder/:crossOrderIndex', (req, res) => {
@@ -208,7 +206,6 @@ app.get('/:lang/orders', (req, res) => {
         } else {
             hasOrders = 0
         }
-        console.log(hasOrders)
         for (let i = 0; i < order.length; i++) {
             order[i].ownerName = accounts.get(order[i].ownerIndex).userName;
         }
@@ -284,7 +281,6 @@ app.get('/:lang/myOrders', (req, res) => {
         req.session.previousPage = req.session.currentPage
         req.session.currentPage = '/' + req.params.lang + '/myOrders'
         let ordersList = orders.getCrossOrderFromUserId(req.session.id);
-        console.log(ordersList)
         for (let i = 0; i < ordersList.length; i++) {
             ordersList[i].ownerName = accounts.get(ordersList[i].ownerIndex).userName;
         }
@@ -302,13 +298,29 @@ app.get('/:lang/account/:id', (req, res) => {
     if (req.session.authenticated) {
         req.session.previousPage = req.session.currentPage
         req.session.currentPage = '/' + req.params.lang + '/account/' + req.params.id;
-        if (req.session.admin) {
+        if (req.session.admin === true) {
             let account = accounts.get(req.params.id);
-            console.log(account)
-            return res.render('./' + req.params.lang + '/account-admin-view.html'), {css : '/account-admin-view.css', account : account}
+            let verifiedState;
+            account.verified ? verifiedState = 0 : verifiedState = 1
+            let otherRoles;
+            account.admin ? otherRoles = 0 : otherRoles = 1;
+            return res.render('./' + req.params.lang + '/account-admin-view.html',
+                { css: '/account-admin-view.css', account: account, otherRoles: otherRoles, verifiedState: verifiedState })
         }
-        return res.send(403)
+        return res.sendStatus(403)
     } return res.redirect('/' + req.params.lang + '/signin');
+});
+
+app.get('/:lang/file/:fileIndex', (req, res) => {
+    if (req.session.authenticated) {
+        req.session.previousPage = req.session.currentPage
+        req.session.currentPage = '/' + req.params.lang + '/account/' + req.params.id;
+        if (req.session.admin === true) {
+            let fileName = products.getFileName(req.params.fileIndex);
+            let productsList = products.getProductsFromFile(req.params.fileIndex)
+            console.log(productsList)
+        } return res.sendStatus(403)
+    } return res.redirect('/' + req.params.lang + '/signin')
 });
 
 // POST
@@ -398,25 +410,20 @@ app.post('/:lang/editAccount', uploadProfilePicture.single('updateProfilePicture
         let name = req.body.nameField;
         let lastName = req.body.lastNameField;
         let phone = req.body.phoneNumberField;
-        let adress = req.body.adressField;
+        let address = req.body.adressField;
         let city = req.body.cityField;
         let zipCode = req.body.zipCodeField
         let id = req.session.id;
-        let email = req.body.email;
         let profilePictureName;
 
-        if (req.file == undefined) {
-            profilePictureName = accounts.get(id).profilePicture;
-        } else {
-            profilePictureName = sanitize(req.file.originalname) + '_' + id + '.png';
-        }
+        req.file == undefined ? profilePictureName = accounts.get(id).profilePicture : profilePictureName = sanitize(req.file.originalname) + '_' + id + '.png';
 
         if (name == undefined) {
             console.log('Invalid username or password')
             return res.render('./' + req.params.lang + '/updateAccount', { msg: 'Invalid email, username or password', css: '/updateAccount.css' });
         }
-        else if (accounts.get(email) == undefined) {
-            accounts.updateAccount(id, name, lastName, adress, city, zipCode, phone, profilePictureName);
+        else if (accounts.get(id) != undefined) {
+            accounts.updateAccount(id, name, lastName, address, city, zipCode, phone, profilePictureName);
 
             if (req.file == undefined) {
                 console.log('No profile picture uploaded');
@@ -433,6 +440,28 @@ app.post('/:lang/editAccount', uploadProfilePicture.single('updateProfilePicture
         }
     } res.redirect('/' + req.params.lang + '/signin')
 });
+
+app.post('/:lang/admin-update-account/:accountId', (req, res) => {
+    if (req.session.authenticated) {
+        if (req.session.admin === true) {
+            let id = req.params.accountId;
+            if (accounts.get(id) != undefined) {
+                let name = req.body.nameField;
+                let lastName = req.body.lastNameField;
+                let address = req.body.addressField;
+                let city = req.body.cityField;
+                let postCode = req.body.postCodeField;
+                let phone = req.body.phoneNumberField;
+                let state = req.body.stateSelect;
+                let role = req.body.roleSelect;
+                role === 1 ? req.session.admin = true : req.session.admin = 0;
+                accounts.updtateAccountAdmin(id, name, lastName, address, city, postCode, phone, state, role);
+                return res.redirect('/' + req.params.lang + '/account')
+            }
+        }
+
+    } res.redirect('/' + req.params.lang + '/signin')
+})
 
 app.post('/:lang/verifyAccount/:token', (req, res) => {
     if (req.session.authenticated) {
@@ -451,7 +480,7 @@ app.post('/:lang/rejectAccount/:token', (req, res) => {
 });
 
 
-app.post('/:lang/insertFile', uploadCSVFiles.single('fileField'), (req, res) => {
+app.post('/:lang/uploadFile', uploadCSVFiles.single('fileField'), (req, res) => {
     if (req.session.authenticated) {
         if (req.file == undefined) {
             console.log('No files uploaded');
@@ -566,6 +595,16 @@ app.post('/:lang/deleteCrossOrder/:crossOrderIndex', (req, res) => {
         }
     } return res.redirect('/' + req.params.lang + '/signin');
 });
+
+app.post('/:lang/deleteFile/:fileIndex', (req, res) =>{
+    if (req.session.authenticated) {
+        if (req.session.admin === true){
+            console.log('fileDeleted')
+            products.deleteFile(req.params.fileIndex)
+            return res.redirect('/' + req.params.lang + '/account');
+        }
+    } return res.redirect('/' + req.params.lang + '/signin');
+})
 
 
 app.post('/:lang/orderSummary/:orderIndex', (req, res) => {

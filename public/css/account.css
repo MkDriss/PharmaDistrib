@@ -64,18 +64,9 @@
     object-fit: cover;
 }
 
-<<<<<<< HEAD
 .unverifiedProfilePicture {
     width: 80px;
     height: 80px;
-=======
-.unverifiedProfilePicture,
-.accountProfilePicture {
-    width: 80px;
-    height: 100px;
->>>>>>> bf6075be236cba713904896b411e9adb6e338fe3
-    border-radius: 10px;
-    object-fit: cover;
 }
 
 #nameSection {
@@ -114,7 +105,6 @@ input[type="text"] {
     font-size: 15px;
     font-weight: 500;
     font-family: var(--font-family);
-
 }
 
 
@@ -224,7 +214,7 @@ input[type="text"] {
 }
 
 
-label {
+#updatePasswordForm label {
     height: 40px;
     width: 40px;
     background-color: var(--text-color);
@@ -248,10 +238,13 @@ table {
     background-color: #a0a0a069;
     border-left: 3px solid #ebebebb2;
     border-right: 3px solid #ebebebb2;
+    width: 1340px;
+}
+
+#accountTable{
     border-bottom: 3px solid #ebebebb2;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    width: 1340px;
 }
 
 .table-title {
@@ -299,7 +292,7 @@ td {
     background-color: var(--text-color);
 }
 
-#fileFieldLabel:hover{
+#fileFieldLabel:hover {
     cursor: pointer;
 }
 
@@ -314,24 +307,6 @@ input[type="submit"]:hover {
     align-items: center;
 }
 
-
-<<<<<<< HEAD
-=======
-.rejectBtn {
-    background-color: var(--text-color);
-}
-
-.verifyBtn {
-    background-color: var(--background-color);
-}
-
-.rejectAccountForm,
-.verifyAccountForm {
-    height: 40px;
-}
-
-
->>>>>>> bf6075be236cba713904896b411e9adb6e338fe3
 #table span,
 #table svg {
     width: 120px;
@@ -339,10 +314,61 @@ input[type="submit"]:hover {
     justify-content: center;
 }
 
+#fileFieldLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    width: 700px;
+    border-radius: 10px;
+    border: 3px solid #ebebebb2;
+    color: var(--text-color);
+    font-size: 25px;
+    font-weight: 500;
+}
+
+#confirmBtn{
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+#insertFileForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background-color: #a0a0a069;
+    border-left: 3px solid #ebebebb2;
+    border-right: 3px solid #ebebebb2;
+    border-bottom: 3px solid #ebebebb2;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 50px 0px;
+}
+
+#uploadFileSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    width: 200px;
+}
+
+#uploadFileSection span{
+    font-size: 13px;
+}
+
 #table {
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+#deleteFileIco{
+    background-image: "./trash.svg";
+    height: 30px;
+    width: 30px;
 }
 
 .row {
@@ -405,9 +431,32 @@ input[type="submit"]:hover {
     background-color: #a0a0a079;
 }
 
-.deleteFileIco{
-    width: 30px;
-    height: 30px;
+.deleteFileIco {
+    width: 40px;
+    height: 40px;
     padding: 0px 20px;
     border-radius: 5px;
+}
+
+.button {
+    width: 200px;
+    height: 50px;
+    font-size: 17px;
+    border: 3px solid #e0dedc88;
+    backdrop-filter: blur(20px);
+    font-family: var(--font-family);
+    border-radius: 10px;
+}
+
+.hidden{
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(+20%);
+    transition: all 0.5s ease;
+}
+
+.show{
+    opacity: 1;
+    transform: translate(0);
 }

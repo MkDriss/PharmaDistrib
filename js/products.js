@@ -8,16 +8,18 @@ const directoryPath = './csv';
 const fileList = fs.readdirSync(directoryPath);
 
 //INIT
-
 db.prepare('DROP TABLE IF EXISTS products').run();
 console.log('Products table dropped');
-db.prepare('CREATE TABLE IF NOT EXISTS products (ean13 INT PRIMARY KEY,' +
-      'laboratoryName TEXT, productName TEXT, price FLOAT, packaging INT, qtyMin INT)').run();
 db.prepare('DROP TABLE IF EXISTS files').run();
-db.prepare('CREATE TABLE IF NOT EXISTS files (filename TEXT PRIMARY KEY, size FLOAT)').run();
+console.log('files table dropped');
 
-let loadProducts = function (filename) {
-      let insertProduct = db.prepare('INSERT INTO products VALUES (?, ?, ?, ?, ?, ?)');
+db.prepare('CREATE TABLE IF NOT EXISTS files (fileIndex INTEGER PRIMARY KEY AUTOINCREMENT, filename TEXT, size FLOAT)').run();
+db.prepare('CREATE TABLE IF NOT EXISTS products (ean13 INT PRIMARY KEY, laboratoryName TEXT, productName TEXT, price FLOAT,' + 
+      'packaging INT, qtyMin INT, fileIndex INTEGER, available boolean)').run();
+
+
+let loadProducts = function (filename, fileIndex) {
+      let insertProduct = db.prepare('INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
       fs.readFile(filename, "utf8", (err, data) => {
             if (err) {
                   console.error("Error while reading:", err);
@@ -28,7 +30,7 @@ let loadProducts = function (filename) {
                   let fields = lines[i].split(";");
                   try {
                         fields[10] = fields[10].replace('\r', '');
-                        insertProduct.run(fields[2], fields[3], fields[5], fields[7], fields[9], fields[10]);
+                        insertProduct.run(fields[2], fields[3], fields[5], fields[7], fields[9], fields[10], fileIndex, 1);
                   } catch {
                         continue;
                   }
@@ -41,8 +43,10 @@ let loadProducts = function (filename) {
 for (let i = 0; i < fileList.length; i++) {
       let file = fileList[i];
       let size = Math.ceil(fs.statSync(directoryPath + '/' + file).size / 1024);
-      db.prepare('INSERT INTO files VALUES (?, ?)').run(file, size);
-      loadProducts(directoryPath + '/' + file);
+      db.prepare('INSERT INTO files (filename, size) VALUES (?, ?)').run(file, size);
+      let fileIndex = db.prepare('SELECT MAX(fileIndex) FROM files').get()['MAX(fileIndex)']
+
+      loadProducts(directoryPath + '/' + file, fileIndex);
 }
 
 //INSERT
@@ -51,7 +55,7 @@ exports.insertProduct = function (ean13, laboratory, productName, packaging, pri
       try {
             db.prepare('INSERT INTO products VALUES (?, ?, ?, ?, ?, ?)').run(ean13, laboratory, productName, packaging, price, qtyMin);
             console.log('Product inserted');
-      } catch (err) {}
+      } catch (err) { }
 };
 
 //GET
@@ -69,11 +73,19 @@ exports.getLaboratories = function () {
 }
 
 exports.list = function () {
-      return db.prepare('SELECT * FROM products').all();
+      return db.prepare('SELECT * FROM products where available = 1').all();
 }
 
 exports.getFiles = function () {
       return db.prepare('SELECT * FROM files').all();
+}
+
+exports.getProductsFromFile = function (fileIndex) {
+      return db.prepare('SELECT * FROM products where fileIndex = ?').all(fileIndex)
+}
+
+exports.getFileName = function (fileIndex) {
+      return db.prepare('SELECT fileName FROM files where fileIndex = ?').get(fileIndex).filename;
 }
 
 //UPDATE
@@ -87,8 +99,17 @@ exports.updateProduct = function (ean13, laboratoryName, productName, packaging,
       }
 }
 
+// DELETE
+
 exports.delete = function (ean13) {
       db.prepare('DELETE FROM user WHERE ean13 = ?').run(ean13);
 }
 
-
+exports.deleteFile = function (fileIndex) {
+      let fileName = db.prepare('SELECT fileName FROM files WHERE fileIndex = ?').get(fileIndex).filename;
+      console.log(directoryPath + '/' + fileName)
+      fs.unlinkSync(directoryPath + '/' + fileName);
+      db.prepare('UPDATE products SET available = 0 WHERE fileIndex = ?').run(fileIndex)
+      db.prepare('DELETE FROM files WHERE fileIndex = ?').run(fileIndex);
+      return console.log(fileName + 'deleted')
+}
