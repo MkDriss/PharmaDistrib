@@ -42,7 +42,7 @@ exports.create = function (id, email, username, password, token) {
             "zipCode": "",
             "phone": "",
             "profilePicture": "account.svg",
-            "verified": 0
+            "verified": 1
       };
 
       fs.readFile('./json/accounts.json', (err, data) => {

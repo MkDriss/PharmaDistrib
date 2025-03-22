@@ -631,7 +631,7 @@ app.post('/:lang/previousUrl', (req, res) => {
 
 // LISTEN
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-    console.log('Click on http://localhost:3000');
+app.listen(3001, () => {
+    console.log('Server is running on port 3001');
+    console.log('Click on http://localhost:3001');
 });
