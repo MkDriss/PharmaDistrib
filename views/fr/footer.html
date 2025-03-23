@@ -1,32 +1,29 @@
 <footer>
-      <div class="column">
-            <span class="text">A propos</span>
-            <div id="footerLeftSide">
-                  <a href="/fr/aboutUs">A propos</a>
-                  <a href="mailto:pharmadistrib@gmail.com">Nous contacter</a>
+      <div class='column'>
+            <span class='text'>À propos</span>
+            <div id='footerLeftSide'>
+                  <a href='/fr/aboutUs'>Qui sommes nous ?</a>
+                  <a href='mailto:pharmadistrib@gmail.com'>Nous contacter</a>
             </div>
       </div>
-      <div class="column">
-            <span class="text">Compte</span>
+      <div class='column'>
+            <span class='text'>Compte</span>
             {{#authenticated}}
-            <div id="footerRightSide">
-                  <a href="//fr/account">Compte</a>
-                  <form action="/fr/signout" method="post">
-                        <input type="submit" value="Se déconnecter">
+            <div id='footerRightSide'>
+                  <a href='/fr/account'>Mon Compte</a>
+                  <form action='/fr/signout' method='post'>
+                        <input type='submit' value='Se déconnecter'>
                   </form>
             </div>
             {{/authenticated}}
 
             {{^authenticated}}
-            <div id="footerRightSide">
-                  <a href="/fr/signin">Se connecter</a>
+            <div id='footerRightSide'>
+                  <a href='/fr/signin'>Se connecter</a>
             </div>
             {{/authenticated}}
 
       </div>
 </footer>
-
-
 </body>
-
 </html>

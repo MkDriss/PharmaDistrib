@@ -1,89 +1,60 @@
 {{>./fr/header}}
 
-<script>
-    function checkPassword() {
-        let pas = document.getElementById("password")
-        let confirmPas = document.getElementById("confirmPassword")
-        let msg = document.getElementById("errorMessage")
-        let btn = document.getElementById("submit")
-        if (pas.value != confirmPas.value) {
-            msg.style.display = "block"
-            btn.type = "button"
-        } else {
-            msg.style.display = "none"
-            btn.type = "submit"
-        }
-    }
+<section class='hidden-up'>
+    <div id='signUpContainer'>
+        <div id='content'>
+            <form action='/en/signup' method='post' id='signUpForm'>
+                <span id='title'>S'enregistrer</span>
+                <div id='inputSection'>
+                    <div id='field'>
+                        <input type='text' name='name' placeholder='Prénom' required>
+                        <input type='email' name='email' placeholder='Email' required>
 
-    function showPassword(name, show, hide, value) {
-        if (value) {
-            document.getElementById(name).type = "text"
-            document.getElementById(show).style.display = "none"
-            document.getElementById(hide).style.display = "flex"
-        } else {
-            document.getElementById(name).type = "password"
-            document.getElementById(show).style.display = "flex"
-            document.getElementById(hide).style.display = "none"
-        }
-    }
-</script>
-
-<div id="signUpContainer">
-    <div id="content">
-        <form action="/fr/signup" method="post" id="signUpForm">
-            <span id="title">S'inscrire</span>
-            <div id="inputSection">
-                <div id="field">
-                    <input type="text" name="name" placeholder="Nom">
-                    <input type="email" name="email" placeholder="Email">
-                    
-                        <div id="passwordSection">
-                            <input type="password" name="passwordField" id="passwordField"
-                                placeholder="Mot de passe">
-                            <input type="button" name="showPassBtn" id="showPassBtn"
-                                onclick="showPassword('passwordField','showPassLabel','hidePassLabel',true)"
-                                hidden>
-                            <label for="showPassBtn" id="showPassLabel">
-                                <img src="../showPass.svg" class="icoPass" alt="show Password">
+                        <div id='passwordSection'>
+                            <input type='password' name='passwordField' id='passwordField' placeholder='Mot de passe' required>
+                            <input type='button' name='showPassBtn' id='showPassBtn'
+                                onclick="showPassword('passwordField','showPassLabel','hidePassLabel',true)" hidden>
+                            <label for='showPassBtn' id='showPassLabel'>
+                                <img src='../showPass.svg' class='icoPass' alt='show Password'>
                             </label>
-                            <input type="button" name="hidePasswdBtn" id="hidePasswdBtn"
-                                onclick="showPassword('passwordField','showPassLabel','hidePassLabel',false)"
-                                hidden>
-                            <label for="hidePasswdBtn" style="display: none;" id="hidePassLabel">
-                                <img src="../hidePass.svg" class="icoPass" alt="hide Password">
+                            <input type='button' name='hidePasswdBtn' id='hidePasswdBtn'
+                                onclick="showPassword('passwordField','showPassLabel','hidePassLabel',false)" hidden>
+                            <label for='hidePasswdBtn' style='display: none;' id='hidePassLabel'>
+                                <img src='../hidePass.svg' class='icoPass' alt='hide Password'>
                             </label>
                         </div>
-                        <div id="confirmPasswordSection">
-                            <input type="password" name="confirmPasswordField" id="confirmPasswordField"
-                                placeholder="Confirmer le mot de passe">
-                            <input type="button" name="showConfirmPassBtn" id="showConfirmPassBtn"
+                        <div id='confirmPasswordSection'>
+                            <input type='password' name='confirmPasswordField' id='confirmPasswordField'
+                                placeholder='Confirmer le mot de passe' required>
+                            <input type='button' name='showConfirmPassBtn' id='showConfirmPassBtn'
                                 onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',true)"
                                 hidden>
-                            <label for="showConfirmPassBtn" id="showConfirmPassLabel">
-                                <img src="../showPass.svg" class="icoPass" alt="show Confirm Password">
+                            <label for='showConfirmPassBtn' id='showConfirmPassLabel'>
+                                <img src='../showPass.svg' class='icoPass' alt='show Confirm Password'>
                             </label>
-                            <input type="button" name="hideConfirmPasswdBtn" id="hideConfirmPasswdBtn"
+                            <input type='button' name='hideConfirmPasswdBtn' id='hideConfirmPasswdBtn'
                                 onclick="showPassword('confirmPasswordField','showConfirmPassLabel','hideConfirmPassLabel',false)"
                                 hidden>
-                            <label for="hideConfirmPasswdBtn" style="display: none;" id="hideConfirmPassLabel">
-                                <img src="../hidePass.svg" class="icoPass" alt="hide Confirm Password">
+                            <label for='hideConfirmPasswdBtn' style='display: none;' id='hideConfirmPassLabel'>
+                                <img src='../hidePass.svg' class='icoPass' alt='hide Confirm Password'>
                             </label>
                         </div>
 
+                    </div>
+                    {{#errorMessage}}
+                    <span id='errorMessage'>{{errorMessage}}</span>
+                    {{/errorMessage}}
+                    <input type='submit' value="S'enregistrer">
+                    <div id='otherOptions'>
+                        <a href='/en/signin'>J'ai déjà un compte</a>
+                    </div>
+
                 </div>
-                {{#errorMessage}}
-                <span id="errorMessage">{{errorMessage}}</span>
-                {{/errorMessage}}
-                <input type="submit" value="S'inscrire">
-                <div id="otherOptions">
-                    <a href="/fr/signin">Je possède déjà un compte</a>
-                </div>
-
-            </div>
 
 
-        </form>
+            </form>
 
+        </div>
     </div>
-</div>
+</section>
 {{>./fr/footer}}

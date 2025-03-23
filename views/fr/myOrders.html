@@ -1,20 +1,19 @@
 {{>./fr/header}}
 <section class='hidden-up'>
-    <div id='orderContainer'>
+    <div id='myOrderContainer'>
         <div id='content'>
-            <span class='title'>Commandes</span>
-            {{#hasOrders}}
+            <span class='title'>Ma commande</span>
             <div id='table'>
                 <div id='firstRow'>
                     <span>Numéro</span>
-                    <span>Date d'ouverture</span>
-                    <span>Date de fermeture</span>
+                    <span>Date de début</span>
+                    <span>Date de fin</span>
                     <span>État</span>
                     <span>Propriétaire</span>
                 </div>
-                <div id="table-scroll">
+                <div id='table-scroll'>
                     {{#ordersList}}
-                    <a href='/en/order/{{orderIndex}}' class='row'>
+                    <a href='/en/crossOrder/{{crossOrderIndex}}' class='row'>
                         <span>{{orderIndex}}</span>
                         <span>{{openDate}}</span>
                         <span>{{closeDate}}</span>
@@ -47,12 +46,14 @@
                     {{/ordersList}}
                 </div>
             </div>
-            {{/hasOrders}}
-            {{^hasOrders}}
-            <div>Il n'y a pas encore de commandes</div>
-            {{/hasOrders}}
-            <a href='/en/newOrder' id='newOrder'>Nouvelle Commande</a>
+            <div id="sumbitSection">
+                <form action="/en/previousUrl">
+                    <input type="submit" value="Annuler" class="button" id="cancelBtn">
+                </form>
+            </div>
         </div>
+
+    </div>
     </div>
 </section>
 {{>./fr/footer}}

@@ -1,62 +1,35 @@
 {{>./fr/header}}
 
-<script>
-    function checkPassword() {
-        let newPas = document.getElementById("newPassordField")
-        let confirmPas = document.getElementById("confirmPasField")
-        let msg = document.getElementById("errorMessage")
-        let btn = document.getElementById("changePsswdSub")
-        if (newPas.value != confirmPas.value) {
-            msg.style.display = "block"
-            btn.type = "button"
-        } else {
-            msg.style.display = "none"
-            btn.type = "submit"
-        }
-    }
-
-    function showElement(showElementId, hideElementId, cancel) {
-
-        document.getElementById(showElementId).style.display = 'flex';
-        document.getElementById(hideElementId).style.display = 'none';
-        if (cancel === 1) {
-            document.getElementById('cancelBtn').style.display = 'flex';
-        } else {
-            document.getElementById('cancelBtn').style.display = 'none';
-        }
-    }
-
-</script>
 {{#account}}
-<form action="/fr/editAccount" method="post" enctype="multipart/form-data">
-    <div id="accountContainer">
-        <div id="row1">
-            <div id="primarySection">
-                <label for="updateProfilePicture" id="editPicture" class="button"><img src="/{{profilePicture}}"
-                        alt="profilePicture" id="profilePicture"></label>
-                <input type="file" id="updateProfilePicture" name="updateProfilePicture"
+<form action='/en/editAccount' method='post' enctype='multipart/form-data' class="hidden-up">
+    <div id='accountContainer'>
+        <div id='row1'>
+            <div id='primarySection'>
+                <label for='updateProfilePicture' id='editPicture' class='button'><img src='/{{profilePicture}}'
+                        alt='profilePicture' id='profilePicture'></label>
+                <input type='file' id='updateProfilePicture' name='updateProfilePicture'
                     accept='image/png, image/jpg, image/jpeg' hidden>
-                <div id="nameSection">
-                    <input type="text" name="nameField" id="nameField" value="{{userName}}" placeholder="Prénom">
-                    <input type="text" name="lastNameField" id="lastNameField" value="{{userLastName}}"
-                        placeholder="Nom">
+                <div id='nameSection'>
+                    <input type='text' name='nameField' id='nameField' value='{{userName}}' placeholder='Prénom'>
+                    <input type='text' name='lastNameField' id='lastNameField' value='{{userLastName}}'
+                        placeholder='Nom'>
                 </div>
             </div>
-            <div id="contactSection">
-                <input type="email" name="emailField" id="emailField" value="{{email}}" placeholder="Email" readonly>
-                <input type="tel" name="phoneNumberField" id="phoneNumberField" value="{{phone}}"
-                    placeholder="Numéro de téléphone">
+            <div id='contactSection'>
+                <input type='email' name='emailField' id='emailField' value='{{email}}' placeholder='Email' readonly>
+                <input type='tel' name='phoneNumberField' id='phoneNumberField' value='{{phone}}'
+                    placeholder='Phone Number' onkeyup='checkNumbers(this)'>
             </div>
 
-            <input type="text" name="adressField" id="adressField" value="{{adress}}" placeholder="Adresse">
+            <input type='text' name='adressField' id='adressField' value='{{adress}}' placeholder='Adresse'>
 
-            <div id="localisationSection">
-                <input type="text" name="cityField" id="cityField" value="{{city}}" placeholder="Ville">
-                <input type="text" name="zipCodeField" id="zipCodeField" value="{{zipCode}}" placeholder="Code Postal">
+            <div id='localisationSection'>
+                <input type='text' name='cityField' id='cityField' value='{{city}}' placeholder='Ville'>
+                <input type='text' name='zipCodeField' id='zipCodeField' value='{{zipCode}}' placeholder='Code Postal' onkeyup='checkNumbers(this)'>
             </div>
-            <div id="buttonSection">
-                <a href="/fr/account" class="button">Annuler</a>
-                <input type="submit" class="button" value="Confirmer">
+            <div id='buttonSection'>
+                <a href='/en/account' class='button'>Annuler</a>
+                <input type='submit' class='button' value='Confirmer'>
             </div>
         </div>
     </div>

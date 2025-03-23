@@ -1,58 +1,39 @@
 {{>./fr/header}}
 
-<script>
-    function showPassword(name, show, hide, value) {
-        if (value) {
-            document.getElementById(name).type = "text"
-            document.getElementById(show).style.display = "none"
-            document.getElementById(hide).style.display = "flex"
-        } else {
-            document.getElementById(name).type = "password"
-            document.getElementById(show).style.display = "flex"
-            document.getElementById(hide).style.display = "none"
-        }
-    }
-</script>
 
-<div id="signinContainer">
-    <div id="content">
-        <form action="/fr/signin" method="post" id="signInForm">
-            <span id="title">Se connecter</span>
-            <div id="inputSection">
-                <div id="field">
-                    <input type="email" name="email" placeholder="Email">
-                    <div id="passwordField">
-                       <input type="password" name="password" id="password"
-                                placeholder="Mot de passe">
-                            <input type="button" name="showPassBtn" id="showPassBtn"
-                                onclick="showPassword('password','showPassLabel','hidePassLabel',true)"
-                                hidden>
-                            <label for="showPassBtn" id="showPassLabel">
-                                <img src="../showPass.svg" class="icoPass" alt="show Password">
+<section class='hidden-up'>
+    <div id='signinContainer'>
+        <div id='content'>
+            <form action='/en/signin' method='post' id='signInForm'>
+                <span id='title'>Se connecter</span>
+                <div id='inputSection'>
+                    <div id='field'>
+                        <input type='email' autocomplete='email' name='email' placeholder='Email' required>
+                        <div id='passwordField'>
+                            <input type='password' name='password' id='password' placeholder='Mot de passe' required>
+                            <input type='button' name='showPassBtn' id='showPassBtn'
+                                onclick="showPassword('password','showPassLabel','hidePassLabel',true)" hidden>
+                            <label for='showPassBtn' id='showPassLabel'>
+                                <img src='../showPass.svg' class='icoPass' alt='show Password'>
                             </label>
-                            <input type="button" name="hidePasswdBtn" id="hidePasswdBtn"
-                                onclick="showPassword('password','showPassLabel','hidePassLabel',false)"
-                                hidden>
-                            <label for="hidePasswdBtn" style="display: none;" id="hidePassLabel">
-                                <img src="../hidePass.svg" class="icoPass" alt="hide Password">
+                            <input type='button' name='hidePasswdBtn' id='hidePasswdBtn'
+                                onclick="showPassword('password','showPassLabel','hidePassLabel',false)" hidden>
+                            <label for='hidePasswdBtn' style='display: none;' id='hidePassLabel'>
+                                <img src='../hidePass.svg' class='icoPass' alt='hide Password'>
                             </label>
+                        </div>
+                    </div>
+                    {{#errorMessage}}
+                    <span id='errorMessage'>{{errorMessage}}</span>
+                    {{/errorMessage}}
+                    <input type='submit' value='Se connecter'>
+                    <div id='otherOptions'>
+                        <a href='/en/forgotPassword'>Mot de passe oublié</a>
+                        <a href='/en/signup'>S'enregistrer</a>
                     </div>
                 </div>
-                {{#errorMessage}}
-                        <span id="errorMessage">{{errorMessage}}</span>
-                        {{/errorMessage}}
-                <input type="submit" value="Se connecter">
-                <div id="otherOptions">
-                    <a href="/fr/forgotPassword">Mot de passe oublié</a>
-                    <a href="/fr/signup">S'inscrire</a>
-                </div>
-
-            </div>
-
-
-        </form>
-
+            </form>
+        </div>
     </div>
-</div>
-
+</section>
 {{>./fr/footer}}

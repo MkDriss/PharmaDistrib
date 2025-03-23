@@ -1,0 +1,82 @@
+{{>./en/header}}
+<div id='orderSummaryContainer'>
+        <div id='content'>
+                <div class="title">
+                        Récapitulatif de la commande
+                </div>
+                {{#orderSummary}}
+                <section class='hidden-up'>
+                        {{#accountInfos}}
+                        <div class='accountSection'>
+                                <img src='/{{accountPicture}}' alt='accountPicture' class='accountProfilePicture'>
+                                <div class='accountInfos'>
+                                        <div class="accountNames">
+                                                <span>{{accountName}}</span>
+                                                <span>{{accountLastName}}</span>
+                                        </div>
+                                        <div class="accountAdress">
+                                                <span>{{accountAdress}}</span>
+                                                <span> {{accountzipCode}}</span>
+                                                <span>{{accountCity}}</span>
+                                        </div>
+                                </div>
+                        </div>
+                        {{/accountInfos}}
+                        <table id='productTable' class='productTable'>
+                                <tr class='firstRow'>
+                                        <th>EAN13</th>
+                                        <th>Laboratoire</th>
+                                        <th>Nom</th>
+                                        <th>Collisage</th>
+                                        <th>Qté</th>
+                                        <th>Prix €</th>
+                                        <th>Price de base</th>
+                                </tr>
+                                {{#products}}
+                                <tr class='{{laboratoryName}}' style='display: table-row;' id='{{ean13}}'>
+                                        <td class='tableContent'><input type='text' class='id' value='{{ean13}}'
+                                                        readonly name='ean13'>
+                                        </td>
+                                        <td class='tableContent'><input type='text' class='laboratoryProductName'
+                                                        value='{{laboratoryName}}' readonly name='laboratoryName'>
+                                        </td>
+                                        <td class='tableContent'><input type='text' class='name' value='{{productName}}'
+                                                        readonly name='productName'></td>
+                                        <td class='tableContent'><input type='text' class='packaging'
+                                                        value='{{packaging}}' readonly name='packaging'></td>
+                                        <td class='tableContent'><input type='text' class='quantity'
+                                                        value='{{quantity}}' name='quantity' readonly></td>
+                                        <td class='tableContent'><input type='text' class='price' value='{{price}}'
+                                                        readonly name='price'>
+                                        </td>
+
+                                        <td class='tableContent'><input type='text' class='basedPrice'
+                                                        value='{{basedPrice}}' name='basedPrice' readonly></td>
+                                </tr>
+                                {{/products}}
+                        </table>
+                        <div class='totalPrice'>Prix Total: {{totalPrice}} €</div>
+                        <hr>
+                </section>
+                {{/orderSummary}}
+                <div>Montant total : {{globalAmount}} €</div>
+                {{#state}}
+                <div id="buttons">
+                        <form action="/en/closeOrder/{{orderIndex}}" method="post">
+                                <input type='submit' value="Fermer" class="button" id="submitBtn"
+                                        formaction="/en/closeOrder/{{orderIndex}}">
+                        </form>
+                        <a href='/en/order/{{orderIndex}}'><input type='button' id='cancelBtn' value='Annuler'
+                                        class="button"></a>
+                </div>
+                {{/state}}
+                {{^state}}
+                <form action="/en/previousUrl">
+                        <input type="submit" value="Annuler" class="button" id="cancelBtn">
+                </form>
+                {{/state}}
+        </div>
+</div>
+
+
+{{>./fr/footer}}

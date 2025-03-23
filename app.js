@@ -213,14 +213,6 @@ app.get('/:lang/orders', (req, res) => {
     } res.redirect('/' + req.params.lang + '/signin')
 });
 
-app.get('/:lang/insertFile', (req, res) => {
-    if (req.session.authenticated) {
-        req.session.previousPage = req.session.currentPage
-        req.session.currentPage = '/' + req.params.lang + '/insertFile'
-        return res.render('./' + req.params.lang + '/insertFile.html', { css: '/insertFile.css', currentDate: now() });
-    } res.redirect('/' + req.params.lang + '/signin')
-});
-
 app.get('/:lang/newOrder', (req, res) => {
     if (req.session.authenticated) {
         req.session.previousPage = req.session.currentPage
@@ -322,6 +314,20 @@ app.get('/:lang/file/:fileIndex', (req, res) => {
         } return res.sendStatus(403)
     } return res.redirect('/' + req.params.lang + '/signin')
 });
+
+app.get('/:lang/aboutUs', (req, res) => {
+    return res.render('./' + req.params.lang + '/aboutUs.html', { css: '/aboutUs.css' });
+});
+
+app.get('/*', (req, res) => {
+    res.redirect('/en/*')
+})
+
+app.get('/:lang/*',(req, res) =>{
+    return res.render('/' + req.params.lang + '/unknowed-page.html', {
+        css:'/unknowned-page.css'
+    })
+})
 
 // POST
 
@@ -631,7 +637,7 @@ app.post('/:lang/previousUrl', (req, res) => {
 
 // LISTEN
 
-app.listen(3001, () => {
-    console.log('Server is running on port 3001');
-    console.log('Click on http://localhost:3001');
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+    console.log('Click on http://localhost:3000');
 });

@@ -1,0 +1,28 @@
+/* Conteneur principal */
+#about-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Titres */
+#about-title, #mission-title, #fonctionnement-title, #valeurs-title, #equipe-title, #contact-title {
+    color: #333;
+}
+
+/* Paragraphes */
+#mission-text, #equipe-text, #contact-text {
+    color: #555;
+}
+
+/* Listes */
+#fonctionnement-list, #valeurs-list {
+    padding-left: 20px;
+}
+
+.fonctionnement-item, .valeurs-item {
+    color: #555;
+}

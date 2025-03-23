@@ -1,32 +1,32 @@
-{{>./en/header}}
+{{>./fr/header}}
 <div class="container">
     <div class="content hidden-up">
-        <div class="title table-title">Accounts</div>
+        <div class="title table-title">Compte</div>
 
         {{#account}}
         <form action="/en/admin-update-account/{{id}}" method="post">
             <table>
                 <tr>
-                    <th>Name</th>
-                    <th>Last Name</th>
+                    <th>Prénom</th>
+                    <th>Nom</th>
                     <th>Email</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>Zip Code</th>
-                    <th>City</th>
-                    <th>Role</th>
-                    <th>State</th>
+                    <th>Téléphone</th>
+                    <th>Adresse</th>
+                    <th>Code Postal</th>
+                    <th>Ville</th>
+                    <th>Droits</th>
+                    <th>État</th>
                 </tr>
                 <tr>
-                    <td><input type="text" value="{{userName}}" required placeholder="First Name" name="nameField" id="nameField"></td>
-                    <td><input type="text" value="{{userLastName}}" required placeholder="Last Name" name="lastNameField" id="lastNameField">
+                    <td><input type="text" value="{{userName}}" required placeholder="Prénom" name="nameField" id="nameField"></td>
+                    <td><input type="text" value="{{userLastName}}" required placeholder="Nom" name="lastNameField" id="lastNameField">
                     </td>
                     <td><input type="email" value="{{email}}" required placeholder="Email" name="emailField" id="emailField"></td>
-                    <td><input type="tel" value='{{phone}}' type="tel" placeholder="Phone Number" name="phoneNumberField" id="phoneNumberField">
+                    <td><input type="tel" value='{{phone}}' type="tel" placeholder="Numéro de téléphone" name="phoneNumberField" id="phoneNumberField">
                     </td>
-                    <td><input type="text" value="{{adress}}" placeholder="Address" name="addressField" id="addressField"></td>
-                    <td><input type="text" value="{{zipCode}}" placeholder="Zip Code" name="postCodeField" id="postCodeField"></td>
-                    <td><input type="text" value="{{city}}" placeholder="City" name="cityField" id="cityField"></td>
+                    <td><input type="text" value="{{adress}}" placeholder="Adresse" name="addressField" id="addressField"></td>
+                    <td><input type="text" value="{{zipCode}}" placeholder="Code Postal" name="postCodeField" id="postCodeField"></td>
+                    <td><input type="text" value="{{city}}" placeholder="Ville" name="cityField" id="cityField"></td>
                     <td><select name="roleSelect">
                             <option value="{{admin}}" selected>{{admin}}</option>
                             <option value="{{otherRoles}}">{{otherRoles}}</option>
@@ -46,8 +46,8 @@
         </form>
         {{/account}}
         {{^account}}
-        <span class="text">Unknowned Account</span>
+        <span class="text">Compte inconnu</span>
         {{/account}}
     </div>
 </div>
-{{>./en/footer}}
+{{>./fr/footer}}
